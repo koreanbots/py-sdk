@@ -11,6 +11,7 @@ A Simple Python API wrapper for KoreanBots.
 -------------
 
 **파이썬 3.6 혹은 그 이상이 필요합니다.**
+
 .. code:: sh
 
     python3 -m pip install koreanbots
