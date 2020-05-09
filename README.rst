@@ -20,7 +20,7 @@ A Simple Python API wrapper for KoreanBots.
 -------------
 
 서버수 업데이트하기
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 주기적으로 봇의 수를 업데이트합니다. (discord.py)
 
@@ -39,7 +39,7 @@ A Simple Python API wrapper for KoreanBots.
     client.run('Discord 토큰')
 
 아이디로 봇 정보 가져오기
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 discord.py 사용시
 
