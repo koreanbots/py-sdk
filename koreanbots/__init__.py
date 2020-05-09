@@ -1,3 +1,10 @@
+"""
+KoreanBots API Wrapper
+~~~~~~~~~~~~~~~~~~~
+A Simple Python API wrapper for KoreanBots.
+:license: MIT, 자세한 내용은 LISENCE를 확인해주세요.
+"""
+
 __title__ = 'koreanbots'
 __author__ = 'kijk2869'
 __lisence__ = 'MIT'

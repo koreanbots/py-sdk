@@ -21,12 +21,14 @@ setup(
     author='kijk2869',
     url='https://github.com/kijk2869/koreanbots',
     project_urls={
-        "Homepage": "https://koreanbots.cf/"
+        "Homepage": "https://koreanbots.cf/",
+        "Source":"https://github.com/koreanbots/py-sdk",
+        "Tracker":"https://github.com/koreanbots/py-sdk/issues"
     },
     version=version,
     packages=['koreanbots'],
     license='MIT',
-    description='A Python wrapper for the KoreanBots.',
+    description='A Simple Python API wrapper for KoreanBots.',
     long_description=readme,
     long_description_content_type="text/x-rst",
     include_package_data=True,

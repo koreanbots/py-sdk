@@ -23,6 +23,15 @@ SOFTWARE.
 """
 
 class DBKRResponse:
+    r""":class:`.HTTPClient`의 모든 반환 데이터에 대한 기본 모델입니다.
+
+    속성
+    -----------
+    response: :class:`dict`
+        반환되는 데이터의 :class:`dict`입니다.
+    attribute: :class:`str`
+        attribute의 이름을 입력하면 해당 값을 반환합니다.
+    """
     def __init__(self, response):
         self.response = response
 
@@ -34,11 +43,29 @@ class DBKRResponse:
 
 
 class userVoted(DBKRResponse):
+    r""":class:`.HTTPClient`의 유저 하트 정보 데이터의 모델입니다.
+
+    속성
+    -----------
+    response: :class:`dict`
+        반환되는 데이터의 :class:`dict`입니다.
+    attribute: :class:`str`
+        attribute의 이름을 입력하면 해당 값을 반환합니다.
+    """
     def __init__(self, response):
         super().__init__(response)
 
 
 class Bot(DBKRResponse):
+    r""":class:`.HTTPClient`의 봇 정보 데이터의 모델입니다.
+
+    속성
+    -----------
+    response: :class:`dict`
+        반환되는 데이터의 :class:`dict`입니다.
+    attribute: :class:`str`
+        attribute의 이름을 입력하면 해당 값을 반환합니다.
+    """
     def __init__(self, response):
         super().__init__(response)
 
