@@ -25,6 +25,8 @@ SOFTWARE.
 class DPKRException(Exception):
     pass
 
+class AuthorizeError(DBKRExeption):
+    pass
 
 class HTTPException(DPKRException):
     def __init__(self, response, message):

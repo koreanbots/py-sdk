@@ -12,6 +12,10 @@ with open('requirements.txt') as f:
 if not version:
     raise RuntimeError('version is not defined')
 
+readme = ''
+with open('README.rst') as f:
+    readme = f.read()
+
 setup(
     name='koreanbots',
     author='kijk2869',
@@ -23,6 +27,8 @@ setup(
     packages=['koreanbots'],
     license='MIT',
     description='A Python wrapper for the KoreanBots.',
+    long_description=readme,
+    long_description_content_type="text/x-rst",
     include_package_data=True,
     install_requires=requirements,
     python_requires='>=3.6',

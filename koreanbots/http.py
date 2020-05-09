@@ -47,8 +47,10 @@ class HTTPClient:
     async def request(self, method, url, authorize=True, **kwargs):
         url = self.BASE + url
         kwargs['headers'] = {"content-type":"application/json"}
-        if authorize:
+        if authorize and self.token:
             kwargs['headers']['token'] = self.token
+        elif authorize and not self.token:
+            raise AuthorizeError('this endpoint required koreanbots token.')
         
         async with ClientSession() as session:
             async with session.request(method, url, **kwargs) as response:
