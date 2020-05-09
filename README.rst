@@ -1,28 +1,33 @@
 koreanbots
 ==========
+.. image:: https://img.shields.io/pypi/v/koreanbots   :alt: PyPI
+.. image:: https://img.shields.io/pypi/pyversions/koreanbots   :alt: PyPI - Python Version
+.. image:: https://img.shields.io/github/license/koreanbots/py-sdk   :alt: GitHub
+.. image:: https://img.shields.io/pypi/dm/koreanbots   :alt: PyPI - Downloads
+
 A Simple Python API wrapper for KoreanBots.
 
-¹®¼­
+ë¬¸ì„œ
 -------------
 
-¾ÆÁ÷ ÁØºñµÇ¾î ÀÖÁö ¾Ê¾Æ¿ä :(
+ì•„ì§ ì¤€ë¹„ë˜ì–´ ìˆì§€ ì•Šì•„ìš” :(
 
-¼³Ä¡
+ì„¤ì¹˜
 -------------
 
-**ÆÄÀÌ½ã 3.6 È¤Àº ±× ÀÌ»óÀÌ ÇÊ¿äÇÕ´Ï´Ù.**
+**íŒŒì´ì¬ 3.6 í˜¹ì€ ê·¸ ì´ìƒì´ í•„ìš”í•©ë‹ˆë‹¤.**
 
 .. code:: sh
 
     python3 -m pip install koreanbots
 
-¿¹½Ã
+ì˜ˆì‹œ
 -------------
 
-¼­¹ö¼ö ¾÷µ¥ÀÌÆ®ÇÏ±â
+ì„œë²„ìˆ˜ ì—…ë°ì´íŠ¸í•˜ê¸°
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ÁÖ±âÀûÀ¸·Î º¿ÀÇ ¼ö¸¦ ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù. (discord.py)
+ì£¼ê¸°ì ìœ¼ë¡œ ë´‡ì˜ ìˆ˜ë¥¼ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤. (discord.py)
 
 .. code:: py
 
@@ -30,18 +35,18 @@ A Simple Python API wrapper for KoreanBots.
     import koreanbots
 
     client = discord.Client()
-    Bot = koreanbots.client(client, 'KoreanBots ÅäÅ«')
+    Bot = koreanbots.client(client, 'KoreanBots í† í°')
 
     @clinet.event
     async def on_ready():
-        print(f'{client.user}·Î ·Î±×ÀÎÇÏ¿´½À´Ï´Ù.')
+        print(f'{client.user}ë¡œ ë¡œê·¸ì¸í•˜ì˜€ìŠµë‹ˆë‹¤.')
 
-    client.run('Discord ÅäÅ«')
+    client.run('Discord í† í°')
 
-¾ÆÀÌµğ·Î º¿ Á¤º¸ °¡Á®¿À±â
+ì•„ì´ë””ë¡œ ë´‡ ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-discord.py »ç¿ë½Ã
+discord.py ì‚¬ìš©ì‹œ
 
 .. code:: py
 
@@ -49,24 +54,24 @@ discord.py »ç¿ë½Ã
     import koreanbots
 
     client = discord.Client()
-    Bot = koreanbots.client(client, 'KoreanBots ÅäÅ«')
+    Bot = koreanbots.client(client, 'KoreanBots í† í°')
 
     @clinet.event
     async def on_ready():
-        print(f'{client.user}·Î ·Î±×ÀÎÇÏ¿´½À´Ï´Ù.')
+        print(f'{client.user}ë¡œ ë¡œê·¸ì¸í•˜ì˜€ìŠµë‹ˆë‹¤.')
 
-    client.run('Discord ÅäÅ«')
+    client.run('Discord í† í°')
 
-discord.py ¹Ì»ç¿ë½Ã
+discord.py ë¯¸ì‚¬ìš©ì‹œ
 
 .. code:: py
 
     import koreanbots
 
-    Bot = koreanbots.HTTPClient('KoreanBots ÅäÅ«')
-    # getBotÀº ÅäÅ«ÀÌ ÇÊ¿äÇÏÁö ¾Ê±â¿¡ 'KoreanBots ÅäÅ«' ºÎºĞÀº »ı·« °¡´ÉÇÕ´Ï´Ù.
+    Bot = koreanbots.HTTPClient('KoreanBots í† í°')
+    # getBotì€ í† í°ì´ í•„ìš”í•˜ì§€ ì•Šê¸°ì— 'KoreanBots í† í°' ë¶€ë¶„ì€ ìƒëµ ê°€ëŠ¥í•©ë‹ˆë‹¤.
 
     Data = loop.run_until_complete(Bot.getBot('653534001742741552'))
-    # ¹İÈ¯µÇ´Â µ¥ÀÌÅÍ´Â ¿· ¸µÅ©¸¦ Âü°íÇØÁÖ¼¼¿ä: https://koreanbots.cf/js-sdk/interfaces/_types_.getbyid.html
+    # ë°˜í™˜ë˜ëŠ” ë°ì´í„°ëŠ” ì˜† ë§í¬ë¥¼ ì°¸ê³ í•´ì£¼ì„¸ìš”: https://koreanbots.cf/js-sdk/interfaces/_types_.getbyid.html
 
     print(Data)
