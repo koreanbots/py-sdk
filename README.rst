@@ -1,9 +1,18 @@
 koreanbots
 ==========
-.. image:: https://img.shields.io/pypi/v/koreanbots   :alt: PyPI
-.. image:: https://img.shields.io/pypi/pyversions/koreanbots   :alt: PyPI - Python Version
-.. image:: https://img.shields.io/github/license/koreanbots/py-sdk   :alt: GitHub
-.. image:: https://img.shields.io/pypi/dm/koreanbots   :alt: PyPI - Downloads
+
+.. image:: https://img.shields.io/pypi/v/koreanbots.svg
+    :target: https://pypi.org/project/koreanbots/
+    :alt: PyPI
+.. image:: https://img.shields.io/pypi/pyversions/koreanbots.svg
+    :target: https://pypi.org/project/koreanbots/
+    :alt: PyPI - Python Version
+.. image:: https://img.shields.io/github/license/koreanbots/py-sdk.svg
+    :target: https://github.com/koreanbots/py-sdk/
+    :alt: GitHub
+.. image:: https://img.shields.io/pypi/dm/koreanbots.svg
+    :target: https://pypi.org/project/koreanbots/
+    :alt: PyPI - Downloads
 
 A Simple Python API wrapper for KoreanBots.
 
