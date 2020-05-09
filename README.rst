@@ -12,6 +12,7 @@ A Simple Python API wrapper for KoreanBots.
 
 **파이썬 3.6 혹은 그 이상이 필요합니다.**
 .. code:: sh
+
     python3 -m pip install koreanbots
 
 예시
@@ -21,7 +22,9 @@ A Simple Python API wrapper for KoreanBots.
 ~~~~~~~~~~~~~
 
 주기적으로 봇의 수를 업데이트합니다. (discord.py)
+
 .. code:: py
+
     import discord
     import koreanbots
 
@@ -36,7 +39,9 @@ A Simple Python API wrapper for KoreanBots.
 ~~~~~~~~~~~~~
 
 discord.py 사용시
+
 .. code:: py
+
     import discord
     import koreanbots
 
@@ -48,7 +53,9 @@ discord.py 사용시
         print(f'{client.user}로 로그인하였습니다.')
 
 discord.py 미사용시
+
 .. code:: py
+
     import koreanbots
 
     Bot = koreanbots.HTTPClient('KoreanBots 토큰')
