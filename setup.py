@@ -1,19 +1,21 @@
 from setuptools import setup
-import re
+import re, os
 
 version = ''
 with open('koreanbots/__init__.py') as f:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
 
+path = os.path.dirname(os.path.realpath(__file__)).replace('\\', '/')
+
 requirements = []
-with open('requirements.txt') as f:
+with open(f'{path}/requirements.txt') as f:
   requirements = f.read().splitlines()
 
 if not version:
     raise RuntimeError('version is not defined')
 
 readme = ''
-with open('README.rst') as f:
+with open(f'{path}/README.rst') as f:
     readme = f.read()
 
 setup(

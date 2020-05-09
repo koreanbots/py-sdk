@@ -28,7 +28,7 @@ class DBKRException(Exception):
     """
     pass
 
-class AuthorizeError(DBKRExeption):
+class AuthorizeError(DBKRException):
     """:class:`.Client` 혹은 :class:`.HTTPClient`에게 토큰이 주어지지 않았을떄,
     토큰이 필요한 엔드포인트에 접근하면 발생합니다.
     """
