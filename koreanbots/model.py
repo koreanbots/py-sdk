@@ -28,6 +28,9 @@ class DBKRResponse:
 
     def __getattr__(self, attr):
         return self.response.get(attr)
+    
+    def __dict__(self):
+        return self.response
 
 
 class userVoted(DBKRResponse):
@@ -60,7 +63,7 @@ Category = Enum('Category',
     ]
 )
 
-Libararies = Enum('Libararies', 
+Library = Enum('Library', 
     [
     'discord.js',
     'Eris',

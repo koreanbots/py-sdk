@@ -5,7 +5,7 @@ __version__ = '0.1.0'
 
 from collections import namedtuple
 
-from .client import DBKRClient
+from .client import Client
 from .http import HTTPClient
 from .model import Category
 from .errors import *

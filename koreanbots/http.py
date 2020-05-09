@@ -45,7 +45,7 @@ class HTTPClient:
         self.token = token
 
     async def request(self, method, url, authorize=True, **kwargs):
-        url = BASE + url
+        url = self.BASE + url
         kwargs['headers'] = {"content-type":"application/json"}
         if authorize:
             kwargs['headers']['token'] = self.token
