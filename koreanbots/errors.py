@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-class DPKRException(Exception):
+class DBKRException(Exception):
     """koreanbots의 기본 예외 클래스입니다.
     즉, 이 라이브러리의 모든 예외는 이 예외로 잡을 수 있습니다.
     """
@@ -34,7 +34,7 @@ class AuthorizeError(DBKRExeption):
     """
     pass
 
-class HTTPException(DPKRException):
+class HTTPException(DBKRException):
     """:class:`.HTTPClient`의 기본 예외 클래스입니다.
     즉 :class:`.HTTPClient`의 모든 예외는 이 예외로 잡을 수 있습니다.
     """
@@ -42,7 +42,7 @@ class HTTPException(DPKRException):
         self.status = response.status
         if isinstance(message, dict):
             self.status = message.get('code', self.status)
-            self.error = message.get('message', 'DPKRException')
+            self.error = message.get('message', 'DBKRException')
         else:
             self.error = message
         super().__init__(f"{self.status} {self.error}")
