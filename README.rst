@@ -2,27 +2,27 @@ koreanbots
 ==========
 A Simple Python API wrapper for KoreanBots.
 
-ë¬¸ì„œ
+¹®¼­
 -------------
 
-ì•„ì§ ì¤€ë¹„ë˜ì–´ ìˆì§€ ì•Šì•„ìš” :(
+¾ÆÁ÷ ÁØºñµÇ¾î ÀÖÁö ¾Ê¾Æ¿ä :(
 
-ì„¤ì¹˜
+¼³Ä¡
 -------------
 
-**íŒŒì´ì¬ 3.6 í˜¹ì€ ê·¸ ì´ìƒì´ í•„ìš”í•©ë‹ˆë‹¤.**
+**ÆÄÀÌ½ã 3.6 È¤Àº ±× ÀÌ»óÀÌ ÇÊ¿äÇÕ´Ï´Ù.**
 
 .. code:: sh
 
     python3 -m pip install koreanbots
 
-ì˜ˆì‹œ
+¿¹½Ã
 -------------
 
-ì„œë²„ìˆ˜ ì—…ë°ì´íŠ¸í•˜ê¸°
+¼­¹ö¼ö ¾÷µ¥ÀÌÆ®ÇÏ±â
 ~~~~~~~~~~~~~
 
-ì£¼ê¸°ì ìœ¼ë¡œ ë´‡ì˜ ìˆ˜ë¥¼ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤. (discord.py)
+ÁÖ±âÀûÀ¸·Î º¿ÀÇ ¼ö¸¦ ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù. (discord.py)
 
 .. code:: py
 
@@ -30,18 +30,18 @@ A Simple Python API wrapper for KoreanBots.
     import koreanbots
 
     client = discord.Client()
-    Bot = koreanbots.client(client, 'KoreanBots í† í°')
+    Bot = koreanbots.client(client, 'KoreanBots ÅäÅ«')
 
     @clinet.event
     async def on_ready():
-        print(f'{client.user}ë¡œ ë¡œê·¸ì¸í•˜ì˜€ìŠµë‹ˆë‹¤.')
+        print(f'{client.user}·Î ·Î±×ÀÎÇÏ¿´½À´Ï´Ù.')
 
-    client.run('Discord í† í°')
+    client.run('Discord ÅäÅ«')
 
-ì•„ì´ë””ë¡œ ë´‡ ì •ë³´ ê°€ì ¸ì˜¤ê¸°
+¾ÆÀÌµğ·Î º¿ Á¤º¸ °¡Á®¿À±â
 ~~~~~~~~~~~~~
 
-discord.py ì‚¬ìš©ì‹œ
+discord.py »ç¿ë½Ã
 
 .. code:: py
 
@@ -49,24 +49,24 @@ discord.py ì‚¬ìš©ì‹œ
     import koreanbots
 
     client = discord.Client()
-    Bot = koreanbots.client(client, 'KoreanBots í† í°')
+    Bot = koreanbots.client(client, 'KoreanBots ÅäÅ«')
 
     @clinet.event
     async def on_ready():
-        print(f'{client.user}ë¡œ ë¡œê·¸ì¸í•˜ì˜€ìŠµë‹ˆë‹¤.')
+        print(f'{client.user}·Î ·Î±×ÀÎÇÏ¿´½À´Ï´Ù.')
 
-    client.run('Discord í† í°')
+    client.run('Discord ÅäÅ«')
 
-discord.py ë¯¸ì‚¬ìš©ì‹œ
+discord.py ¹Ì»ç¿ë½Ã
 
 .. code:: py
 
     import koreanbots
 
-    Bot = koreanbots.HTTPClient('KoreanBots í† í°')
-    # getBotì€ í† í°ì´ í•„ìš”í•˜ì§€ ì•Šê¸°ì— 'KoreanBots í† í°' ë¶€ë¶„ì€ ìƒëµ ê°€ëŠ¥í•©ë‹ˆë‹¤.
+    Bot = koreanbots.HTTPClient('KoreanBots ÅäÅ«')
+    # getBotÀº ÅäÅ«ÀÌ ÇÊ¿äÇÏÁö ¾Ê±â¿¡ 'KoreanBots ÅäÅ«' ºÎºĞÀº »ı·« °¡´ÉÇÕ´Ï´Ù.
 
     Data = loop.run_until_complete(Bot.getBot('653534001742741552'))
-    # ë°˜í™˜ë˜ëŠ” ë°ì´í„°ëŠ” ì˜† ë§í¬ë¥¼ ì°¸ê³ í•´ì£¼ì„¸ìš”: https://koreanbots.cf/js-sdk/interfaces/_types_.getbyid.html
+    # ¹İÈ¯µÇ´Â µ¥ÀÌÅÍ´Â ¿· ¸µÅ©¸¦ Âü°íÇØÁÖ¼¼¿ä: https://koreanbots.cf/js-sdk/interfaces/_types_.getbyid.html
 
     print(Data)
