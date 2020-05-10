@@ -8,7 +8,7 @@ A Simple Python API wrapper for KoreanBots.
 __title__ = 'koreanbots'
 __author__ = 'kijk2869'
 __lisence__ = 'MIT'
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 from collections import namedtuple
 
