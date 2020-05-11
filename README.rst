@@ -46,7 +46,7 @@ A Simple Python API wrapper for KoreanBots.
     client = discord.Client()
     Bot = koreanbots.client(client, 'KoreanBots 토큰')
 
-    @clinet.event
+    @client.event
     async def on_ready():
         print(f'{client.user}로 로그인하였습니다.')
 
@@ -65,7 +65,7 @@ discord.py 사용시
     client = discord.Client()
     Bot = koreanbots.client(client, 'KoreanBots 토큰')
 
-    @clinet.event
+    @client.event
     async def on_ready():
         print(f'{client.user}로 로그인하였습니다.')
 
