@@ -63,7 +63,7 @@ discord.py 사용시
     import koreanbots
 
     client = discord.Client()
-    Bot = koreanbots.client(client, 'KoreanBots 토큰')
+    Bot = koreanbots.lient(client, 'KoreanBots 토큰')
 
     @client.event
     async def on_ready():
