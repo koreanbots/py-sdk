@@ -60,7 +60,7 @@ class HTTPClient:
         API 호출에 사용되는 :class:`koreanbots.HTTPClient` 클래스 입니다.
     """
 
-    BASE = 'https://api.koreanbots.cf'
+    BASE = 'https://api.koreanbots.dev'
 
     def __init__(self, token=None, loop=None):
         self.loop = loop or get_event_loop()
