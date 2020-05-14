@@ -69,6 +69,11 @@ discord.py 사용시
     async def on_ready():
         print(f'{client.user}로 로그인하였습니다.')
 
+        Data = await Bot.getBot('653534001742741552')
+        # 반환되는 데이터는 옆 링크를 참고해주세요: https://koreanbots.cf/js-sdk/interfaces/_types_.getbyid.html
+
+        print(Data)
+
     client.run('Discord 토큰')
 
 discord.py 미사용시
