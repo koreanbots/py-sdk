@@ -19,7 +19,7 @@ A Simple Python API wrapper for KoreanBots.
 문서
 -------------
 
-아직 준비되어 있지 않아요 :(
+`문서 <https://koreanbots.readthedocs.io/>`_
 
 설치
 -------------
