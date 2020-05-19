@@ -29,14 +29,14 @@ class DBKRException(Exception):
     pass
 
 class AuthorizeError(DBKRException):
-    """:class:`.Client` 혹은 :class:`.HTTPClient`에게 토큰이 주어지지 않았을떄,
+    """.Client 혹은 .HTTPClient에게 토큰이 주어지지 않았을떄,
     토큰이 필요한 엔드포인트에 접근하면 발생합니다.
     """
     pass
 
 class HTTPException(DBKRException):
-    """:class:`.HTTPClient`의 기본 예외 클래스입니다.
-    즉 :class:`.HTTPClient`의 모든 예외는 이 예외로 잡을 수 있습니다.
+    """.HTTPClient의 기본 예외 클래스입니다.
+    즉 .HTTPClient의 모든 예외는 이 예외로 잡을 수 있습니다.
     """
     def __init__(self, response, message):
         self.status = response.status
@@ -56,18 +56,15 @@ class BadRequest(HTTPException):
 
 
 class Unauthorized(HTTPException):
-    """잘못된 KoreanBots 토큰을 사용했을 떄 발생합니다.
-    """
+    """잘못된 KoreanBots 토큰을 사용했을 떄 발생합니다."""
     pass
 
 
 class Forbidden(HTTPException):
-    """접근 권한이 없을 때 발생합니다.
-    """
+    """접근 권한이 없을 때 발생합니다."""
     pass
 
 
 class NotFound(HTTPException):
-    """해당 항목을 찾을 수 없을 때 발생합니다.
-    """
+    """해당 항목을 찾을 수 없을 때 발생합니다."""
     pass

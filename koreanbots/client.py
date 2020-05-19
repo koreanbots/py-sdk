@@ -33,27 +33,27 @@ class Client:
     r"""discord.py Client를 기반으로 한 KoreanBots 클라이언트를 반환합니다.
     이 클래스는 KoreanBots API와 연결됩니다.
 
-    일부 옵션이 :class:`Client`에 전달될 수 있습니다.
+    일부 옵션이 Client에 전달될 수 있습니다.
 
     파라미터
     -----------
-    Bot: :class:`discord.Client`
+    Bot: discord.Client
         discord.py의 클라이언트 입니다.
         이 클라이언트를 사용하여 길드 정보를 얻습니다.
-    Token: :class:`str`
+    Token: str
         KoreanBots의 토큰입니다.
-    loop: Optional[:class:`asyncio.AbstractEventLoop`]
-        비동기를 사용하기 위한 :class:`asyncio.AbstractEventLoop`입니다.
-        기본값은 ``None``이며, 기본 :class:`asyncio.AbstractEventLoop`는 :func:`asyncio.get_event_loop()`를 사용하여 얻습니다.
-    postCount: Optional[:class:`bool`]
-        자동으로 ``1800``초마다 길드 정보를 KoreanBots에 전송할지 설정합니다. 기본값은 ``True``입니다. 
+    loop: 선택[asyncio.AbstractEventLoop]
+        비동기를 사용하기 위한 asyncio.AbstractEventLoop입니다.
+        기본값은 None이며, 기본 asyncio.AbstractEventLoop는 asyncio.get_event_loop()를 사용하여 얻습니다.
+    postCount: 선택[bool]
+        자동으로 1800초마다 길드 정보를 KoreanBots에 전송할지 설정합니다. 기본값은 True입니다. 
 
     속성
     -----------
-    loop: :class:`asyncio.AbstractEventLoop`
-        HTTP 리퀘스트에 사용되는 :class:`asyncio.AbstractEventLoop` 클래스 입니다.
-    http: :class:`.HTTPClient`
-        API 호출에 사용되는 :class:`koreanbots.HTTPClient` 클래스 입니다.
+    loop: asyncio.AbstractEventLoop
+        HTTP 리퀘스트에 사용되는 asyncio.AbstractEventLoop 클래스 입니다.
+    http: .HTTPClient
+        API 호출에 사용되는 koreanbots.HTTPClient 클래스 입니다.
     """
 
     def __init__(self, Bot, Token, loop=None, postCount=True):
@@ -75,21 +75,19 @@ class Client:
             await sleep(1800)
     
     async def postGuildCount(self):
-        r"""|coro|
-
-        :class:`discord.Client`의 :attr:`.guilds`의 수를 KoreanBots API로 보냅니다.
+        r"""discord.Client의 .guilds의 수를 KoreanBots API로 보냅니다.
 
         예외
         --------
-        :exc:`.errors.AuthorizeError`
+        .errors.AuthorizeError
             토큰이 필요한 엔드포인트지만, 클라이언트에 토큰이 주어지지 않았습니다.
-        :exc:`.errors.Unauthrized`
+        .errors.Unauthrized
             인증되지 않았습니다, KoreanBots 토큰이 잘못되었을 수 있습니다.
-        :exc:`.errors.Forbidden`
+        .errors.Forbidden
             접근 권한이 없습니다.
-        :exc:`.errors.NotFound`
+        .errors.NotFound
             찾을 수 없습니다, 파라미터를 확인하세요.
-        :exc:`.errors.HTTPException`
+        .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
 
@@ -97,98 +95,88 @@ class Client:
         await self.http.postGuildCount(GuildCounts)
 
     async def getVote(self, user_id: int):
-        r"""|coro|
-
-        주어진 유저ID의 하트 정보를 가져옵니다.
+        r"""주어진 유저ID의 하트 정보를 가져옵니다.
 
         파라미터
         -------------
-        user_id: :class:`int`
+        user_id: int
             정보를 가져올 유저의 ID
 
         예외
         --------
-        :exc:`.errors.AuthorizeError`
+        .errors.AuthorizeError
             토큰이 필요한 엔드포인트지만, 클라이언트에 토큰이 주어지지 않았습니다.
-        :exc:`.errors.Unauthrized`
+        .errors.Unauthrized
             인증되지 않았습니다, KoreanBots 토큰이 잘못되었을 수 있습니다.
-        :exc:`.errors.Forbidden`
+        .errors.Forbidden
             접근 권한이 없습니다.
-        :exc:`.errors.NotFound`
+        .errors.NotFound
             찾을 수 없습니다, 파라미터를 확인하세요.
-        :exc:`.errors.HTTPException`
+        .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
         return await self.http.getVote(user_id)
 
     async def getBot(self, bot_id: int):
-        r"""|coro|
-
-        주어진 봇ID의 KoreanBots 정보를 가져옵니다.
+        r"""주어진 봇ID의 KoreanBots 정보를 가져옵니다.
 
         파라미터
         -------------
-        bot_id: :class:`int`
+        bot_id: int
             정보를 가져올 봇의 ID
 
         예외
         --------
-        :exc:`.errors.HTTPException`
+        .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
         return await self.http.getBot(bot_id)
 
     async def getBots(self, page: int=1):
-        r"""|coro|
-
-        KoreanBots의 봇 리스트를 가져옵니다.
+        r"""KoreanBots의 봇 리스트를 가져옵니다.
 
         파라미터
         -------------
-        page: Optional[:class:`int`]
-            봇 리스트의 페이지입니다. 기본값은 ``1``입니다.
+        page: 선택[int]
+            봇 리스트의 페이지입니다. 기본값은 1입니다.
 
         예외
         --------
-        :exc:`.errors.HTTPException`
+        .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
         return await self.http.getBots(page)
 
     async def searchBots(self, query: str, page: int=1):
-        r"""|coro|
-
-        주어진 문자열로 KoreanBots 봇을 검색합니다.
+        r"""주어진 문자열로 KoreanBots 봇을 검색합니다.
 
         파라미터
         -------------
-        query: :class:`str`
+        query: str
             검색할 봇의 이름
-        page: Optional[:class:`int`]
-            봇 리스트의 페이지입니다. 기본값은 ``1``입니다.
+        page: 선택[int]
+            봇 리스트의 페이지입니다. 기본값은 1입니다.
 
         예외
         --------
-        :exc:`.errors.HTTPException`
+        .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
         return await self.http.searchBots(query, page)
 
     async def getBotsByCategory(self, category: CategoryModel, page: int=1):
-        r"""|coro|
-
-        주어진 카테고리에 해당하는 KoreanBots 정보를 가져옵니다.
+        r"""주어진 카테고리에 해당하는 KoreanBots 정보를 가져옵니다.
 
         파라미터
         -------------
-        category: :class:`.Category`
+        category: .Category
             KoreanBots의 카테고리
-        page: Optional[:class:`int`]
-            봇 리스트의 페이지입니다. 기본값은 ``1``입니다.
+        page: 선택[int]
+            봇 리스트의 페이지입니다. 기본값은 1입니다.
 
         예외
         --------
-        :exc:`.errors.HTTPException`
+        .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
         return await self.http.getBotsByCategory(category, page)

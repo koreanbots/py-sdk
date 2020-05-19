@@ -15,7 +15,7 @@ from collections import namedtuple
 
 from .client import Client
 from .http import HTTPClient
-from .model import Category
+from .model import Category, Library
 from .errors import *
 
 VersionInfo = namedtuple('VersionInfo', 'major minor micro releaselevel serial')
