@@ -22,8 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from asyncio import get_event_loop
+from asyncio import get_event_loop, Event, sleep
 from aiohttp import ClientSession
+from datetime import datetime
 from json import loads
 from logging import getLogger
 from .errors import *
@@ -63,7 +64,10 @@ class HTTPClient:
         self.loop = loop or get_event_loop()
         self.token = token
 
-    async def request(self, method, url, authorize=True, **kwargs):
+        self._globalLimit = Event()
+        self._globalLimit.set()
+
+    async def request(self, method, endpoint, authorize=True, **kwargs):
         r"""주어진 길드 수를 KoreanBots API로 보냅니다.
 
         파라미터
@@ -89,31 +93,51 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        url = self.BASE + url
+        url = self.BASE + endpoint
         kwargs['headers'] = {"content-type":"application/json"}
         if authorize and self.token:
             kwargs['headers']['token'] = self.token
         elif authorize and not self.token:
             raise AuthorizeError('this endpoint required koreanbots token.')
         
-        async with ClientSession() as session:
-            async with session.request(method, url, **kwargs) as response:
-                log.debug(f'{method} {url} returned {response.status}')
-                Data = await detectJson(response)
+        if not self._globalLimit.is_set():
+            await self._globalLimit.wait()
 
-                if 200 <= response.status < 300:
-                    return Data
-                
-                if response.status == 400:
-                    raise HTTPException(response, Data)
-                if response.status == 401:
-                    raise Unauthorized(response, Data)
-                if response.status == 403:
-                    raise Forbidden(response, Data)
-                if response.status == 404:
-                    raise NotFound(response, Data)
-                else:
-                    raise HTTPException(response, Data)
+        for tries in range(5):
+            async with ClientSession() as session:
+                async with session.request(method, url, **kwargs) as response:
+                    log.debug(f'{method} {url} returned {response.status}')
+                    Data = await detectJson(response)
+                    
+                    remainLimit = response.headers.get('x-ratelimit-remaining')
+                    if remainLimit == 0 or response.status == 429:
+                        resetLimitTimestamp = response.headers.get('x-ratelimit-reset')
+                        resetLimit = datetime.fromtimestamp(resetLimitTimestamp)
+
+                        retryAfter = resetLimit - datetime.now()
+
+                        log.warning(r"we're now rate limited. retrying after %.2f seconds", retryAfter.total_seconds())
+                        if not endpoint == '/bot/servers':
+                            self._globalLimit.clear()
+
+                        await sleep(retryAfter.total_seconds())
+                        if not endpoint == '/bot/servers':
+                            self._globalLimit.set()
+
+                        continue
+
+                    if 200 <= response.status < 300:
+                        return Data
+                    
+                    if response.status == 401:
+                        raise Unauthorized(response, Data)
+                    elif response.status == 403:
+                        raise Forbidden(response, Data)
+                    elif response.status == 404:
+                        raise NotFound(response, Data)
+                    else:
+                        raise HTTPException(response, Data)
+        raise HTTPException(response, Data)
                 
     
     async def postGuildCount(self, guild_count: int):
