@@ -9,7 +9,7 @@ A Simple Python API wrapper for KoreanBots.
 __title__ = 'koreanbots'
 __author__ = 'kijk2869'
 __lisence__ = 'MIT'
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 from collections import namedtuple
 
@@ -20,4 +20,4 @@ from .errors import *
 
 VersionInfo = namedtuple('VersionInfo', 'major minor micro releaselevel serial')
 
-version_info = VersionInfo(major=0, minor=2, micro=0, releaselevel='final', serial=0)
+version_info = VersionInfo(major=0, minor=2, micro=1, releaselevel='final', serial=0)
