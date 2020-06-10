@@ -111,7 +111,7 @@ class HTTPClient:
                     
                     remainLimit = response.headers.get('x-ratelimit-remaining')
                     if remainLimit == 0 or response.status == 429:
-                        resetLimitTimestamp = response.headers.get('x-ratelimit-reset')
+                        resetLimitTimestamp = int(response.headers.get('x-ratelimit-reset'))
                         resetLimit = datetime.fromtimestamp(resetLimitTimestamp)
 
                         retryAfter = resetLimit - datetime.now()

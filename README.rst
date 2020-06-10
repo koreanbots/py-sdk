@@ -70,7 +70,7 @@ discord.py 사용시
         print(f'{client.user}로 로그인하였습니다.')
 
         Data = await Bot.getBot('653534001742741552')
-        # 반환되는 데이터는 옆 링크를 참고해주세요: https://koreanbots.cf/js-sdk/interfaces/_types_.getbyid.html
+        # 반환되는 데이터는 옆 링크를 참고해주세요: https://koreanbots.dev/js-sdk/interfaces/_types_.getbyid.html
 
         print(Data)
 
@@ -81,11 +81,14 @@ discord.py 미사용시
 .. code:: py
 
     import koreanbots
+    import asyncio
+
+    loop = asyncio.get_event_loop()
 
     Bot = koreanbots.HTTPClient('KoreanBots 토큰')
     # getBot은 토큰이 필요하지 않기에 'KoreanBots 토큰' 부분은 생략 가능합니다.
 
     Data = loop.run_until_complete(Bot.getBot('653534001742741552'))
-    # 반환되는 데이터는 옆 링크를 참고해주세요: https://koreanbots.cf/js-sdk/interfaces/_types_.getbyid.html
+    # 반환되는 데이터는 옆 링크를 참고해주세요: https://koreanbots.dev/js-sdk/interfaces/_types_.getbyid.html
 
     print(Data)
