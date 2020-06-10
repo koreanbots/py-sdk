@@ -256,3 +256,8 @@ class HTTPClient:
             category = category.name
         Data = await self.request('GET', f"/bots/category/{category}", authorize=False, params={'page': page})
         return [Bot(_) for _ in Data.get('data', [])]
+    
+    async def getVoteWidget(self, bot_id: int):
+        raise NotImplementedError
+
+        Data = await self.request('')
