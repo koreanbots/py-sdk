@@ -81,6 +81,9 @@ discord.py 미사용시
 .. code:: py
 
     import koreanbots
+    import asyncio
+
+    loop = asyncio.get_event_loop()
 
     Bot = koreanbots.HTTPClient('KoreanBots 토큰')
     # getBot은 토큰이 필요하지 않기에 'KoreanBots 토큰' 부분은 생략 가능합니다.
