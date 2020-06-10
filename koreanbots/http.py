@@ -27,6 +27,8 @@ from aiohttp import ClientSession
 from datetime import datetime
 from json import loads
 from logging import getLogger
+from io import BytesIO
+from cairosvg import svg2png
 from .errors import *
 from .model import *
 log = getLogger(__name__)
@@ -258,6 +260,87 @@ class HTTPClient:
         return [Bot(_) for _ in Data.get('data', [])]
     
     async def getVoteWidget(self, bot_id: int):
-        raise NotImplementedError
+        r"""주어진 봇ID의 투표 수 위젯(png)을 가져옵니다.
 
-        Data = await self.request('')
+        파라미터
+        -------------
+        bot_id: int
+            정보를 가져올 봇의 ID
+
+        예외
+        --------
+        .errors.HTTPException
+            알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
+        """
+        URL = await self.getVoteWidgetURL(bot_id)
+
+        async with ClientSession() as session:
+            async with session.get(URL) as response:
+                SVG = await response.read()
+        
+        fp = BytesIO()
+        svg2png(bytestring=SVG, write_to=fp)
+        fp.seek(0)
+
+        return fp
+    
+    async def getVoteWidgetURL(self, bot_id: int):
+        r"""주어진 봇ID의 투표 수 위젯 주소를 가져옵니다.
+
+        파라미터
+        -------------
+        bot_id: int
+            정보를 가져올 봇의 ID
+
+        예외
+        --------
+        .errors.HTTPException
+            알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
+        """
+        Data = await self.getBot(bot_id)
+        if not Data: return
+
+        return f"{self.BASE}/widget/bots/votes/{bot_id}.svg"
+    
+    async def getServerWidgetURL(self, bot_id: int):
+        r"""주어진 봇ID의 서버 수 위젯 주소를 가져옵니다.
+
+        파라미터
+        -------------
+        bot_id: int
+            정보를 가져올 봇의 ID
+
+        예외
+        --------
+        .errors.HTTPException
+            알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
+        """
+        Data = await self.getBot(bot_id)
+        if not Data: return
+
+        return f"{self.BASE}/widget/bots/servers/{bot_id}.svg"
+    
+    async def getServerWidget(self, bot_id: int):
+        r"""주어진 봇ID의 서버 수 위젯(png)을 가져옵니다.
+
+        파라미터
+        -------------
+        bot_id: int
+            정보를 가져올 봇의 ID
+
+        예외
+        --------
+        .errors.HTTPException
+            알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
+        """
+        URL = await self.getServerWidgetURL(bot_id)
+
+        async with ClientSession() as session:
+            async with session.get(URL) as response:
+                SVG = await response.read()
+        
+        fp = BytesIO()
+        svg2png(bytestring=SVG, write_to=fp)
+        fp.seek(0)
+
+        return fp

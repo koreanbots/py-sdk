@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import discord
 from asyncio import sleep
 from logging import getLogger
 from .http import HTTPClient
@@ -180,3 +181,71 @@ class Client:
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
         return await self.http.getBotsByCategory(category, page)
+    
+    async def getVoteWidget(self, bot_id: int, *args, filename='servers.png', **kwargs):
+        r"""주어진 봇ID의 투표 수 위젯의 discord.File을 가져옵니다.
+
+        파라미터
+        -------------
+        bot_id: int
+            정보를 가져올 봇의 ID
+        filename: 선택[str]
+            반환받을 파일의 이름
+
+        예외
+        --------
+        .errors.HTTPException
+            알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
+        """
+        fp = await self.http.getVoteWidget(bot_id)
+
+        return discord.File(fp, *args, filename=filename, **kwargs)
+    
+    async def getVoteWidgetURL(self, bot_id: int):
+        r"""주어진 봇ID의 투표 수 위젯 주소를 가져옵니다.
+
+        파라미터
+        -------------
+        bot_id: int
+            정보를 가져올 봇의 ID
+
+        예외
+        --------
+        .errors.HTTPException
+            알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
+        """
+        return await self.http.getVoteWidgetURL(bot_id)
+    
+    async def getServerWidget(self, bot_id: int, *args, filename='servers.png', **kwargs):
+        r"""주어진 봇ID의 서버 수 위젯의 discord.File을 가져옵니다.
+
+        파라미터
+        -------------
+        bot_id: int
+            정보를 가져올 봇의 ID
+        filename: 선택[str]
+            반환받을 파일의 이름
+
+        예외
+        --------
+        .errors.HTTPException
+            알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
+        """
+        fp = await self.http.getVoteWidget(bot_id)
+
+        return discord.File(fp, *args, filename=filename, **kwargs)
+    
+    async def getServerWidgetURL(self, bot_id: int):
+        r"""주어진 봇ID의 서버 수 위젯 주소를 가져옵니다.
+
+        파라미터
+        -------------
+        bot_id: int
+            정보를 가져올 봇의 ID
+
+        예외
+        --------
+        .errors.HTTPException
+            알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
+        """
+        return await self.http.getServerWidgetURL(bot_id)
