@@ -30,6 +30,25 @@ A Simple Python API wrapper for KoreanBots.
 
     python3 -m pip install koreanbots
 
+로거
+-------------
+
+*koreanbots* 는 파이썬의 ``logging`` 모듈을 사용하여 로깅합니다.
+
+간단한 디버깅을 위해 ``INFO`` 이상의 로깅을 추천합니다.
+
+``logging`` 설정 예시
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: py
+    import logging
+    
+    logger = logging.getLogger('koreanbots')
+    logger.setLevel(logging.INFO) # DEBUG INFO WARNING ERROR CRITICAL
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter('[%(asctime)s] [%(filename)s] [%(name)s:%(module)s] [%(levelname)s]: %(message)s'))
+    logger.addHandler(handler)
+
 예시
 -------------
 
