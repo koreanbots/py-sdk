@@ -41,6 +41,7 @@ A Simple Python API wrapper for KoreanBots.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: py
+
     import logging
     
     logger = logging.getLogger('koreanbots')
