@@ -60,7 +60,7 @@ class HTTPClient:
         HTTP 리퀘스트에 사용되는 asyncio.AbstractEventLoop 클래스 입니다.
     """
 
-    BASE = 'https://api.koreanbots.dev'
+    BASE = 'https://api.koreanbots.dev/v1'
 
     def __init__(self, token=None, loop=None):
         self.loop = loop or get_event_loop()
