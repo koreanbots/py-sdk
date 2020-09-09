@@ -28,7 +28,6 @@ from datetime import datetime
 from json import loads
 from logging import getLogger
 from io import BytesIO
-from cairosvg import svg2png
 from .errors import *
 from .model import *
 log = getLogger(__name__)
@@ -39,7 +38,11 @@ async def detectJson(response):
     except ValueError:
         return await response.text()
 
-
+try:
+    from cairosvg import svg2png
+except:
+    svg2png = None
+    
 class HTTPClient:
     r"""KoreanBots의 HTTP 클라이언트를 반환합니다.
     이 클래스는 KoreanBots API와 연결됩니다.
@@ -272,6 +275,9 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
+        if not svg2png:
+            raise NotImplementedError
+            
         URL = await self.getVoteWidgetURL(bot_id)
 
         async with ClientSession() as session:
@@ -333,6 +339,9 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
+        if not svg2png:
+            raise NotImplementedError
+        
         URL = await self.getServerWidgetURL(bot_id)
 
         async with ClientSession() as session:
