@@ -1,46 +1,48 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from setuptools import setup
 import re, os
 
-version = ''
-with open('koreanbots/__init__.py', encoding='UTF8') as f:
-    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
+version = ""
+with open("koreanbots/__init__.py", encoding="UTF8") as f:
+    version = re.search(
+        r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE
+    ).group(1)
 
-path = os.path.dirname(os.path.realpath(__file__)).replace('\\', '/')
+path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
 
 requirements = []
-with open(f'{path}/requirements.txt', encoding='UTF8') as f:
-  requirements = f.read().splitlines()
+with open(f"{path}/requirements.txt", encoding="UTF8") as f:
+    requirements = f.read().splitlines()
 
 if not version:
-    raise RuntimeError('version is not defined')
+    raise RuntimeError("version is not defined")
 
-readme = ''
-with open(f'{path}/README.rst', encoding='UTF8') as f:
+readme = ""
+with open(f"{path}/README.md", encoding="UTF8") as f:
     readme = f.read()
 
 setup(
-    name='koreanbots',
-    author='kijk2869',
-    url='https://github.com/kijk2869/koreanbots',
+    name="koreanbots",
+    author="kijk2869",
+    url="https://github.com/kijk2869/koreanbots",
     project_urls={
         "Homepage": "https://koreanbots.cf/",
-        "Source":"https://github.com/koreanbots/py-sdk",
-        "Tracker":"https://github.com/koreanbots/py-sdk/issues"
+        "Source": "https://github.com/koreanbots/py-sdk",
+        "Tracker": "https://github.com/koreanbots/py-sdk/issues",
     },
     version=version,
-    packages=['koreanbots'],
-    license='MIT',
-    description='A Simple Python API wrapper for KoreanBots.',
+    packages=["koreanbots"],
+    license="MIT",
+    description="A Simple Python API wrapper for KoreanBots.",
     long_description=readme,
-    long_description_content_type="text/x-rst",
+    long_description_content_type="text/markdown",
     include_package_data=True,
     install_requires=requirements,
-    python_requires='>=3.6',
+    python_requires=">=3.6",
     classifiers=[
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8'
-    ]
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+    ],
 )
