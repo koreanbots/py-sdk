@@ -33,8 +33,8 @@ class KoreanbotsRequester:
             method, KOREANBOTS_URL + endpoint, **kwargs
         ) as response:
             if response.status != 200:
-                if error_mapping.get(response.status):
-                    raise error_mapping[response.status](
+                if ERROR_MAPPING.get(response.status):
+                    raise ERROR_MAPPING[response.status](
                         response.status, await response.json()
                     )
                 else:
