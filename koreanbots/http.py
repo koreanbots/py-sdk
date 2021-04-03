@@ -1,9 +1,5 @@
 import aiohttp
 from typing import Any, Literal, Optional
-from dataclasses import dataclass
-
-from multidict import CIMultiDictProxy
-from yarl import URL
 
 from koreanbots.decorator import required, strict_literal
 from koreanbots.errors import HTTPException, error_mapping
@@ -17,7 +13,7 @@ KOREANBOTS_URL = BASE + VERSION
 class KoreanbotsRequester:
     def __init__(
         self,
-        api_key: str,
+        api_key: Optional[str],
         session: Optional[aiohttp.ClientSession] = None,
     ) -> None:
         self.api_key = api_key
@@ -44,7 +40,7 @@ class KoreanbotsRequester:
                 else:
                     raise HTTPException(response.status, await response.json())
 
-            return (await getattr(response, return_method)(),)
+            return await getattr(response, return_method)()
 
     @required
     async def get_vote(self, user_id: int):

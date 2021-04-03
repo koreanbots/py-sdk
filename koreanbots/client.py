@@ -12,25 +12,28 @@ import contextlib
 class Koreanbots(KoreanbotsRequester):
     def __init__(
         self,
-        client: Type[discord.Client],
-        api_key: str,
+        client: Optional[Type[discord.Client]],
+        api_key: Optional[str],
         session: Optional[aiohttp.ClientSession],
     ) -> None:
         self.client = client
         super().__init__(api_key, session=session)
 
-    async def send_guildcount_tasks(self):
+    async def tasks_send_guildcount(self):
+        if not self.client:
+            raise RuntimeError("Client Not Found")
+
         await self.client.wait_until_ready()  # type: ignore
+        bot_id = (await self.client.application_info()).id  # type:ignore
+        total_guilds = len(self.client.guilds)  # type: ignore
         while not self.client.is_closed():  # type: ignore
 
             with contextlib.suppress(HTTPException):
-                await self.guildcount()
+                await self.guildcount(bot_id, total_guilds)
 
             await asyncio.sleep(1800)
 
-    async def guildcount(self):
-        total_guilds = len(self.client.guilds)  # type: ignore
-        bot_id = (await self.client.application_info()).id  # type:ignore
+    async def guildcount(self, bot_id: int, total_guilds: int):
         return await self.post_update_bot_info(bot_id, total_guilds)
 
     async def userinfo(self, user_id: int):

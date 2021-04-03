@@ -11,7 +11,7 @@ def required(f):
         if not self.api_key:
             raise AuthorizeError("This endpoint required koreanbots token.")
 
-        return await f(self, *args, **kwargs)
+        return await f(self, headers={"Authorization": self.api_key}, *args, **kwargs)
 
     return decorator_function
 
@@ -26,7 +26,7 @@ def strict_literal(argument_name: str):
             arg_annoration = full_arg_spec.annotations[argument_name]
             # Check annotation is Lireral
             if arg_annoration.__origin__ is Literal:
-                # Literal -> Tuple
+                # Literal -> list
                 literal_list = list(get_args(arg_annoration))
                 # Get index
                 arg_index = full_arg_spec.args.index(argument_name)
