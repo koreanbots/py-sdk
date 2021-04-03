@@ -58,4 +58,4 @@ class NotFound(HTTPException):
     pass
 
 
-error_mapping = {400: BadRequest, 403: Forbidden, 404: NotFound}
+ERROR_MAPPING = {400: BadRequest, 403: Forbidden, 404: NotFound}
