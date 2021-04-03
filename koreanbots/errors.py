@@ -22,49 +22,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+
 class DBKRException(Exception):
-    """koreanbots의 기본 예외 클래스입니다.
-    즉, 이 라이브러리의 모든 예외는 이 예외로 잡을 수 있습니다.
-    """
     pass
+
 
 class AuthorizeError(DBKRException):
-    """.Client 혹은 .HTTPClient에게 토큰이 주어지지 않았을때,
-    토큰이 필요한 엔드포인트에 접근하면 발생합니다.
-    """
     pass
 
+
 class HTTPException(DBKRException):
-    """.HTTPClient의 기본 예외 클래스입니다.
-    즉 .HTTPClient의 모든 예외는 이 예외로 잡을 수 있습니다.
-    """
-    def __init__(self, response, message):
-        self.status = response.status
+    def __init__(self, code, message):
+        self.status = code
         if isinstance(message, dict):
-            self.status = message.get('code', self.status)
-            self.error = message.get('message', 'DBKRException')
+            self.status = message.get("code", self.status)
+            self.error = message.get("message", "DBKRException")
         else:
             self.error = message
         super().__init__(f"{self.status} {self.error}")
 
 
 class BadRequest(HTTPException):
-    """잘못된 파라미터의 리퀘스트입니다.
-    파라미터를 확인해주세요.
-    """
     pass
 
 
 class Unauthorized(HTTPException):
-    """잘못된 KoreanBots 토큰을 사용했을 떄 발생합니다."""
     pass
 
 
 class Forbidden(HTTPException):
-    """접근 권한이 없을 때 발생합니다."""
     pass
 
 
 class NotFound(HTTPException):
-    """해당 항목을 찾을 수 없을 때 발생합니다."""
     pass
+
+
+error_mapping = {400: BadRequest, 403: Forbidden, 404: NotFound}
