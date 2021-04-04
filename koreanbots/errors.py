@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import Any, Dict, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from .typing import ErrorMapping
@@ -13,7 +13,7 @@ class AuthorizeError(KoreanbotsExeption):
 
 
 class HTTPException(KoreanbotsExeption):
-    def __init__(self, code, message):
+    def __init__(self, code: Any, message: Union[Any, Dict[str, Any]]):
         self.status = code
         if isinstance(message, dict):
             self.status = message.get("code", self.status)

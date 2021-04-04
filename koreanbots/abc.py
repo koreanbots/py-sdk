@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 class KoreanbotsABC(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def __init__(self, **response_data) -> None:
+    def __init__(self, **response_data: Any) -> None:
         self.response_data = response_data
 
     @abc.abstractproperty
@@ -18,5 +18,3 @@ class KoreanbotsABC(metaclass=abc.ABCMeta):
     @abc.abstractproperty
     def data(self) -> Dict[str, Any]:
         return self.response_data.pop("data", {})
-
-    

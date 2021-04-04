@@ -1,15 +1,17 @@
 import functools
 import inspect
-from typing import TYPE_CHECKING, Literal, get_args
+from typing import Any, TYPE_CHECKING, Literal, get_args
 
 if TYPE_CHECKING:
     from .errors import AuthorizeError
     from .http import KoreanbotsRequester
 
 
-def required(f):
+def required(f: Any):
     @functools.wraps(f)
-    async def decorator_function(self: "KoreanbotsRequester", *args, **kwargs):
+    async def decorator_function(
+        self: "KoreanbotsRequester", *args: Any, **kwargs: Any
+    ):
         if not self.api_key:
             raise AuthorizeError("This endpoint required koreanbots token.")
 
@@ -19,9 +21,9 @@ def required(f):
 
 
 def strict_literal(argument_name: str):
-    def decorator(f):
+    def decorator(f: Any):
         @functools.wraps(f)
-        async def decorated_function(*args, **kwargs):
+        async def decorated_function(*args: Any, **kwargs: Any):
             # First get about func args
             full_arg_spec = inspect.getfullargspec(f)
             # Get annotation

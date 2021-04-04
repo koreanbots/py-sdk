@@ -24,7 +24,7 @@ class KoreanbotsRequester:
         self.api_key = api_key
         self.session = session
         self.loop = loop or asyncio.get_event_loop()
-        self.queue = asyncio.Queue()
+        self.queue = asyncio.Queue()  # type:ignore
 
     def __del__(self) -> None:
         if self.session:
@@ -34,12 +34,12 @@ class KoreanbotsRequester:
                 self.loop.run_until_complete(self.session.close())
 
     async def handle_ratelimit(
-        self, session: aiohttp.ClientSession, *args, **kwargs
+        self, session: aiohttp.ClientSession, *args: Any, **kwargs: Any
     ) -> Dict[str, Any]:
         async with session.request(*args, **kwargs) as response:
             remain_limit = response.headers["x-ratelimit-remaining"]
             if remain_limit == 0 or response.status == 429:
-                await self.queue.put(session.request(*args, **kwargs))
+                await self.queue.put(session.request(*args, **kwargs))  # type: ignore
                 reset_limit_timestamp = int(response.headers["x-ratelimit-reset"])
                 resetLimit = datetime.fromtimestamp(reset_limit_timestamp)
                 retryAfter = resetLimit - datetime.now()
@@ -49,8 +49,8 @@ class KoreanbotsRequester:
                 )
                 await asyncio.sleep(retryAfter.total_seconds())
 
-                blocked_session_request: aiohttp.client._RequestContextManager = (
-                    await self.queue.get()
+                blocked_session_request: aiohttp.client._RequestContextManager = (  # type:ignore
+                    await self.queue.get()  # type: ignore
                 )
                 async with blocked_session_request as response:
                     return await response.json()

@@ -22,7 +22,7 @@ class BaseKoreanbots(KoreanbotsABC):
 
 
 class KoreanbotsBot(BaseKoreanbots):
-    def __init__(self, **response_data) -> None:
+    def __init__(self, **response_data: Any) -> None:
         super().__init__(**response_data)
 
     @property
