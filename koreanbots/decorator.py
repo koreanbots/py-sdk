@@ -1,17 +1,19 @@
 import functools
-from typing import Literal, get_args
-from koreanbots.http import KoreanbotsRequester
-from koreanbots.errors import AuthorizeError
 import inspect
+from typing import TYPE_CHECKING, Literal, get_args
+
+if TYPE_CHECKING:
+    from .errors import AuthorizeError
+    from .http import KoreanbotsRequester
 
 
 def required(f):
     @functools.wraps(f)
-    async def decorator_function(self: KoreanbotsRequester, *args, **kwargs):
+    async def decorator_function(self: "KoreanbotsRequester", *args, **kwargs):
         if not self.api_key:
             raise AuthorizeError("This endpoint required koreanbots token.")
 
-        return await f(self, headers={"Authorization": self.api_key}, *args, **kwargs)
+        return await f(self, *args, **kwargs)
 
     return decorator_function
 
@@ -36,8 +38,8 @@ def strict_literal(argument_name: str):
                         f"Arguments do not match. Expected: {literal_list}"
                     )
                 # Handle keyword arguments
-                elif recive_arg := kwargs.get(argument_name):
-                    if recive_arg not in literal_list:
+                elif kwargs.get(argument_name):
+                    if kwargs[argument_name] not in literal_list:
                         raise ValueError(
                             f"Arguments do not match. Expected: {literal_list}"
                         )

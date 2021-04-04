@@ -1,44 +1,53 @@
-from typing import Literal
+from typing import Dict, Literal, Type, TypeVar
 
-category = Literal[
+import discord
+
+from .errors import HTTPException
+
+Client = TypeVar("Client", bound=discord.Client)
+
+ErrorMapping = Dict[int, Type[HTTPException]]
+
+WidgetType = Literal["votes", "servers", "status"]
+
+WidgetStyle = Literal["classic", "flat"]
+
+Category = Literal[
     "관리",
     "뮤직",
     "전적",
-    "웹 대시보드",
-    "로깅",
-    "도박",
     "게임",
+    "도박",
+    "로깅",
+    "슬래시 명령어",
+    "웹 대시보드",
     "밈",
     "레벨링",
     "유틸리티",
-    "번역",
     "대화",
     "NSFW",
     "검색",
+    "학교",
+    "코로나19",
+    "번역",
+    "오버워치",
+    "리그 오브 레전드",
+    "배틀그라운드",
+    "마인크래프트",
 ]
 
-library = Literal[
-    "discord.js",
-    "Eris",
-    "discord.py",
-    "discordcr",
-    "Nyxx",
-    "Discord.Net",
-    "DSharpPlus",
-    "Nostrum",
-    "coxir",
-    "DiscordGo",
-    "Discord4J",
-    "Javacord",
-    "JDA",
-    "Discordia",
-    "RestCord",
-    "Yasmin",
-    "disco",
-    "discordrb",
-    "serenity",
-    "SwiftDiscord",
-    "Sword",
-    "기타",
-    "비공개",
+Status = Literal[
+    "online",
+    "idle",
+    "dnd",
+    "streaming",
+    "offline",
+]
+
+State = Literal[
+    "ok",
+    "reported",
+    "blocked",
+    "private",
+    "archived",
 ]

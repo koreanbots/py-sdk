@@ -1,49 +1,60 @@
 import asyncio
-from koreanbots.decorator import strict_literal
-from typing import Literal, Optional, Type
+import contextlib
+from typing import Optional
 
 import aiohttp
-from koreanbots.http import KoreanbotsRequester
-from koreanbots.errors import HTTPException
-import discord
-import contextlib
+
+from .decorator import strict_literal
+from .errors import HTTPException
+from .http import KoreanbotsRequester
+from .model import KoreanbotsBot, KoreanbotsUser
+from .typing import Client, WidgetStyle, WidgetType
 
 
 class Koreanbots(KoreanbotsRequester):
     def __init__(
         self,
-        client: Optional[Type[discord.Client]],
-        api_key: Optional[str],
-        session: Optional[aiohttp.ClientSession],
+        client: Optional[Client] = None,
+        api_key: Optional[str] = None,
+        session: Optional[aiohttp.ClientSession] = None,
+        loop: Optional[asyncio.AbstractEventLoop] = None,
+        task: bool = False,
     ) -> None:
         self.client = client
-        super().__init__(api_key, session=session)
+        super().__init__(api_key, session=session, loop=loop)
+
+        if task and client:
+            self.loop = loop or client.loop
+            self.loop.create_task(self.tasks_send_guildcount())
 
     async def tasks_send_guildcount(self):
         if not self.client:
             raise RuntimeError("Client Not Found")
 
-        await self.client.wait_until_ready()  # type: ignore
-        bot_id = (await self.client.application_info()).id  # type:ignore
-        total_guilds = len(self.client.guilds)  # type: ignore
-        while not self.client.is_closed():  # type: ignore
+        await self.client.wait_until_ready()
 
+        while not self.client.is_closed():
             with contextlib.suppress(HTTPException):
-                await self.guildcount(bot_id, total_guilds)
-
+                await self.guildcount(self.client.user.id, len(self.client.guilds))
             await asyncio.sleep(1800)
 
     async def guildcount(self, bot_id: int, total_guilds: int):
         return await self.post_update_bot_info(bot_id, total_guilds)
 
     async def userinfo(self, user_id: int):
-        return await self.get_user_info(user_id)
+        return KoreanbotsUser(**await self.get_user_info(user_id))
 
     async def botinfo(self, bot_id: int):
-        return await self.get_bot_info(bot_id)
+        return KoreanbotsBot(**await self.get_bot_info(bot_id))
 
     @strict_literal("widget_type")
+    @strict_literal("style")
     async def widget(
-        self, widget_type: Literal["votes", "servers", "status"], bot_id: int
+        self,
+        widget_type: WidgetType,
+        bot_id: int,
+        style: WidgetStyle = "flat",
+        scale: float = 1.0,
+        icon: bool = False,
     ):
-        return await self.get_bot_widget(widget_type, bot_id)
+        return await self.get_bot_widget_url(widget_type, bot_id, style, scale, icon)
