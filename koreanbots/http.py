@@ -1,6 +1,7 @@
 import asyncio
 from datetime import datetime
 from typing import Any, Dict, Literal, Optional
+from logging import getLogger
 
 import aiohttp
 
@@ -12,6 +13,8 @@ BASE = "https://beta.koreanbots.dev/api/"
 VERSION = "v2"
 
 KOREANBOTS_URL = BASE + VERSION
+
+log = getLogger(__name__)
 
 
 class KoreanbotsRequester:
@@ -43,9 +46,10 @@ class KoreanbotsRequester:
                 reset_limit_timestamp = int(response.headers["x-ratelimit-reset"])
                 resetLimit = datetime.fromtimestamp(reset_limit_timestamp)
                 retryAfter = resetLimit - datetime.now()
-                print(
-                    "we're now rate limited. retrying after %.2f seconds",
+                log.warn(
+                    "we're now rate limited. retrying after %.2f seconds, %d request in queue",
                     retryAfter.total_seconds(),
+                    self.queue.qsize(),  # type: ignore
                 )
                 await asyncio.sleep(retryAfter.total_seconds())
 

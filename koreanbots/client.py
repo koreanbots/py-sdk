@@ -1,14 +1,15 @@
 import asyncio
-import contextlib
 from typing import Optional
+from logging import getLogger
 
 import aiohttp
 
 from .decorator import strict_literal
-from .errors import HTTPException
 from .http import KoreanbotsRequester
 from .model import KoreanbotsBot, KoreanbotsUser
 from .typing import Client, WidgetStyle, WidgetType
+
+log = getLogger(__name__)
 
 
 class Koreanbots(KoreanbotsRequester):
@@ -34,8 +35,9 @@ class Koreanbots(KoreanbotsRequester):
         await self.client.wait_until_ready()
 
         while not self.client.is_closed():
-            with contextlib.suppress(HTTPException):
-                await self.guildcount(self.client.user.id, len(self.client.guilds))
+            log.info("Send")
+            await self.guildcount(self.client.user.id, len(self.client.guilds))
+            log.info("Complete i will sleep")
             await asyncio.sleep(1800)
 
     async def guildcount(self, bot_id: int, total_guilds: int) -> None:
