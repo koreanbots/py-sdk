@@ -80,11 +80,13 @@ class KoreanbotsRequester:
 
         return response
 
-    async def get_bot_info(self, bot_id: int):
+    async def get_bot_info(self, bot_id: int) -> Dict[str, Any]:
         return await self.request("GET", f"/bots/{bot_id}")
 
     @required
-    async def post_update_bot_info(self, bot_id: int, total_guilds: int):
+    async def post_update_bot_info(
+        self, bot_id: int, total_guilds: int
+    ) -> Dict[str, Any]:
         return await self.request(
             "POST",
             f"/bots/{bot_id}/stats",
@@ -101,7 +103,7 @@ class KoreanbotsRequester:
         style: WidgetStyle = "flat",
         scale: float = 1.0,
         icon: bool = False,
-    ):
+    ) -> str:
         return (
             KOREANBOTS_URL
             + f"/widget/bots/{widget_type}/{bot_id}.svg?style={style}&scale={scale}&icon={icon}"

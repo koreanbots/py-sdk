@@ -27,7 +27,7 @@ class Koreanbots(KoreanbotsRequester):
             self.loop = loop or client.loop
             self.loop.create_task(self.tasks_send_guildcount())
 
-    async def tasks_send_guildcount(self):
+    async def tasks_send_guildcount(self) -> None:
         if not self.client:
             raise RuntimeError("Client Not Found")
 
@@ -38,13 +38,13 @@ class Koreanbots(KoreanbotsRequester):
                 await self.guildcount(self.client.user.id, len(self.client.guilds))
             await asyncio.sleep(1800)
 
-    async def guildcount(self, bot_id: int, total_guilds: int):
-        return await self.post_update_bot_info(bot_id, total_guilds)
+    async def guildcount(self, bot_id: int, total_guilds: int) -> None:
+        await self.post_update_bot_info(bot_id, total_guilds)
 
-    async def userinfo(self, user_id: int):
+    async def userinfo(self, user_id: int) -> KoreanbotsUser:
         return KoreanbotsUser(**await self.get_user_info(user_id))
 
-    async def botinfo(self, bot_id: int):
+    async def botinfo(self, bot_id: int) -> KoreanbotsBot:
         return KoreanbotsBot(**await self.get_bot_info(bot_id))
 
     @strict_literal("widget_type")
@@ -56,5 +56,5 @@ class Koreanbots(KoreanbotsRequester):
         style: WidgetStyle = "flat",
         scale: float = 1.0,
         icon: bool = False,
-    ):
+    ) -> str:
         return await self.get_bot_widget_url(widget_type, bot_id, style, scale, icon)
