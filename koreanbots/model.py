@@ -110,7 +110,7 @@ class KoreanbotsBot(BaseKoreanbots):
         return self.data.get("status", None)
 
     @property
-    def state(self) -> Optional[State]:
+    def state(self) -> State:
         return self.data.get("state", None)
 
 
