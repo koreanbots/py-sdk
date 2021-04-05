@@ -9,12 +9,12 @@ class KoreanbotsABC(metaclass=abc.ABCMeta):
 
     @abc.abstractproperty
     def code(self) -> int:
-        return self.response_data.pop("code", 0)
+        return self.response_data.get("code", 0)
 
     @abc.abstractproperty
     def version(self) -> int:
-        return self.response_data.pop("version", 0)
+        return self.response_data.get("version", 0)
 
     @abc.abstractproperty
     def data(self) -> Dict[str, Any]:
-        return self.response_data.pop("data", {})
+        return self.response_data.get("data", {})

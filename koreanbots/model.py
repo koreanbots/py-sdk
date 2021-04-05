@@ -10,15 +10,15 @@ class BaseKoreanbots(KoreanbotsABC):
 
     @property
     def code(self) -> int:
-        return self.response_data.pop("code", 0)
+        return self.response_data.get("code", 0)
 
     @property
     def version(self) -> int:
-        return self.response_data.pop("version", 0)
+        return self.response_data.get("version", 0)
 
     @property
     def data(self) -> Dict[str, Any]:
-        return self.response_data.pop("data", {})
+        return self.response_data.get("data", {})
 
 
 class KoreanbotsBot(BaseKoreanbots):
@@ -27,91 +27,91 @@ class KoreanbotsBot(BaseKoreanbots):
 
     @property
     def id(self) -> str:
-        return self.data.pop("id", "")
+        return self.data.get("id", "")
 
     @property
     def name(self) -> str:
-        return self.data.pop("name", "")
+        return self.data.get("name", "")
 
     @property
     def tag(self) -> str:
-        return self.data.pop("tag", "")
+        return self.data.get("tag", "")
 
     @property
     def avatar(self) -> Optional[str]:
-        return self.data.pop("avatar", None)
+        return self.data.get("avatar", None)
 
     @property
     def owners(self) -> List[Dict[str, Any]]:
-        return self.data.pop("owners", [])
+        return self.data.get("owners", [])
 
     @property
     def flags(self) -> int:
-        return self.data.pop("flags", 0)
+        return self.data.get("flags", 0)
 
     @property
     def lib(self) -> str:
-        return self.data.pop("lib", "")
+        return self.data.get("lib", "")
 
     @property
     def prefix(self) -> str:
-        return self.data.pop("prefix", "")
+        return self.data.get("prefix", "")
 
     @property
     def votes(self) -> int:
-        return self.data.pop("votes", 0)
+        return self.data.get("votes", 0)
 
     @property
     def servers(self) -> int:
-        return self.data.pop("servers", 0)
+        return self.data.get("servers", 0)
 
     @property
     def intro(self) -> str:
-        return self.data.pop("intro", "")
+        return self.data.get("intro", "")
 
     @property
     def desc(self) -> str:
-        return self.data.pop("desc", "")
+        return self.data.get("desc", "")
 
     @property
     def web(self) -> Optional[str]:
-        return self.data.pop("web", None)
+        return self.data.get("web", None)
 
     @property
     def git(self) -> Optional[str]:
-        return self.data.pop("git", None)
+        return self.data.get("git", None)
 
     @property
     def url(self) -> Optional[str]:
-        return self.data.pop("url", None)
+        return self.data.get("url", None)
 
     @property
     def discord(self) -> Optional[str]:
-        return self.data.pop("discord", None)
+        return self.data.get("discord", None)
 
     @property
     def category(self) -> Category:
-        return self.data.pop("category", None)
+        return self.data.get("category", None)
 
     @property
     def vanity(self) -> Optional[str]:
-        return self.data.pop("vanity", None)
+        return self.data.get("vanity", None)
 
     @property
     def bg(self) -> Optional[str]:
-        return self.data.pop("bg", None)
+        return self.data.get("bg", None)
 
     @property
     def banner(self) -> Optional[str]:
-        return self.data.pop("banner", None)
+        return self.data.get("banner", None)
 
     @property
     def status(self) -> Optional[Status]:
-        return self.data.pop("status", None)
+        return self.data.get("status", None)
 
     @property
     def state(self) -> Optional[State]:
-        return self.data.pop("state", None)
+        return self.data.get("state", None)
 
 
 class KoreanbotsUser(BaseKoreanbots):
@@ -120,24 +120,24 @@ class KoreanbotsUser(BaseKoreanbots):
 
     @property
     def id(self) -> int:
-        return self.data.pop("id", 0)
+        return self.data.get("id", 0)
 
     @property
     def username(self) -> str:
-        return self.data.pop("username", "")
+        return self.data.get("username", "")
 
     @property
     def tag(self) -> str:
-        return self.data.pop("tag", "")
+        return self.data.get("tag", "")
 
     @property
     def github(self) -> Optional[str]:
-        return self.data.pop("github", None)
+        return self.data.get("github", None)
 
     @property
     def flags(self) -> int:
-        return self.data.pop("flags", 0)
+        return self.data.get("flags", 0)
 
     @property
     def bots(self) -> List[Any]:
-        return self.data.pop("bots", [])
+        return self.data.get("bots", [])
