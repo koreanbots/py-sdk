@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from .abc import KoreanbotsABC
 from .typing import Category, State, Status
@@ -22,8 +22,13 @@ class BaseKoreanbots(KoreanbotsABC):
 
 
 class KoreanbotsBot(BaseKoreanbots):
-    def __init__(self, **response_data: Any) -> None:
+    def __init__(
+        self,
+        call_in_user: bool = False,
+        **response_data: Any,
+    ) -> None:
         super().__init__(**response_data)
+        self.call_in_user = call_in_user
 
     @property
     def id(self) -> str:
@@ -42,8 +47,16 @@ class KoreanbotsBot(BaseKoreanbots):
         return self.data.get("avatar", None)
 
     @property
-    def owners(self) -> List[Dict[str, Any]]:
-        return self.data.get("owners", [])
+    def owners(self) -> Union[List["KoreanbotsUser"], List[str]]:
+        if self.call_in_user:
+            return self.response_data.get("owners", [])
+
+        return list(
+            map(
+                lambda user: KoreanbotsUser(True, **user),
+                self.data.get("owners", []),
+            )
+        )
 
     @property
     def flags(self) -> int:
@@ -115,8 +128,9 @@ class KoreanbotsBot(BaseKoreanbots):
 
 
 class KoreanbotsUser(BaseKoreanbots):
-    def __init__(self, **response_data: Any) -> None:
+    def __init__(self, call_in_bots: bool = False, **response_data: Any) -> None:
         super().__init__(**response_data)
+        self.call_in_bots = call_in_bots
 
     @property
     def id(self) -> int:
@@ -139,5 +153,15 @@ class KoreanbotsUser(BaseKoreanbots):
         return self.data.get("flags", 0)
 
     @property
-    def bots(self) -> List[Any]:
-        return self.data.get("bots", [])
+    def bots(
+        self,
+    ) -> Union[List[KoreanbotsBot], List[str]]:
+        if self.call_in_bots:
+            return self.response_data.get("bots", [])
+
+        return list(
+            map(
+                lambda bot: KoreanbotsBot(True, **bot),
+                self.data.get("bots", []),
+            )
+        )
