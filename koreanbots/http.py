@@ -1,4 +1,6 @@
-import asyncio
+from asyncio import sleep
+from asyncio.events import AbstractEventLoop, get_event_loop
+from asyncio.locks import Event
 from datetime import datetime
 from typing import Any, Dict, Literal, Optional
 from logging import getLogger
@@ -22,12 +24,13 @@ class KoreanbotsRequester:
         self,
         api_key: Optional[str] = None,
         session: Optional[aiohttp.ClientSession] = None,
-        loop: Optional[asyncio.AbstractEventLoop] = None,
+        loop: Optional[AbstractEventLoop] = None,
     ) -> None:
         self.api_key = api_key
         self.session = session
-        self.loop = loop or asyncio.get_event_loop()
-        self.queue = asyncio.Queue()  # type:ignore
+        self.loop = loop or get_event_loop()
+        self._global_limit = Event()
+        self._global_limit.set()
 
     def __del__(self) -> None:
         if self.session:
@@ -36,53 +39,43 @@ class KoreanbotsRequester:
             else:
                 self.loop.run_until_complete(self.session.close())
 
-    async def handle_ratelimit(
-        self, session: aiohttp.ClientSession, *args: Any, **kwargs: Any
-    ) -> Dict[str, Any]:
-        async with session.request(*args, **kwargs) as response:
-            remain_limit = response.headers["x-ratelimit-remaining"]
-            if remain_limit == 0 or response.status == 429:
-                await self.queue.put(session.request(*args, **kwargs))  # type: ignore
-                reset_limit_timestamp = int(response.headers["x-ratelimit-reset"])
-                resetLimit = datetime.fromtimestamp(reset_limit_timestamp)
-                retryAfter = resetLimit - datetime.now()
-                log.warn(
-                    "we're now rate limited. retrying after %.2f seconds, %d request in queue",
-                    retryAfter.total_seconds(),
-                    self.queue.qsize(),  # type: ignore
-                )
-                await asyncio.sleep(retryAfter.total_seconds())
-
-                blocked_session_request: aiohttp.client._RequestContextManager = (  # type:ignore
-                    await self.queue.get()  # type: ignore
-                )
-                async with blocked_session_request as response:
-                    return await response.json()
-
-            elif response.status != 200:
-                if ERROR_MAPPING.get(response.status):
-                    raise ERROR_MAPPING[response.status](
-                        response.status, await response.json()
-                    )
-                else:
-                    raise HTTPException(response.status, await response.json())
-
-            return await response.json()
-
     async def request(
         self,
         method: Literal["GET", "POST"],
         endpoint: str,
         **kwargs: Any,
     ) -> Dict[str, Any]:
+        response = None
         if not self.session:
             self.session = aiohttp.ClientSession()
 
-        response = await self.handle_ratelimit(
-            self.session, method, KOREANBOTS_URL + endpoint, **kwargs
-        )
+        if not self._global_limit.is_set():
+            await self._global_limit.wait()
 
-        return response
+        for _ in range(5):
+            async with self.session.request(
+                method, KOREANBOTS_URL + endpoint, **kwargs
+            ) as response:
+                print(response.headers)
+                remain_limit = response.headers["x-ratelimit-remaining"]
+                if remain_limit == 0 or response.status == 429:
+                    reset_limit_timestamp = int(response.headers["x-ratelimit-reset"])
+                    reset_limit = datetime.fromtimestamp(reset_limit_timestamp)
+                    retry_after = reset_limit - datetime.now()
+                    self._global_limit.clear()
+                    await sleep(retry_after.total_seconds())
+                    self._global_limit.set()
+                    continue
+
+                if response.status != 200:
+                    if ERROR_MAPPING.get(response.status):
+                        raise ERROR_MAPPING[response.status](
+                            response.status, await response.json()
+                        )
+                    else:
+                        raise HTTPException(response.status, await response.json())
+        assert response is not None
+        return await response.json()
 
     async def get_bot_info(self, bot_id: int) -> Dict[str, Any]:
         return await self.request("GET", f"/bots/{bot_id}")
