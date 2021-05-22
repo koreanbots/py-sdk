@@ -56,7 +56,6 @@ class KoreanbotsRequester:
             async with self.session.request(
                 method, KOREANBOTS_URL + endpoint, **kwargs
             ) as response:
-                print(response.headers)
                 remain_limit = response.headers["x-ratelimit-remaining"]
                 if remain_limit == 0 or response.status == 429:
                     reset_limit_timestamp = int(response.headers["x-ratelimit-reset"])
@@ -74,8 +73,9 @@ class KoreanbotsRequester:
                         )
                     else:
                         raise HTTPException(response.status, await response.json())
-        assert response is not None
-        return await response.json()
+                return await response.json()
+
+        assert None
 
     async def get_bot_info(self, bot_id: int) -> Dict[str, Any]:
         return await self.request("GET", f"/bots/{bot_id}")
