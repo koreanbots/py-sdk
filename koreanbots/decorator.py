@@ -40,7 +40,7 @@ def strict_literal(argument_name: str):
                         f"Arguments do not match. Expected: {literal_list}"
                     )
                 # Handle keyword arguments
-                elif kwargs.get(argument_name):
+                elif kwargs.get(argument_name) and kwargs[argument_name] not in literal_list:
                     if kwargs[argument_name] not in literal_list:
                         raise ValueError(
                             f"Arguments do not match. Expected: {literal_list}"
