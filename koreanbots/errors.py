@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from .typing import ErrorMapping
 
 
-class KoreanbotsExeption(Exception):
+class KoreanbotsException(Exception):
     pass
 
 
