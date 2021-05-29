@@ -11,7 +11,7 @@ path = os.path.dirname(os.path.realpath(__file__)).replace('\\', '/')
 
 requirements = []
 with open(f'{path}/requirements.txt', encoding='UTF8') as f:
-  requirements = f.read().splitlines()
+    requirements = f.read().splitlines()
 
 if not version:
     raise RuntimeError('version is not defined')
@@ -25,7 +25,7 @@ setup(
     author='kijk2869',
     url='https://github.com/kijk2869/koreanbots',
     project_urls={
-        "Homepage": "https://koreanbots.cf/",
+        "Homepage": "https://koreanbots.dev/",
         "Source":"https://github.com/koreanbots/py-sdk",
         "Tracker":"https://github.com/koreanbots/py-sdk/issues"
     },
