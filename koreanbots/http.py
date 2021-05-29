@@ -63,11 +63,12 @@ class HTTPClient:
         HTTP 리퀘스트에 사용되는 asyncio.AbstractEventLoop 클래스 입니다.
     """
 
-    BASE = 'https://api.koreanbots.dev/v1'
+    BASE = 'https://koreanbots.dev/api/v2'
 
-    def __init__(self, token=None, loop=None):
+    def __init__(self, bot_id: int, token=None, loop=None):
         self.loop = loop or get_event_loop()
         self.token = token
+        self.id = bot_id
 
         self._globalLimit = Event()
         self._globalLimit.set()
@@ -166,7 +167,7 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        await self.request('POST', '/bots/servers', json={'servers': guild_count})
+        await self.request('POST', f'/bots/{self.id}/stats', json={'servers': guild_count})
 
     async def getVote(self, user_id: int):
         r"""주어진 유저ID의 하트 정보를 가져옵니다.
@@ -189,7 +190,7 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        Data = await self.request('GET', f"/bots/voted/{user_id}")
+        Data = await self.request('GET', f"/bots/{self.id}/vote?userID={user_id}")
         return userVoted(Data)
 
     async def getBot(self, bot_id: int):
@@ -205,7 +206,7 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        Data = await self.request('GET', f"/bots/get/{bot_id}", authorize=False)
+        Data = await self.request('GET', f"/bots/{bot_id}", authorize=False)
         return Bot(Data.get('data', {}))
 
     async def getBots(self, page: int=1):
@@ -221,7 +222,7 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        Data = await self.request('GET', '/bots/get', authorize=False, params={'page': page})
+        Data = await self.request('GET', '/list/bots/vote', authorize=False, params={'page': page})
         return [Bot(_) for _ in Data.get('data', [])]
 
     async def searchBots(self, query: str, page: int=1):
@@ -239,7 +240,7 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        Data = await self.request('GET', '/bots/search', authorize=False, params={'q':query,  'page':page})
+        Data = await self.request('GET', '/search/bots', authorize=False, params={'query':query,  'page':page})
         return [Bot(_) for _ in Data.get('data', [])]
 
     async def getBotsByCategory(self, category: Category, page: int=1):
