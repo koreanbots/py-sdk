@@ -69,6 +69,21 @@ class Bot(DBKRResponse):
     def __init__(self, response):
         super().__init__(response)
 
+        
+class User(DBKRResponse):
+    r""".HTTPClient의 유저 정보 데이터의 모델입니다.
+
+    속성
+    -----------
+    response: dict
+        반환되는 데이터의 dict입니다.
+    attribute
+        attribute의 이름을 입력하면 해당 값을 반환합니다.
+    """
+    def __init__(self, response):
+        super().__init__(response)
+
+        
 from enum import Enum
 
 Category = Enum('Category', 
