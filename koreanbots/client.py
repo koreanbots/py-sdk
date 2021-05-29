@@ -60,7 +60,7 @@ class Client:
     def __init__(self, Bot, Token, loop=None, postCount=True):
         self.Bot = Bot
         self.loop = loop or Bot.loop
-        self.http = HTTPClient(Token, loop=loop)
+        self.http = HTTPClient(Token, loop=loop, bot_id=Bot.id)
         if postCount:
             self.loop.create_task(self.postCount())
     
