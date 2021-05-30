@@ -25,7 +25,6 @@ SOFTWARE.
 from asyncio import get_event_loop, Event, sleep
 from aiohttp import ClientSession
 from datetime import datetime
-from json import loads
 from logging import getLogger
 from io import BytesIO
 from .errors import *
