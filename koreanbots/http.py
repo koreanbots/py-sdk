@@ -209,6 +209,22 @@ class HTTPClient:
         Data = await self.request('GET', f"/bots/{bot_id}", authorize=False)
         return Bot(Data.get('data', {}))
 
+    async def getUser(self, user_id: int):
+        r"""주어진 유저ID의 KoreanBots 정보를 가져옵니다.
+
+        파라미터
+        -------------
+        user_id: int
+            정보를 가져올 유저의 ID
+
+        예외
+        --------
+        .errors.HTTPException
+            알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
+        """
+        Data = await self.request('GET', f"/users/{user_id}", authorize=False)
+        return User(Data.get('data', {}))
+
     async def getBots(self, page: int=1):
         r"""KoreanBots의 봇 리스트를 가져옵니다.
 

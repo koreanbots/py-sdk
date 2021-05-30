@@ -60,7 +60,7 @@ class Client:
     def __init__(self, Bot, Token, loop=None, postCount=True):
         self.Bot = Bot
         self.loop = loop or Bot.loop
-        self.http = HTTPClient(Token, loop=loop, bot_id=Bot.id)
+        self.http = HTTPClient(bot_id=Bot.id, token=Token, loop=loop)
         if postCount:
             self.loop.create_task(self.postCount())
     
@@ -132,6 +132,21 @@ class Client:
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
         return await self.http.getBot(bot_id)
+
+    async def getUser(self, user_id: int):
+        r"""주어진 유저ID의 KoreanBots 정보를 가져옵니다.
+
+        파라미터
+        -------------
+        user_id: int
+            정보를 가져올 유저의 ID
+
+        예외
+        --------
+        .errors.HTTPException
+            알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
+        """
+        return await self.http.getUser(user_id)
 
     async def getBots(self, page: int=1):
         r"""KoreanBots의 봇 리스트를 가져옵니다.
