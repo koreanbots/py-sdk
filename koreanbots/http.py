@@ -237,7 +237,7 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        data = await self.request('GET', '/list/bots/vote', authorize=False, params={'page': page})
+        data = await self.request('GET', '/list/bots/votes', authorize=False, params={'page': page})
         return [Bot(_) for _ in data.get('data', [])]
 
     async def searchBots(self, query: str, page: int = 1):
