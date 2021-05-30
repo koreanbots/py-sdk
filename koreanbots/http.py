@@ -102,7 +102,7 @@ class HTTPClient:
         url = self.BASE + endpoint
         kwargs['headers'] = {"content-type": "application/json"}
         if authorize and self.token:
-            kwargs['headers']['token'] = self.token
+            kwargs['headers']['Authorization'] = self.token
         elif authorize and not self.token:
             raise AuthorizeError('this endpoint required koreanbots token.')
         
