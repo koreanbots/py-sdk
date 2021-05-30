@@ -27,7 +27,6 @@ from asyncio import sleep
 from logging import getLogger
 from .http import HTTPClient
 from .errors import HTTPException
-from .model import Category as CategoryModel
 log = getLogger(__name__)
 
 
@@ -180,23 +179,6 @@ class Client:
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
         return await self.http.searchBots(query, page)
-
-    async def getBotsByCategory(self, category: CategoryModel, page: int = 1):
-        r"""주어진 카테고리에 해당하는 KoreanBots 정보를 가져옵니다.
-
-        파라미터
-        -------------
-        category: .Category
-            KoreanBots의 카테고리
-        page: 선택[int]
-            봇 리스트의 페이지입니다. 기본값은 1입니다.
-
-        예외
-        --------
-        .errors.HTTPException
-            알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
-        """
-        return await self.http.getBotsByCategory(category, page)
     
     async def getVoteWidget(self, bot_id: int, *args, filename='servers.png', **kwargs):
         r"""주어진 봇ID의 투표 수 위젯의 discord.File을 가져옵니다.

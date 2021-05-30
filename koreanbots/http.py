@@ -257,26 +257,6 @@ class HTTPClient:
         """
         data = await self.request('GET', '/search/bots', authorize=False, params={'query': query,  'page': page})
         return [Bot(_) for _ in data.get('data', [])]
-
-    async def getBotsByCategory(self, category: Category, page: int = 1):
-        r"""주어진 카테고리에 해당하는 KoreanBots 정보를 가져옵니다.
-
-        파라미터
-        -------------
-        category: .Category
-            KoreanBots의 카테고리
-        page: 선택[int]
-            봇 리스트의 페이지입니다. 기본값은 1입니다.
-
-        예외
-        --------
-        .errors.HTTPException
-            알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
-        """
-        if isinstance(category, Category):
-            category = category.name
-        data = await self.request('GET', f"/bots/category/{category}", authorize=False, params={'page': page})
-        return [Bot(_) for _ in data.get('data', [])]
     
     async def getVoteWidget(self, bot_id: int):
         r"""주어진 봇ID의 투표 수 위젯(png)을 가져옵니다.
