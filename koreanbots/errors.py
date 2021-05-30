@@ -17,7 +17,7 @@ class HTTPException(KoreanbotsException):
         self.status = code
         if isinstance(message, dict):
             self.status = message.get("code", self.status)
-            self.error = message.get("message", "KoreanbotsExeption")
+            self.error = message.get("message", "KoreanbotsException")
         else:
             self.error = message
         super().__init__(f"{self.status} {self.error}")
