@@ -40,7 +40,7 @@ async def detectJson(response):
 
 try:
     from cairosvg import svg2png
-except ImportError:
+except:
     svg2png = None
 
 
