@@ -61,7 +61,7 @@ class Client:
     def __init__(self, Bot, Token, loop=None, postCount=True):
         self.Bot = Bot
         self.loop = loop or Bot.loop
-        self.http = HTTPClient(bot_id=Bot.id, token=Token, loop=loop)
+        self.http = HTTPClient(token=Token, loop=loop)
         if postCount:
             self.loop.create_task(self.postCount())
     
@@ -94,7 +94,7 @@ class Client:
         """
 
         guild_counts = len(self.Bot.guilds)
-        await self.http.postGuildCount(guild_counts)
+        await self.http.postGuildCount(guild_counts, bot_id=self.Bot.user.id)
 
     async def getVote(self, user_id: int):
         r"""주어진 유저ID의 하트 정보를 가져옵니다.
@@ -117,7 +117,7 @@ class Client:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        return await self.http.getVote(user_id)
+        return await self.http.getVote(user_id, bot_id=self.Bot.user.id)
 
     async def getBot(self, bot_id: int):
         r"""주어진 봇ID의 KoreanBots 정보를 가져옵니다.

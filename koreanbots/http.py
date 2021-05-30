@@ -66,10 +66,9 @@ class HTTPClient:
 
     BASE = 'https://koreanbots.dev/api/v2'
 
-    def __init__(self, bot_id: int, token=None, loop=None):
+    def __init__(self, token=None, loop=None):
         self.loop = loop or get_event_loop()
         self.token = token
-        self.id = bot_id
 
         self._globalLimit = Event()
         self._globalLimit.set()
@@ -146,7 +145,7 @@ class HTTPClient:
                         raise HTTPException(response, data)
         raise HTTPException(response, data)
 
-    async def postGuildCount(self, guild_count: int):
+    async def postGuildCount(self, guild_count: int, bot_id: int):
         r"""주어진 길드 수를 KoreanBots API로 보냅니다.
 
         파라미터
@@ -167,9 +166,9 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        await self.request('POST', f'/bots/{self.id}/stats', json={'servers': guild_count})
+        await self.request('POST', f'/bots/{bot_id}/stats', json={'servers': guild_count})
 
-    async def getVote(self, user_id: int):
+    async def getVote(self, user_id: int, bot_id: int):
         r"""주어진 유저ID의 하트 정보를 가져옵니다.
 
         파라미터
@@ -190,7 +189,7 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        data = await self.request('GET', f"/bots/{self.id}/vote?userID={user_id}")
+        data = await self.request('GET', f"/bots/{bot_id}/vote?userID={user_id}")
         return userVoted(data)
 
     async def getBot(self, bot_id: int):
