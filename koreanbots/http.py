@@ -32,6 +32,7 @@ from .errors import *
 from .model import *
 log = getLogger(__name__)
 
+
 async def detectJson(response):
     try:
         return await response.json()
@@ -42,7 +43,8 @@ try:
     from cairosvg import svg2png
 except:
     svg2png = None
-    
+
+
 class HTTPClient:
     r"""KoreanBots의 HTTP 클라이언트를 반환합니다.
     이 클래스는 KoreanBots API와 연결됩니다.
@@ -100,7 +102,7 @@ class HTTPClient:
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
         url = self.BASE + endpoint
-        kwargs['headers'] = {"content-type":"application/json"}
+        kwargs['headers'] = {"content-type": "application/json"}
         if authorize and self.token:
             kwargs['headers']['token'] = self.token
         elif authorize and not self.token:
@@ -113,39 +115,38 @@ class HTTPClient:
             async with ClientSession() as session:
                 async with session.request(method, url, **kwargs) as response:
                     log.debug(f'{method} {url} returned {response.status}')
-                    Data = await detectJson(response)
+                    data = await detectJson(response)
                     
-                    remainLimit = response.headers.get('x-ratelimit-remaining')
-                    if remainLimit == 0 or response.status == 429:
-                        resetLimitTimestamp = int(response.headers.get('x-ratelimit-reset'))
-                        resetLimit = datetime.fromtimestamp(resetLimitTimestamp)
+                    remain_limit = response.headers.get('x-ratelimit-remaining')
+                    if remain_limit == 0 or response.status == 429:
+                        reset_limit_timestamp = int(response.headers.get('x-ratelimit-reset'))
+                        reset_limit = datetime.fromtimestamp(reset_limit_timestamp)
 
-                        retryAfter = resetLimit - datetime.now()
+                        retry_after = reset_limit - datetime.now()
 
-                        log.warning(r"we're now rate limited. retrying after %.2f seconds", retryAfter.total_seconds())
+                        log.warning(r"we're now rate limited. retrying after %.2f seconds", retry_after.total_seconds())
                         if not endpoint == '/bot/servers':
                             self._globalLimit.clear()
 
-                        await sleep(retryAfter.total_seconds())
+                        await sleep(retry_after.total_seconds())
                         if not endpoint == '/bot/servers':
                             self._globalLimit.set()
 
                         continue
 
                     if 200 <= response.status < 300:
-                        return Data
+                        return data
                     
                     if response.status == 401:
-                        raise Unauthorized(response, Data)
+                        raise Unauthorized(response, data)
                     elif response.status == 403:
-                        raise Forbidden(response, Data)
+                        raise Forbidden(response, data)
                     elif response.status == 404:
-                        raise NotFound(response, Data)
+                        raise NotFound(response, data)
                     else:
-                        raise HTTPException(response, Data)
-        raise HTTPException(response, Data)
-                
-    
+                        raise HTTPException(response, data)
+        raise HTTPException(response, data)
+
     async def postGuildCount(self, guild_count: int):
         r"""주어진 길드 수를 KoreanBots API로 보냅니다.
 
@@ -190,8 +191,8 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        Data = await self.request('GET', f"/bots/{self.id}/vote?userID={user_id}")
-        return userVoted(Data)
+        data = await self.request('GET', f"/bots/{self.id}/vote?userID={user_id}")
+        return userVoted(data)
 
     async def getBot(self, bot_id: int):
         r"""주어진 봇ID의 KoreanBots 정보를 가져옵니다.
@@ -206,8 +207,8 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        Data = await self.request('GET', f"/bots/{bot_id}", authorize=False)
-        return Bot(Data.get('data', {}))
+        data = await self.request('GET', f"/bots/{bot_id}", authorize=False)
+        return Bot(data.get('data', {}))
 
     async def getUser(self, user_id: int):
         r"""주어진 유저ID의 KoreanBots 정보를 가져옵니다.
@@ -222,10 +223,10 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        Data = await self.request('GET', f"/users/{user_id}", authorize=False)
-        return User(Data.get('data', {}))
+        data = await self.request('GET', f"/users/{user_id}", authorize=False)
+        return User(data.get('data', {}))
 
-    async def getBots(self, page: int=1):
+    async def getBots(self, page: int = 1):
         r"""KoreanBots의 봇 리스트를 가져옵니다.
 
         파라미터
@@ -238,10 +239,10 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        Data = await self.request('GET', '/list/bots/vote', authorize=False, params={'page': page})
-        return [Bot(_) for _ in Data.get('data', [])]
+        data = await self.request('GET', '/list/bots/vote', authorize=False, params={'page': page})
+        return [Bot(_) for _ in data.get('data', [])]
 
-    async def searchBots(self, query: str, page: int=1):
+    async def searchBots(self, query: str, page: int = 1):
         r"""주어진 문자열로 KoreanBots 봇을 검색합니다.
 
         파라미터
@@ -256,10 +257,10 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        Data = await self.request('GET', '/search/bots', authorize=False, params={'query':query,  'page':page})
-        return [Bot(_) for _ in Data.get('data', [])]
+        data = await self.request('GET', '/search/bots', authorize=False, params={'query': query,  'page': page})
+        return [Bot(_) for _ in data.get('data', [])]
 
-    async def getBotsByCategory(self, category: Category, page: int=1):
+    async def getBotsByCategory(self, category: Category, page: int = 1):
         r"""주어진 카테고리에 해당하는 KoreanBots 정보를 가져옵니다.
 
         파라미터
@@ -276,8 +277,8 @@ class HTTPClient:
         """
         if isinstance(category, Category):
             category = category.name
-        Data = await self.request('GET', f"/bots/category/{category}", authorize=False, params={'page': page})
-        return [Bot(_) for _ in Data.get('data', [])]
+        data = await self.request('GET', f"/bots/category/{category}", authorize=False, params={'page': page})
+        return [Bot(_) for _ in data.get('data', [])]
     
     async def getVoteWidget(self, bot_id: int):
         r"""주어진 봇ID의 투표 수 위젯(png)을 가져옵니다.
@@ -320,8 +321,9 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        Data = await self.getBot(bot_id)
-        if not Data: return
+        data = await self.getBot(bot_id)
+        if not data:
+            return
 
         return f"{self.BASE}/widget/bots/votes/{bot_id}.svg"
     
@@ -338,8 +340,9 @@ class HTTPClient:
         .errors.HTTPException
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
-        Data = await self.getBot(bot_id)
-        if not Data: return
+        data = await self.getBot(bot_id)
+        if not data:
+            return
 
         return f"{self.BASE}/widget/bots/servers/{bot_id}.svg"
     

@@ -22,11 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+
 class DBKRException(Exception):
     """koreanbots의 기본 예외 클래스입니다.
     즉, 이 라이브러리의 모든 예외는 이 예외로 잡을 수 있습니다.
     """
     pass
+
 
 class AuthorizeError(DBKRException):
     """.Client 혹은 .HTTPClient에게 토큰이 주어지지 않았을때,
@@ -34,10 +36,12 @@ class AuthorizeError(DBKRException):
     """
     pass
 
+
 class HTTPException(DBKRException):
     """.HTTPClient의 기본 예외 클래스입니다.
     즉 .HTTPClient의 모든 예외는 이 예외로 잡을 수 있습니다.
     """
+
     def __init__(self, response, message):
         self.status = response.status
         if isinstance(message, dict):

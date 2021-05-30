@@ -30,6 +30,7 @@ from .errors import HTTPException
 from .model import Category as CategoryModel
 log = getLogger(__name__)
 
+
 class Client:
     r"""discord.py Client를 기반으로 한 KoreanBots 클라이언트를 반환합니다.
     이 클래스는 KoreanBots API와 연결됩니다.
@@ -92,8 +93,8 @@ class Client:
             알수없는 HTTP 에러가 발생했습니다, 주로 400에 발생합니다.
         """
 
-        GuildCounts = len(self.Bot.guilds)
-        await self.http.postGuildCount(GuildCounts)
+        guild_counts = len(self.Bot.guilds)
+        await self.http.postGuildCount(guild_counts)
 
     async def getVote(self, user_id: int):
         r"""주어진 유저ID의 하트 정보를 가져옵니다.
@@ -148,7 +149,7 @@ class Client:
         """
         return await self.http.getUser(user_id)
 
-    async def getBots(self, page: int=1):
+    async def getBots(self, page: int = 1):
         r"""KoreanBots의 봇 리스트를 가져옵니다.
 
         파라미터
@@ -163,7 +164,7 @@ class Client:
         """
         return await self.http.getBots(page)
 
-    async def searchBots(self, query: str, page: int=1):
+    async def searchBots(self, query: str, page: int = 1):
         r"""주어진 문자열로 KoreanBots 봇을 검색합니다.
 
         파라미터
@@ -180,7 +181,7 @@ class Client:
         """
         return await self.http.searchBots(query, page)
 
-    async def getBotsByCategory(self, category: CategoryModel, page: int=1):
+    async def getBotsByCategory(self, category: CategoryModel, page: int = 1):
         r"""주어진 카테고리에 해당하는 KoreanBots 정보를 가져옵니다.
 
         파라미터
