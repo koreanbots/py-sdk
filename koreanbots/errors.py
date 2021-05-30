@@ -8,11 +8,11 @@ class KoreanbotsException(Exception):
     pass
 
 
-class AuthorizeError(KoreanbotsExeption):
+class AuthorizeError(KoreanbotsException):
     pass
 
 
-class HTTPException(KoreanbotsExeption):
+class HTTPException(KoreanbotsException):
     def __init__(self, code: Any, message: Union[Any, Dict[str, Any]]):
         self.status = code
         if isinstance(message, dict):
