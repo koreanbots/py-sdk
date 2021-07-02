@@ -11,7 +11,7 @@ from .decorator import required, strict_literal
 from .errors import ERROR_MAPPING, HTTPException
 from .typing import WidgetStyle, WidgetType
 
-BASE = "https://beta.koreanbots.dev/api/"
+BASE = "https://koreanbots.dev/api/"
 VERSION = "v2"
 
 KOREANBOTS_URL = BASE + VERSION
