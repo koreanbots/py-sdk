@@ -43,7 +43,7 @@ class KoreanbotsRequester:
 
         for _ in range(5):
             async with aiohttp.ClientSession() as session:
-                async with self.session.request(
+                async with session.request(
                     method, KOREANBOTS_URL + endpoint, **kwargs
                 ) as response:
                     remain_limit = response.headers["x-ratelimit-remaining"]
