@@ -32,13 +32,6 @@ class KoreanbotsRequester:
         self._global_limit = Event()
         self._global_limit.set()
 
-    def __del__(self) -> None:
-        if self.session:
-            if self.loop.is_running():
-                self.loop.create_task(self.session.close())
-            else:
-                self.loop.run_until_complete(self.session.close())
-
     async def request(
         self,
         method: Literal["GET", "POST"],
@@ -46,34 +39,33 @@ class KoreanbotsRequester:
         **kwargs: Any,
     ) -> Dict[str, Any]:
         response = None
-        if not self.session:
-            self.session = aiohttp.ClientSession()
 
         if not self._global_limit.is_set():
             await self._global_limit.wait()
 
         for _ in range(5):
-            async with self.session.request(
-                method, KOREANBOTS_URL + endpoint, **kwargs
-            ) as response:
-                remain_limit = response.headers["x-ratelimit-remaining"]
-                if remain_limit == 0 or response.status == 429:
-                    reset_limit_timestamp = int(response.headers["x-ratelimit-reset"])
-                    reset_limit = datetime.fromtimestamp(reset_limit_timestamp)
-                    retry_after = reset_limit - datetime.now()
-                    self._global_limit.clear()
-                    await sleep(retry_after.total_seconds())
-                    self._global_limit.set()
-                    continue
+            async with aiohttp.ClientSession() as session:
+                async with self.session.request(
+                    method, KOREANBOTS_URL + endpoint, **kwargs
+                ) as response:
+                    remain_limit = response.headers["x-ratelimit-remaining"]
+                    if remain_limit == 0 or response.status == 429:
+                        reset_limit_timestamp = int(response.headers["x-ratelimit-reset"])
+                        reset_limit = datetime.fromtimestamp(reset_limit_timestamp)
+                        retry_after = reset_limit - datetime.now()
+                        self._global_limit.clear()
+                        await sleep(retry_after.total_seconds())
+                        self._global_limit.set()
+                        continue
 
-                if response.status != 200:
-                    if ERROR_MAPPING.get(response.status):
-                        raise ERROR_MAPPING[response.status](
-                            response.status, await response.json()
-                        )
-                    else:
-                        raise HTTPException(response.status, await response.json())
-                return await response.json()
+                    if response.status != 200:
+                        if ERROR_MAPPING.get(response.status):
+                            raise ERROR_MAPPING[response.status](
+                                response.status, await response.json()
+                            )
+                        else:
+                            raise HTTPException(response.status, await response.json())
+                    return await response.json()
 
         assert None
 
