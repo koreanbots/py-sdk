@@ -3,9 +3,7 @@
 from setuptools import setup
 import re, os
 
-version = ''
-with open('koreanbots/__init__.py', encoding='UTF8') as f:
-    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
+version = '2.0.0'
 
 path = os.path.dirname(os.path.realpath(__file__)).replace('\\', '/')
 
@@ -22,13 +20,6 @@ with open(f'{path}/README.rst', encoding='UTF8') as f:
 
 setup(
     name='koreanbots',
-    author='kijk2869',
-    url='https://github.com/kijk2869/koreanbots',
-    project_urls={
-        "Homepage": "https://koreanbots.cf/",
-        "Source":"https://github.com/koreanbots/py-sdk",
-        "Tracker":"https://github.com/koreanbots/py-sdk/issues"
-    },
     version=version,
     packages=['koreanbots'],
     license='MIT',
