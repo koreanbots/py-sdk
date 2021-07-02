@@ -17,7 +17,6 @@ class Koreanbots(KoreanbotsRequester):
         self,
         client: Optional[Client] = None,
         api_key: Optional[str] = None,
-        session: Optional[aiohttp.ClientSession] = None,
         loop: Optional[asyncio.AbstractEventLoop] = None,
         task: bool = False,
     ) -> None:
@@ -26,7 +25,7 @@ class Koreanbots(KoreanbotsRequester):
 
         if task and client:
             self.loop = loop or client.loop
-            self.loop.create_task(self.tasks_send_guildcount())
+            self.loop.create_task(self.tasks_send_guildcount)
 
     async def tasks_send_guildcount(self) -> None:
         if not self.client:
