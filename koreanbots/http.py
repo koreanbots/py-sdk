@@ -23,11 +23,9 @@ class KoreanbotsRequester:
     def __init__(
         self,
         api_key: Optional[str] = None,
-        session: Optional[aiohttp.ClientSession] = None,
         loop: Optional[AbstractEventLoop] = None,
     ) -> None:
         self.api_key = api_key
-        self.session = session
         self.loop = loop or get_event_loop()
         self._global_limit = Event()
         self._global_limit.set()
