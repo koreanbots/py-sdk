@@ -21,7 +21,7 @@ class Koreanbots(KoreanbotsRequester):
         task: bool = False,
     ) -> None:
         self.client = client
-        super().__init__(api_key, session=session, loop=loop)
+        super().__init__(api_key, loop=loop)
 
         if task and client:
             self.loop = loop or client.loop
