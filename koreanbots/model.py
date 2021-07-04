@@ -79,12 +79,12 @@ class KoreanbotsBot(BaseKoreanbots):
         return self.data.get("servers", 0)
 
     @property
-    def intro(self) -> str:
-        return self.data.get("intro", "")
+    def intro(self) -> Optional[str]:
+        return self.data.get("intro")
 
     @property
-    def desc(self) -> str:
-        return self.data.get("desc", "")
+    def desc(self) -> Optional[str]:
+        return self.data.get("desc")
 
     @property
     def web(self) -> Optional[str]:
