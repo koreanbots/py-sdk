@@ -31,20 +31,20 @@ class KoreanbotsBot(BaseKoreanbots):
         self.call_in_user = call_in_user
 
     @property
-    def id(self) -> str:
-        return self.data.get("id", "")
+    def id(self) -> Optional[str]:
+        return self.data.get("id")
 
     @property
-    def name(self) -> str:
-        return self.data.get("name", "")
+    def name(self) -> Optional[str]:
+        return self.data.get("name")
 
     @property
-    def tag(self) -> str:
-        return self.data.get("tag", "")
+    def tag(self) -> Optional[str]:
+        return self.data.get("tag")
 
     @property
     def avatar(self) -> Optional[str]:
-        return self.data.get("avatar", None)
+        return self.data.get("avatar")
 
     @property
     def owners(self) -> Union[List["KoreanbotsUser"], List[str]]:
