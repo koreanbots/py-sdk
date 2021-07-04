@@ -63,12 +63,12 @@ class KoreanbotsBot(BaseKoreanbots):
         return self.data.get("flags", 0)
 
     @property
-    def lib(self) -> str:
-        return self.data.get("lib", "")
+    def lib(self) -> Optional[str]:
+        return self.data.get("lib")
 
     @property
-    def prefix(self) -> str:
-        return self.data.get("prefix", "")
+    def prefix(self) -> Optional[str]:
+        return self.data.get("prefix")
 
     @property
     def votes(self) -> int:
