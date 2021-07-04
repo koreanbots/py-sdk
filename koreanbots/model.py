@@ -88,43 +88,43 @@ class KoreanbotsBot(BaseKoreanbots):
 
     @property
     def web(self) -> Optional[str]:
-        return self.data.get("web", None)
+        return self.data.get("web")
 
     @property
     def git(self) -> Optional[str]:
-        return self.data.get("git", None)
+        return self.data.get("git")
 
     @property
     def url(self) -> Optional[str]:
-        return self.data.get("url", None)
+        return self.data.get("url")
 
     @property
     def discord(self) -> Optional[str]:
-        return self.data.get("discord", None)
+        return self.data.get("discord")
 
     @property
     def category(self) -> Category:
-        return self.data.get("category", None)
+        return self.data.get("category")
 
     @property
     def vanity(self) -> Optional[str]:
-        return self.data.get("vanity", None)
+        return self.data.get("vanity")
 
     @property
     def bg(self) -> Optional[str]:
-        return self.data.get("bg", None)
+        return self.data.get("bg")
 
     @property
     def banner(self) -> Optional[str]:
-        return self.data.get("banner", None)
+        return self.data.get("banner")
 
     @property
     def status(self) -> Optional[Status]:
-        return self.data.get("status", None)
+        return self.data.get("status")
 
     @property
-    def state(self) -> State:
-        return self.data.get("state", None)
+    def state(self) -> Optional[State]:
+        return self.data.get("state")
 
 
 class KoreanbotsUser(BaseKoreanbots):
