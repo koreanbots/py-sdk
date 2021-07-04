@@ -3,7 +3,7 @@
 from setuptools import setup
 import re, os
 
-version = '2.0.0'
+version = ""
 
 path = os.path.dirname(os.path.realpath(__file__)).replace('\\', '/')
 
