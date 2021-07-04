@@ -20,10 +20,17 @@ with open(f'{path}/README.rst', encoding='UTF8') as f:
 
 setup(
     name='koreanbots',
+    author='kijk2869',
+    url='https://github.com/koreanbots/py-sdk',
+    project_urls={
+         "Homepage": "https://koreanbots.dev/",
+         "Source":"https://github.com/koreanbots/py-sdk",
+         "Tracker":"https://github.com/koreanbots/py-sdk/issues"
+     },
     version=version,
     packages=['koreanbots'],
     license='MIT',
-    description='A Simple Python API wrapper for KoreanBots.',
+    description='Official SDK for Koreanbots.',
     long_description=readme,
     long_description_content_type="text/x-rst",
     include_package_data=True,
