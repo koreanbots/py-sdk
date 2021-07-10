@@ -1,9 +1,10 @@
 #-*- coding: utf-8 -*-
 
 from setuptools import setup
-import re, os
+import os
+import koreanbots
 
-version = ""
+version = koreanbots.__version__
 
 path = os.path.dirname(os.path.realpath(__file__)).replace('\\', '/')
 
