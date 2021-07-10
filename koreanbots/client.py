@@ -44,7 +44,7 @@ class Koreanbots(KoreanbotsRequester):
             log.info("Complete i will sleep")
             await asyncio.sleep(1800)
 
-    async def guildcount(self, bot_id: int, **kwargs) -> None:
+    async def guildcount(self, bot_id: int, **kwargs:Optional[int]) -> None:
         await self.post_update_bot_info(bot_id, kwargs)
 
     async def userinfo(self, user_id: int) -> KoreanbotsUser:
