@@ -18,12 +18,13 @@ class Koreanbots(KoreanbotsRequester):
         client: Optional[Client] = None,
         api_key: Optional[str] = None,
         loop: Optional[asyncio.AbstractEventLoop] = None,
+        session: Optional[aiohttp.ClientSession] = None,
         task: bool = False,
         shard: bool = False,
     ) -> None:
         self.client = client
         self.shard = shard
-        super().__init__(api_key, loop=loop)
+        super().__init__(api_key, loop, session)
 
         if task and client:
             self.loop = loop or client.loop
