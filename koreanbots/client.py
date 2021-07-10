@@ -23,6 +23,16 @@ class Koreanbots(KoreanbotsRequester):
         shard: bool = False,
     ) -> None:
         self.client = client
+
+        # Patch discord.py client.close() method to handle session.close()
+        original_close = client.close
+
+        async def close():
+            if self.session is not None and not self.session.closed:
+                await self.session.close()
+            await original_close()
+        client.close = close
+
         self.shard = shard
         super().__init__(api_key, loop, session)
 

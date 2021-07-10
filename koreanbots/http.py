@@ -32,16 +32,6 @@ class KoreanbotsRequester:
         self._global_limit = Event()
         self._global_limit.set()
 
-    def __del__(self):
-        try:
-            loop = get_event_loop()
-            if loop.is_running():
-                loop.create_task(self.session.close()) # type: ignore
-            else:
-                loop.run_until_complete(self.session.close()) # type: ignore
-        except Exception:
-            pass
-
     async def request(
         self,
         method: Literal["GET", "POST"],
