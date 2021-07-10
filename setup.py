@@ -3,9 +3,7 @@
 from setuptools import setup
 import re, os
 
-version = ''
-with open('koreanbots/__init__.py', encoding='UTF8') as f:
-    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
+version = ""
 
 path = os.path.dirname(os.path.realpath(__file__)).replace('\\', '/')
 
@@ -23,16 +21,16 @@ with open(f'{path}/README.rst', encoding='UTF8') as f:
 setup(
     name='koreanbots',
     author='kijk2869',
-    url='https://github.com/kijk2869/koreanbots',
+    url='https://github.com/koreanbots/py-sdk',
     project_urls={
-        "Homepage": "https://koreanbots.cf/",
-        "Source":"https://github.com/koreanbots/py-sdk",
-        "Tracker":"https://github.com/koreanbots/py-sdk/issues"
-    },
+         "Homepage": "https://koreanbots.dev/",
+         "Source":"https://github.com/koreanbots/py-sdk",
+         "Tracker":"https://github.com/koreanbots/py-sdk/issues"
+     },
     version=version,
     packages=['koreanbots'],
     license='MIT',
-    description='A Simple Python API wrapper for KoreanBots.',
+    description='Official SDK for Koreanbots.',
     long_description=readme,
     long_description_content_type="text/x-rst",
     include_package_data=True,

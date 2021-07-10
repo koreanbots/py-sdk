@@ -1,119 +1,167 @@
-"""
-MIT License
+from typing import Any, Dict, List, Optional, Union
 
-Copyright (c) 2020 매리
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
-
-class DBKRResponse:
-    r""".HTTPClient의 모든 반환 데이터에 대한 기본 모델입니다.
-
-    속성
-    -----------
-    response: dict
-        반환되는 데이터의 dict입니다.
-    attribute
-        attribute의 이름을 입력하면 해당 값을 반환합니다.
-    """
-    def __init__(self, response):
-        self.response = response
-
-    def __getattr__(self, attr):
-        return self.response.get(attr)
-    
-    def __dict__(self):
-        return self.response
+from .abc import KoreanbotsABC
+from .typing import Category, State, Status
 
 
-class userVoted(DBKRResponse):
-    r""".HTTPClient의 유저 하트 정보 데이터의 모델입니다.
+class BaseKoreanbots(KoreanbotsABC):
+    def __init__(self, **response_data: Any) -> None:
+        self.response_data = response_data
 
-    속성
-    -----------
-    response: dict
-        반환되는 데이터의 dict입니다.
-    attribute
-        attribute의 이름을 입력하면 해당 값을 반환합니다.
-    """
-    def __init__(self, response):
-        super().__init__(response)
+    @property
+    def code(self) -> int:
+        return self.response_data.get("code", 0)
+
+    @property
+    def version(self) -> int:
+        return self.response_data.get("version", 0)
+
+    @property
+    def data(self) -> Dict[str, Any]:
+        return self.response_data.get("data", {})
 
 
-class Bot(DBKRResponse):
-    r""".HTTPClient의 봇 정보 데이터의 모델입니다.
+class KoreanbotsBot(BaseKoreanbots):
+    def __init__(
+        self,
+        call_in_user: bool = False,
+        **response_data: Any,
+    ) -> None:
+        super().__init__(**response_data)
+        self.call_in_user = call_in_user
 
-    속성
-    -----------
-    response: dict
-        반환되는 데이터의 dict입니다.
-    attribute
-        attribute의 이름을 입력하면 해당 값을 반환합니다.
-    """
-    def __init__(self, response):
-        super().__init__(response)
+    @property
+    def id(self) -> Optional[str]:
+        return self.data.get("id")
 
-from enum import Enum
+    @property
+    def name(self) -> Optional[str]:
+        return self.data.get("name")
 
-Category = Enum('Category', 
-    [
-     '관리',
-     '뮤직',
-     '전적',
-     '웹 대시보드',
-     '로깅',
-     '도박',
-     '게임',
-     '밈',
-     '레벨링',
-     '유틸리티',
-     '번역',
-     '대화',
-     'NSFW',
-     '검색'
-    ]
-)
+    @property
+    def tag(self) -> Optional[str]:
+        return self.data.get("tag")
 
-Library = Enum('Library', 
-    [
-    'discord.js',
-    'Eris',
-    'discord.py',
-    'discordcr',
-    'Nyxx',
-    'Discord.Net',
-    'DSharpPlus',
-    'Nostrum',
-    'coxir',
-    'DiscordGo',
-    'Discord4J',
-    'Javacord',
-    'JDA',
-    'Discordia',
-    'RestCord',
-    'Yasmin',
-    'disco',
-    'discordrb',
-    'serenity',
-    'SwiftDiscord',
-    'Sword',
-    '기타',
-    '비공개'
-    ]
-)
+    @property
+    def avatar(self) -> Optional[str]:
+        return self.data.get("avatar")
+
+    @property
+    def owners(self) -> Union[List["KoreanbotsUser"], List[str]]:
+        if self.call_in_user:
+            return self.response_data.get("owners", [])
+
+        return list(
+            map(
+                lambda user: KoreanbotsUser(True, **user),
+                self.data.get("owners", []),
+            )
+        )
+
+    @property
+    def flags(self) -> int:
+        return self.data.get("flags", 0)
+
+    @property
+    def lib(self) -> Optional[str]:
+        return self.data.get("lib")
+
+    @property
+    def prefix(self) -> Optional[str]:
+        return self.data.get("prefix")
+
+    @property
+    def votes(self) -> int:
+        return self.data.get("votes", 0)
+
+    @property
+    def servers(self) -> int:
+        return self.data.get("servers", 0)
+
+    @property
+    def intro(self) -> Optional[str]:
+        return self.data.get("intro")
+
+    @property
+    def desc(self) -> Optional[str]:
+        return self.data.get("desc")
+
+    @property
+    def web(self) -> Optional[str]:
+        return self.data.get("web")
+
+    @property
+    def git(self) -> Optional[str]:
+        return self.data.get("git")
+
+    @property
+    def url(self) -> Optional[str]:
+        return self.data.get("url")
+
+    @property
+    def discord(self) -> Optional[str]:
+        return self.data.get("discord")
+
+    @property
+    def category(self) -> Category:
+        return self.data.get("category")
+
+    @property
+    def vanity(self) -> Optional[str]:
+        return self.data.get("vanity")
+
+    @property
+    def bg(self) -> Optional[str]:
+        return self.data.get("bg")
+
+    @property
+    def banner(self) -> Optional[str]:
+        return self.data.get("banner")
+
+    @property
+    def status(self) -> Optional[Status]:
+        return self.data.get("status")
+
+    @property
+    def state(self) -> Optional[State]:
+        return self.data.get("state")
+
+
+class KoreanbotsUser(BaseKoreanbots):
+    def __init__(self, call_in_bots: bool = False, **response_data: Any) -> None:
+        super().__init__(**response_data)
+        self.call_in_bots = call_in_bots
+
+    @property
+    def id(self) -> int:
+        return self.data.get("id", 0)
+
+    @property
+    def username(self) -> str:
+        return self.data.get("username", "")
+
+    @property
+    def tag(self) -> str:
+        return self.data.get("tag", "")
+
+    @property
+    def github(self) -> Optional[str]:
+        return self.data.get("github", None)
+
+    @property
+    def flags(self) -> int:
+        return self.data.get("flags", 0)
+
+    @property
+    def bots(
+        self,
+    ) -> Union[List[KoreanbotsBot], List[str]]:
+        if self.call_in_bots:
+            return self.response_data.get("bots", [])
+
+        return list(
+            map(
+                lambda bot: KoreanbotsBot(True, **bot),
+                self.data.get("bots", []),
+            )
+        )
