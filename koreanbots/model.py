@@ -24,11 +24,11 @@ class BaseKoreanbots(KoreanbotsABC):
 class KoreanbotsBot(BaseKoreanbots):
     def __init__(
         self,
-        call_in_user: bool = False,
+        init_in_user: bool = False,
         **response_data: Any,
     ) -> None:
         super().__init__(**response_data)
-        self.call_in_user = call_in_user
+        self.init_in_user = init_in_user
 
     @property
     def id(self) -> Optional[str]:
@@ -48,7 +48,7 @@ class KoreanbotsBot(BaseKoreanbots):
 
     @property
     def owners(self) -> Union[List["KoreanbotsUser"], List[str]]:
-        if self.call_in_user:
+        if self.init_in_user:
             return self.response_data.get("owners", [])
 
         return list(
@@ -77,6 +77,10 @@ class KoreanbotsBot(BaseKoreanbots):
     @property
     def servers(self) -> int:
         return self.data.get("servers", 0)
+    
+    @property
+    def shards(self) -> int:
+        return self.data.get("shards", 0)
 
     @property
     def intro(self) -> Optional[str]:
@@ -103,7 +107,7 @@ class KoreanbotsBot(BaseKoreanbots):
         return self.data.get("discord")
 
     @property
-    def category(self) -> Category:
+    def category(self) -> Optional[Category]:
         return self.data.get("category")
 
     @property
@@ -128,9 +132,9 @@ class KoreanbotsBot(BaseKoreanbots):
 
 
 class KoreanbotsUser(BaseKoreanbots):
-    def __init__(self, call_in_bots: bool = False, **response_data: Any) -> None:
+    def __init__(self, init_in_bots: bool = False, **response_data: Any) -> None:
         super().__init__(**response_data)
-        self.call_in_bots = call_in_bots
+        self.init_in_bots = init_in_bots
 
     @property
     def id(self) -> int:
@@ -156,7 +160,7 @@ class KoreanbotsUser(BaseKoreanbots):
     def bots(
         self,
     ) -> Union[List[KoreanbotsBot], List[str]]:
-        if self.call_in_bots:
+        if self.init_in_bots:
             return self.response_data.get("bots", [])
 
         return list(

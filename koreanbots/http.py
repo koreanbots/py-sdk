@@ -86,12 +86,15 @@ class KoreanbotsRequester:
 
     @required
     async def post_update_bot_info(
-        self, bot_id: int, total_guilds: int
+        self, bot_id: int, **kwargs:Optional[int]
     ) -> Dict[str, Any]:
+        if "servers" not in kwargs or "shards" not in kwargs:
+            raise ValueError("Unexpected args")
+
         return await self.request(
             "POST",
             f"/bots/{bot_id}/stats",
-            json={"servers": total_guilds},
+            json=kwargs,
             headers={"Authorization": self.api_key},
         )
 
