@@ -1,5 +1,4 @@
 from asyncio import sleep
-from asyncio.events import AbstractEventLoop, get_event_loop
 from asyncio.locks import Event
 from datetime import datetime
 from typing import Any, Dict, Literal, Optional
@@ -23,12 +22,10 @@ class KoreanbotsRequester:
     def __init__(
         self,
         api_key: Optional[str] = None,
-        loop: Optional[AbstractEventLoop] = None,
         session: Optional[aiohttp.ClientSession] = None,
     ) -> None:
         self.session = session
         self.api_key = api_key
-        self.loop = loop or get_event_loop()
         self._global_limit = Event()
         self._global_limit.set()
 
@@ -41,7 +38,7 @@ class KoreanbotsRequester:
         response = None
 
         if not self.session:
-            self.session = aiohttp.ClientSession(loop=self.loop)
+            self.session = aiohttp.ClientSession()
 
         if not self._global_limit.is_set():
             await self._global_limit.wait()

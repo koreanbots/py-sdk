@@ -1,4 +1,5 @@
 import asyncio
+from asyncio.events import get_event_loop
 from typing import Optional
 from logging import getLogger
 
@@ -17,7 +18,6 @@ class Koreanbots(KoreanbotsRequester):
         self,
         client: Optional[Client] = None,
         api_key: Optional[str] = None,
-        loop: Optional[asyncio.AbstractEventLoop] = None,
         session: Optional[aiohttp.ClientSession] = None,
         task: bool = False,
         shard: bool = False,
@@ -34,11 +34,10 @@ class Koreanbots(KoreanbotsRequester):
         client.close = close
 
         self.shard = shard
-        super().__init__(api_key, loop, session)
+        super().__init__(api_key,  session)
 
         if task and client:
-            self.loop = loop or client.loop
-            self.loop.create_task(self.tasks_send_guildcount())
+            get_event_loop().create_task(self.tasks_send_guildcount())
 
     async def tasks_send_guildcount(self) -> None:
         if not self.client:
