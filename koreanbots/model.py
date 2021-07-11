@@ -77,7 +77,7 @@ class KoreanbotsBot(BaseKoreanbots):
     @property
     def servers(self) -> int:
         return self.data.get("servers", 0)
-    
+
     @property
     def shards(self) -> int:
         return self.data.get("shards", 0)

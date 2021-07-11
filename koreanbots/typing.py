@@ -1,12 +1,10 @@
-from typing import Dict, Literal, Type, TypeVar
+from typing import Literal, TypeVar
 
 import discord
 
-from .errors import HTTPException
 
 Client = TypeVar("Client", bound=discord.Client)
 
-ErrorMapping = Dict[int, Type[HTTPException]]
 
 WidgetType = Literal["votes", "servers", "status"]
 

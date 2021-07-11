@@ -1,8 +1,3 @@
-.. koreanbots documentation master file, created by
-   sphinx-quickstart on Tue May 19 18:56:11 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 koreanbots 문서에 오신것을 환영합니다!
 ======================================
 

@@ -1,7 +1,4 @@
-from typing import Any, Dict, TYPE_CHECKING, Union
-
-if TYPE_CHECKING:
-    from .typing import ErrorMapping
+from typing import Any, Dict, Type, Union
 
 
 class KoreanbotsException(Exception):
@@ -27,10 +24,6 @@ class BadRequest(HTTPException):
     pass
 
 
-class Unauthorized(HTTPException):
-    pass
-
-
 class Forbidden(HTTPException):
     pass
 
@@ -39,7 +32,7 @@ class NotFound(HTTPException):
     pass
 
 
-ERROR_MAPPING: "ErrorMapping" = {
+ERROR_MAPPING: Dict[int, Type[HTTPException]] = {
     400: BadRequest,
     403: Forbidden,
     404: NotFound,
