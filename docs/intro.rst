@@ -28,7 +28,7 @@ discord.py와 함께 사용이 가능하지만 필수는 아닙니다.
     import koreanbots
 
     client = discord.Client()
-    Bot = koreanbots.Client(client, 'KoreanBots 토큰')
+    kb = koreanbots.Koreanbots(client, 'KoreanBots 토큰', run_task=True)
 
     @client.event
     async def on_ready():
@@ -47,16 +47,15 @@ discord.py 사용시
     import koreanbots
 
     client = discord.Client()
-    Bot = koreanbots.Client(client, 'KoreanBots 토큰')
+    kb = koreanbots.Koreanbots()
 
     @client.event
     async def on_ready():
         print(f'{client.user}로 로그인하였습니다.')
 
-        Data = await Bot.getBot('653534001742741552')
-        # 반환되는 데이터는 옆 링크를 참고해주세요: https://koreanbots.cf/js-sdk/interfaces/_types_.getbyid.html
+        data = await kb.botinfo('653534001742741552')
 
-        print(Data)
+        print(data.name)
 
     client.run('Discord 토큰')
 
@@ -66,10 +65,8 @@ discord.py 미사용시
 
     import koreanbots
 
-    Bot = koreanbots.HTTPClient('KoreanBots 토큰')
-    # getBot은 토큰이 필요하지 않기에 'KoreanBots 토큰' 부분은 생략 가능합니다.
+    kb = koreanbots.Koreanbots()
 
-    Data = loop.run_until_complete(Bot.getBot('653534001742741552'))
-    # 반환되는 데이터는 옆 링크를 참고해주세요: https://koreanbots.cf/js-sdk/interfaces/_types_.getbyid.html
+    data = loop.run_until_complete(kb.botinfo('653534001742741552'))
 
-    print(Data)
+    print(data.name)

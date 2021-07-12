@@ -14,36 +14,34 @@ API 레퍼런스
 Client
 -------
 
-.. autoclass:: Client
+.. autoclass:: Koreanbots
     :members:
 
-HTTPClient
+HTTP
 -------------------
 
-.. autoclass:: HTTPClient
+.. autoclass:: KoreanbotsRequester
     :members:
 
-Enumerations
--------------
+Model
+-------------------
 
-.. autoclass:: Category
+.. autoclass:: KoreanbotsBot
     :members:
 
-.. autoclass:: Library
+.. autoclass:: KoreanbotsUser
     :members:
 
 예외
 -------------
 
-.. autoexception:: DBKRException
+.. autoexception:: KoreanbotsException
 
 .. autoexception:: AuthorizeError
 
 .. autoexception:: HTTPException
 
 .. autoexception:: BadRequest
-
-.. autoexception:: Unauthorized
 
 .. autoexception:: Forbidden
 
