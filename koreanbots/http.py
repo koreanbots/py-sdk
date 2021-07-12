@@ -1,4 +1,5 @@
 from asyncio import sleep
+from asyncio.events import get_event_loop
 from asyncio.locks import Event
 from datetime import datetime
 from functools import wraps
@@ -33,28 +34,39 @@ def required(f: Any):
 
 
 class KoreanbotsRequester:
+    """
+    Koreanbots의 API를 요청하는 클래스입니다.
+
+    :param api_key:
+        KoreanBots의 토큰입니다. 기본값은 None 입니다.
+    :type api_key:
+        Optional[str], optional
+
+    :param session:
+        aiohttp.ClientSession의 클래스입니다. 전달되지 않으면 생성합니다. 기본값은 None 입니다.
+    :type session:
+        Optional[aiohttp.ClientSession], optional
+    """
+
     def __init__(
         self,
         api_key: Optional[str] = None,
         session: Optional[aiohttp.ClientSession] = None,
     ) -> None:
-        """
-        Koreanbots의 API를 요청하는 인스턴스를 생성합니다.
-
-        :param api_key:
-            KoreanBots의 토큰입니다. 기본값은 None 입니다.
-        :type api_key:
-            Optional[str], optional
-
-        :param session:
-            aiohttp.ClientSession의 객체입니다. 전달되지 않으면 생성합니다. 기본값은 None 입니다.
-        :type session:
-            Optional[aiohttp.ClientSession], optional
-        """
         self.session = session
         self.api_key = api_key
         self._global_limit = Event()
         self._global_limit.set()
+
+    # How to close the session if discord.Client is not specified.
+    def __del__(self):
+        if self.session:
+            if not self.session.closed:
+                loop = get_event_loop()
+                if loop.is_running():
+                    loop.create_task(self.session.close())
+                else:
+                    loop.run_until_complete(self.session.close())
 
     async def request(
         self,

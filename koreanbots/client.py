@@ -14,6 +14,35 @@ log = getLogger(__name__)
 
 
 class Koreanbots(KoreanbotsRequester):
+    """
+    KoreanbotsRequester를 감싸는 클라이언트 클래스 입니다.
+
+    :param client:
+        discord.Client의 클래스입니다. 만약 필요한 경우 이 인수를 지정하세요.
+    :type client:
+        Optional[Client]
+
+    :param api_key:
+        API key를 지정합니다. 만약 필요한 경우 이 키를 지정하세요.
+    :type api_key:
+        Optional[str]
+
+    :param session:
+        aiohttp.ClientSession의 클래스입니다. 만약 필요한 경우 이 인수를 지정하세요. 지정하지 않으면 생성합니다.
+    :type session:
+        Optional[aiohttp.ClientSession]
+
+    :param run_task:
+        봇 정보를 갱신하는 작업을 자동으로 실행합니다. 만약 아니라면 지정하지 않습니다.
+    :type run_task:
+        bool
+
+    :param include_shard_count:
+        샤드 갯수를 포함할지 지정합니다. 만약 아니라면 지정하지 않습니다.
+    :type include_shard_count:
+        bool
+    """
+
     def __init__(
         self,
         client: Optional[Client] = None,
@@ -22,36 +51,6 @@ class Koreanbots(KoreanbotsRequester):
         run_task: bool = False,
         include_shard_count: bool = False,
     ) -> None:
-        """
-        KoreanbotsRequester를 감싸는 클라이언트 객체 입니다.
-
-        :param client:
-            discord.Client의 인스턴스입니다. 만약 필요한 경우 이 인스턴스를 지정하세요.
-        :type client:
-            Optional[Client]
-
-        :param api_key:
-            API key를 지정합니다. 만약 필요한 경우 이 키를 지정하세요.
-        :type api_key:
-            Optional[str]
-
-        :param session:
-            aiohttp.ClientSession의 인스턴스입니다. 만약 필요한 경우 이 인스턴스를 지정하세요.
-        :type session:
-            Optional[aiohttp.ClientSession]
-
-        :param run_task:
-            봇 정보를 갱신하는 작업을 자동으로 실행합니다. 만약 아니라면 지정하지 않습니다.
-        :type run_task:
-            bool
-
-        :param include_shard_count:
-            샤드 갯수를 포함할지 지정합니다. 만약 아니라면 지정하지 않습니다.
-        :type include_shard_count:
-            bool
-
-
-        """
         self.client = client
 
         # Patch discord.py client.close() method to handle session.close()
@@ -114,7 +113,7 @@ class Koreanbots(KoreanbotsRequester):
         :type user_id:
             int
         :return:
-            유저 정보를 담고 있는 KoreanbotsUser인스턴스입니다.
+            유저 정보를 담고 있는 KoreanbotsUser클래스입니다.
         :rtype:
             KoreanbotsUser
         """
@@ -130,7 +129,7 @@ class Koreanbots(KoreanbotsRequester):
             int
 
         :return:
-            봇 정보를 담고 있는 KoreanbotsBot인스턴스입니다.
+            봇 정보를 담고 있는 KoreanbotsBot클래스입니다.
         :rtype:
             KoreanbotsBot
         """
