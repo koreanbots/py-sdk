@@ -343,6 +343,7 @@ class KoreanbotsBot(BaseKoreanbots):
     def state(self) -> Optional[State]:
         """
         Koreanbots에서의 상태를 반환합니다.
+
         :return:
             Koreanbots에서의 상태
         :rtype:
