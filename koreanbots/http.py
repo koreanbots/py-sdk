@@ -182,8 +182,7 @@ class KoreanbotsRequester:
             headers={"Authorization": self.api_key},
         )
 
-    @strict_literal("widget_type")
-    @strict_literal("style")
+    @strict_literal(["widget_type", "style"])
     async def get_bot_widget_url(
         self,
         widget_type: WidgetType,
