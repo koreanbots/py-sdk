@@ -1,10 +1,10 @@
 import functools
 import inspect
 from koreanbots.typing import C
-from typing import Any, Literal, get_args, cast
+from typing import Any, List, Literal, get_args, cast
 
 
-def strict_literal(argument_names: list[str]):
+def strict_literal(argument_names: List[str]):
     def decorator(f: C) -> C:
         @functools.wraps(f)
         async def decorated_function(*args: Any, **kwargs: Any):
