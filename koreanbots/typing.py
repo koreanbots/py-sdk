@@ -5,7 +5,7 @@ import discord
 
 Client = TypeVar("Client", bound=discord.Client)
 
-C = TypeVar("CA", bound=Callable[..., Coroutine[Any, Any, Any]])
+C = TypeVar("C", bound=Callable[..., Coroutine[Any, Any, Any]])
 
 WidgetType = Literal["votes", "servers", "status"]
 
