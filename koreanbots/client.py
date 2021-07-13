@@ -135,8 +135,7 @@ class Koreanbots(KoreanbotsRequester):
         """
         return KoreanbotsBot(**await self.get_bot_info(bot_id))
 
-    @strict_literal("widget_type")
-    @strict_literal("style")
+    @strict_literal(["widget_type", "style"])
     async def widget(
         self,
         widget_type: WidgetType,
