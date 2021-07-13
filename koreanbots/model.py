@@ -126,7 +126,7 @@ class KoreanbotsBot(BaseKoreanbots):
 
         """
         if self.init_in_user:
-            return self.response_data.get("owners", [])
+            return self._response_data.get("owners", [])
 
         return list(
             map(
@@ -441,7 +441,7 @@ class KoreanbotsUser(BaseKoreanbots):
 
         """
         if self.init_in_bot:
-            return self.response_data.get("bots", [])
+            return self._response_data.get("bots", [])
 
         return list(
             map(
