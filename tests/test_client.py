@@ -1,7 +1,6 @@
-import pytest
-
-from koreanbots.client import Koreanbots
 from koreanbots.model import KoreanbotsBot, KoreanbotsUser
+from koreanbots.client import Koreanbots
+import pytest
 
 
 @pytest.mark.asyncio
@@ -24,7 +23,7 @@ async def test_get_user_info(client: Koreanbots):
 
 @pytest.mark.asyncio
 async def test_get(client: Koreanbots):
-    response = await client.widget()
+    response = await client.widget("votes", 653534001742741552)
     assert (
         response
         == "https://koreanbots.dev/api/v2/widget/bots/votes/653534001742741552.svg?style=flat&scale=1.0&icon=False"
