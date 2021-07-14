@@ -18,7 +18,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo npm install -g pyright
-        python -m pip install -r requirements.txt
+        python -m pip install -r requirements.txt discord.py-stubs
         python -m pip install mypy
     - name: Checking type annotations
       run: |
