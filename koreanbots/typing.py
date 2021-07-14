@@ -1,10 +1,6 @@
 from typing import Any, Callable, Coroutine, Literal, TypeVar
 
-import discord
-
-Client = TypeVar("Client", bound=discord.Client)
-
-C = TypeVar("C", bound=Callable[..., Coroutine[Any, Any, Any]])
+CORO = TypeVar("CORO", bound=Callable[..., Coroutine[Any, Any, Any]])
 
 WidgetType = Literal["votes", "servers", "status"]
 

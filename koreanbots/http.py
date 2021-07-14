@@ -4,13 +4,13 @@ from asyncio.locks import Event
 from datetime import datetime
 from functools import wraps
 from logging import getLogger
-from typing import Any, Dict, Literal, Optional
+from typing import Any, Literal, Optional, cast
 
 import aiohttp
 
 from .decorator import strict_literal
 from .errors import ERROR_MAPPING, AuthorizeError, HTTPException
-from .typing import WidgetStyle, WidgetType
+from .typing import CORO, WidgetStyle, WidgetType
 
 BASE = "https://koreanbots.dev/api/"
 VERSION = "v2"
@@ -20,17 +20,17 @@ KOREANBOTS_URL = BASE + VERSION
 log = getLogger(__name__)
 
 
-def required(f: Any):
+def required(f: CORO) -> CORO:
     @wraps(f)
     async def decorator_function(
         self: "KoreanbotsRequester", *args: Any, **kwargs: Any
-    ):
+    ) -> Any:
         if not self.api_key:
             raise AuthorizeError("This endpoint required koreanbots token.")
 
         return await f(self, *args, **kwargs)
 
-    return decorator_function
+    return cast(CORO, decorator_function)
 
 
 class KoreanbotsRequester:
@@ -59,7 +59,7 @@ class KoreanbotsRequester:
         self._global_limit.set()
 
     # How to close the session if discord.Client is not specified.
-    def __del__(self):
+    def __del__(self) -> None:
         if self.session:
             if not self.session.closed:
                 loop = get_event_loop()
@@ -73,7 +73,7 @@ class KoreanbotsRequester:
         method: Literal["GET", "POST"],
         endpoint: str,
         **kwargs: Any,
-    ) -> Dict[str, Any]:
+    ) -> Any:
         """
         Koreanbots의 url을 기반으로 요청합니다.
         레이트리밋을 핸들합니다.
@@ -114,7 +114,7 @@ class KoreanbotsRequester:
                 method, KOREANBOTS_URL + endpoint, **kwargs
             ) as response:
                 remain_limit = response.headers["x-ratelimit-remaining"]
-                if remain_limit == 0 or response.status == 429:
+                if int(remain_limit) == 0 or response.status == 429:
                     reset_limit_timestamp = int(response.headers["x-ratelimit-reset"])
                     reset_limit = datetime.fromtimestamp(reset_limit_timestamp)
                     retry_after = reset_limit - datetime.now()
@@ -134,7 +134,7 @@ class KoreanbotsRequester:
 
         assert None
 
-    async def get_bot_info(self, bot_id: int) -> Dict[str, Any]:
+    async def get_bot_info(self, bot_id: int) -> Any:
         """
         주어진 bot_id로 bot의 정보를 반환합니다.
 
@@ -151,7 +151,7 @@ class KoreanbotsRequester:
         return await self.request("GET", f"/bots/{bot_id}")
 
     @required
-    async def post_update_bot_info(self, bot_id: int, **kwargs: int) -> Dict[str, Any]:
+    async def post_update_bot_info(self, bot_id: int, **kwargs: Optional[int]) -> Any:
         """
         주어진 bot_id로 bot의 정보를 갱신합니다.
 
@@ -231,7 +231,7 @@ class KoreanbotsRequester:
             + f"/widget/bots/{widget_type}/{bot_id}.svg?style={style}&scale={scale}&icon={icon}"
         )
 
-    async def get_user_info(self, user_id: int):
+    async def get_user_info(self, user_id: int) -> Any:
         """
         주어진 user_id로 user의 정보를 반환합니다.
 

@@ -1,0 +1,26 @@
+name: Cheking Type Annotations
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  type:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        sudo npm install -g pyright
+        python -m pip install -r requirements.txt discord.py-stubs
+        python -m pip install mypy
+    - name: Checking type annotations
+      run: |
+        mypy ./koreanbots --strict
+        pyright ./koreanbots --outputjson

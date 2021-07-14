@@ -1,14 +1,14 @@
 import functools
 import inspect
-from typing import Any, List, Literal, cast, get_args
+from typing import Any, Callable, List, Literal, cast, get_args
 
-from koreanbots.typing import C
+from koreanbots.typing import CORO
 
 
-def strict_literal(argument_names: List[str]):
-    def decorator(f: C) -> C:
+def strict_literal(argument_names: List[str]) -> Callable[[CORO], CORO]:
+    def decorator(f: CORO) -> CORO:
         @functools.wraps(f)
-        async def decorated_function(*args: Any, **kwargs: Any):
+        async def decorated_function(*args: Any, **kwargs: Any) -> Any:
             # First get about func args
             full_arg_spec = inspect.getfullargspec(f)
             for argument_name in argument_names:
@@ -37,6 +37,6 @@ def strict_literal(argument_names: List[str]):
 
             return await f(*args, **kwargs)
 
-        return cast(C, decorated_function)
+        return cast(CORO, decorated_function)
 
     return decorator

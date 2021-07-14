@@ -4,11 +4,12 @@ from logging import getLogger
 from typing import Optional
 
 import aiohttp
+from discord import Client
 
 from .decorator import strict_literal
 from .http import KoreanbotsRequester
 from .model import KoreanbotsBot, KoreanbotsUser
-from .typing import Client, WidgetStyle, WidgetType
+from .typing import WidgetStyle, WidgetType
 
 log = getLogger(__name__)
 
@@ -57,12 +58,12 @@ class Koreanbots(KoreanbotsRequester):
         if client:
             original_close = client.close
 
-            async def close():
+            async def close() -> None:
                 if self.session is not None and not self.session.closed:
                     await self.session.close()
                 await original_close()
 
-            client.close = close
+            setattr(client, "close", close)
 
         self.include_shard_count = include_shard_count
         super().__init__(api_key, session)
