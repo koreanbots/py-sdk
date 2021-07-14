@@ -22,5 +22,5 @@ jobs:
         python -m pip install mypy
     - name: Checking type annotations
       run: |
-        mypy ./koreanbots --strict
-        pyright ./koreanbots --outputjson
+        mypy . --strict
+        pyright . --outputjson
