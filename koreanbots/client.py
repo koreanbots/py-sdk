@@ -1,7 +1,7 @@
 import asyncio
 from asyncio.events import get_event_loop
-from typing import Optional
 from logging import getLogger
+from typing import Optional
 
 import aiohttp
 

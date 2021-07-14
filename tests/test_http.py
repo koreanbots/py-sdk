@@ -1,5 +1,6 @@
-from koreanbots.client import Koreanbots
 import pytest
+
+from koreanbots.client import Koreanbots
 
 
 @pytest.mark.asyncio

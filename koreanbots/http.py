@@ -3,13 +3,13 @@ from asyncio.events import get_event_loop
 from asyncio.locks import Event
 from datetime import datetime
 from functools import wraps
-from typing import Any, Dict, Literal, Optional
 from logging import getLogger
+from typing import Any, Dict, Literal, Optional
 
 import aiohttp
 
 from .decorator import strict_literal
-from .errors import ERROR_MAPPING, HTTPException, AuthorizeError
+from .errors import ERROR_MAPPING, AuthorizeError, HTTPException
 from .typing import WidgetStyle, WidgetType
 
 BASE = "https://koreanbots.dev/api/"

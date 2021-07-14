@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from setuptools import setup
 import os
+
+from setuptools import setup
+
 import koreanbots
 
 version = koreanbots.__version__
@@ -39,6 +41,6 @@ setup(
     python_requires=">=3.8",
     classifiers=[
         "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9"
+        "Programming Language :: Python :: 3.9",
     ],
 )

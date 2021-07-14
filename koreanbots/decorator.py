@@ -1,7 +1,8 @@
 import functools
 import inspect
+from typing import Any, List, Literal, cast, get_args
+
 from koreanbots.typing import C
-from typing import Any, List, Literal, get_args, cast
 
 
 def strict_literal(argument_names: List[str]):

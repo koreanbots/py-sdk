@@ -1,6 +1,8 @@
-from pytest import fixture
-from koreanbots import Koreanbots
 from os import getenv
+
+from pytest import fixture
+
+from koreanbots import Koreanbots
 
 
 @fixture

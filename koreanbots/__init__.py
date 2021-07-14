@@ -1,9 +1,10 @@
-﻿from .client import Koreanbots
-from .http import KoreanbotsRequester
-from .errors import *
-from .model import KoreanbotsBot, KoreanbotsUser
+﻿from typing import Literal, NamedTuple
 
-from typing import Literal, NamedTuple
+from .client import Koreanbots as Koreanbots
+from .errors import *
+from .http import KoreanbotsRequester as KoreanbotsRequester
+from .model import KoreanbotsBot as KoreanbotsBot
+from .model import KoreanbotsUser as KoreanbotsUser
 
 
 class VersionInfo(NamedTuple):
