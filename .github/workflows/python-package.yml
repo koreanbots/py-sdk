@@ -28,6 +28,10 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install pytest pytest-cov pytest-asyncio
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Checking style
+      run: |
+        black ./koreanbots --check
+        isort ./koreanbots --check
     - name: Test with pytest
       run: |
         pytest --cov=koreanbots --cov-report=xml
