@@ -4,7 +4,7 @@ from logging import getLogger
 from typing import Optional
 
 import aiohttp
-from discord.client import Client
+from discord import Client
 
 from .decorator import strict_literal
 from .http import KoreanbotsRequester
