@@ -4,7 +4,7 @@ from logging import getLogger
 from typing import Optional
 
 import aiohttp
-from discord import Client
+from discord import Client, User, Member
 
 from .decorator import strict_literal
 from .http import KoreanbotsRequester
@@ -178,3 +178,7 @@ class Koreanbots(KoreanbotsRequester):
         :rtype: str
         """
         return await self.get_bot_widget_url(widget_type, bot_id, style, scale, icon)
+
+    async def is_voted(self, user: Optional[User, Member, int]) -> bool:
+        _id = user if isinstance(user, int) else user.id
+        return await self.get_user_vote(_id, self.client.user.id)
