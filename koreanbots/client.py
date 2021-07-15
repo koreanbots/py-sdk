@@ -179,6 +179,8 @@ class Koreanbots(KoreanbotsRequester):
         """
         return await self.get_bot_widget_url(widget_type, bot_id, style, scale, icon)
 
-    async def is_voted(self, user: Optional[Union[User, Member, int]]) -> KoreanbotsVote:
+    async def is_voted(
+        self, user: Optional[Union[User, Member, int]]
+    ) -> KoreanbotsVote:
         user_id = user if isinstance(user, int) else user.id
         return KoreanbotsVote(**await self.get_user_vote(user_id, self.client.user.id))
