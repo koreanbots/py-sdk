@@ -1,10 +1,10 @@
 import asyncio
 from asyncio.events import get_event_loop
 from logging import getLogger
-from typing import Optional
+from typing import Optional, Union
 
 import aiohttp
-from discord import Client, User, Member
+from discord import Client, Member, User
 
 from .decorator import strict_literal
 from .http import KoreanbotsRequester
@@ -179,6 +179,6 @@ class Koreanbots(KoreanbotsRequester):
         """
         return await self.get_bot_widget_url(widget_type, bot_id, style, scale, icon)
 
-    async def is_voted(self, user: Optional[User, Member, int]) -> KoreanbotsVote:
+    async def is_voted(self, user: Optional[Union[User, Member, int]]) -> KoreanbotsVote:
         user_id = user if isinstance(user, int) else user.id
         return KoreanbotsVote(**await self.get_user_vote(user_id, self.client.user.id))
