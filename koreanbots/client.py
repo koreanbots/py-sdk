@@ -8,7 +8,7 @@ from discord import Client, User, Member
 
 from .decorator import strict_literal
 from .http import KoreanbotsRequester
-from .model import KoreanbotsBot, KoreanbotsUser
+from .model import KoreanbotsBot, KoreanbotsUser, KoreanbotsVote
 from .typing import WidgetStyle, WidgetType
 
 log = getLogger(__name__)
@@ -179,6 +179,6 @@ class Koreanbots(KoreanbotsRequester):
         """
         return await self.get_bot_widget_url(widget_type, bot_id, style, scale, icon)
 
-    async def is_voted(self, user: Optional[User, Member, int]) -> bool:
-        _id = user if isinstance(user, int) else user.id
-        return await self.get_user_vote(_id, self.client.user.id)
+    async def is_voted(self, user: Optional[User, Member, int]) -> KoreanbotsVote:
+        user_id = user if isinstance(user, int) else user.id
+        return KoreanbotsVote(**await self.get_user_vote(user_id, self.client.user.id))

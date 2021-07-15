@@ -449,3 +449,16 @@ class KoreanbotsUser(BaseKoreanbots):
                 self.data.get("bots", []),
             )
         )
+
+
+class KoreanbotsVote(BaseKoreanbots):
+    def __init__(self, **response_data: Any) -> None:
+        super().__init__(**response_data)
+
+    @property
+    def voted(self) -> bool:
+        return self.data.get("voted", False)
+
+    @property
+    def last_vote(self) -> int:
+        return self.data.get("lastVote", 0)

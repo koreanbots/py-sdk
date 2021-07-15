@@ -242,5 +242,5 @@ class KoreanbotsRequester:
         """
         return await self.request("GET", f"/users/{user_id}")
 
-    async def get_user_vote(self, user_id: int, bot_id: int) -> bool:
-        return (await self.request("GET", f"/bots/{bot_id}/vote?userID={user_id}"))["data"]["voted"]
+    async def get_user_vote(self, user_id: int, bot_id: int) -> Any:
+        return await self.request("GET", f"/bots/{bot_id}/vote?userID={user_id}")
