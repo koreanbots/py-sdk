@@ -1,14 +1,14 @@
 import asyncio
 from asyncio.events import get_event_loop
 from logging import getLogger
-from typing import Optional
+from typing import Optional, Union
 
 import aiohttp
-from discord import Client
+from discord import Client, Member, User
 
 from .decorator import strict_literal
 from .http import KoreanbotsRequester
-from .model import KoreanbotsBot, KoreanbotsUser
+from .model import KoreanbotsBot, KoreanbotsUser, KoreanbotsVote
 from .typing import WidgetStyle, WidgetType
 
 log = getLogger(__name__)
@@ -178,3 +178,6 @@ class Koreanbots(KoreanbotsRequester):
         :rtype: str
         """
         return await self.get_bot_widget_url(widget_type, bot_id, style, scale, icon)
+
+    async def is_voted(self, user_id: int, bot_id: int) -> KoreanbotsVote:
+        return KoreanbotsVote(**await self.get_user_vote(user_id, bot_id))
