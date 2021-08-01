@@ -178,7 +178,7 @@ class KoreanbotsRequester:
         return await self.request(
             "POST",
             f"/bots/{bot_id}/stats",
-            json={x: kwargs[x] for x in kwargs if x not in ["servers", "shards"]},
+            json={x: kwargs[x] for x in kwargs if x in ["servers", "shards"]},
             headers={"Authorization": self.api_key},
         )
 
