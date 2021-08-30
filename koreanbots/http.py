@@ -242,10 +242,8 @@ class KoreanbotsRequester:
         """
         return await self.request("GET", f"/users/{user_id}")
 
+    @required
     async def get_user_vote(self, user_id: int, bot_id: int) -> Any:
-        if not self.api_key:
-            raise AuthorizeError("이 엔드포인트는 API 키가 필요합니다.")
-            
         return await self.request(
             "GET",
             f"/bots/{bot_id}/vote?userID={user_id}",
