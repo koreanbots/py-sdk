@@ -180,4 +180,17 @@ class Koreanbots(KoreanbotsRequester):
         return await self.get_bot_widget_url(widget_type, bot_id, style, scale, icon)
 
     async def is_voted(self, user_id: int, bot_id: int) -> KoreanbotsVote:
+        """
+        주어진 bot_id로 user_id를 통해 해당 user의 투표 여부를 반환합니다.
+
+        :param user_id:
+            요청할 user의 ID를 지정합니다.
+        :type user_id:
+            int
+
+        :return:
+            투표여부를 담고 있는 KoreanbotsVote클래스입니다.
+        :rtype:
+            KoreanbotsVote
+        """
         return KoreanbotsVote(**await self.get_user_vote(user_id, bot_id))
