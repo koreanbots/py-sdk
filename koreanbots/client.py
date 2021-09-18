@@ -181,7 +181,7 @@ class Koreanbots(KoreanbotsRequester):
 
     async def is_voted(self, user_id: int, bot_id: Optional[int] = None) -> KoreanbotsVote:
         if not bot_id:
-            if not self.client:
+            if not hasattr(self.client, "user"):
                 raise TypeError("유효한 봇 ID가 지정되지 않았습니다.")
             bot_id = self.client.user.id
         return KoreanbotsVote(**await self.get_user_vote(user_id, bot_id))
