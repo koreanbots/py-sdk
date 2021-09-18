@@ -4,8 +4,8 @@ from logging import getLogger
 from typing import Optional
 
 import aiohttp
-from .abc import DiscordABC
 
+from .abc import DiscordABC
 from .decorator import strict_literal
 from .http import KoreanbotsRequester
 from .model import KoreanbotsBot, KoreanbotsUser, KoreanbotsVote
