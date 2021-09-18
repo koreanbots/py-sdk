@@ -4,7 +4,7 @@ from logging import getLogger
 from typing import Optional
 
 import aiohttp
-from discord import Client
+from .abc import DiscordABC
 
 from .decorator import strict_literal
 from .http import KoreanbotsRequester
@@ -21,7 +21,7 @@ class Koreanbots(KoreanbotsRequester):
     :param client:
         discord.Client의 클래스입니다. 만약 필요한 경우 이 인수를 지정하세요.
     :type client:
-        Optional[Client]
+        Optional[DiscordABC]
 
     :param api_key:
         API key를 지정합니다. 만약 필요한 경우 이 키를 지정하세요.
@@ -46,7 +46,7 @@ class Koreanbots(KoreanbotsRequester):
 
     def __init__(
         self,
-        client: Optional[Client] = None,
+        client: Optional[DiscordABC] = None,
         api_key: Optional[str] = None,
         session: Optional[aiohttp.ClientSession] = None,
         run_task: bool = False,
