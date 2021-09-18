@@ -1,10 +1,10 @@
 import asyncio
 from asyncio.events import get_event_loop
 from logging import getLogger
-from typing import Optional, Union
+from typing import Optional
 
 import aiohttp
-from discord import Client, Member, User
+from discord import Client
 
 from .decorator import strict_literal
 from .http import KoreanbotsRequester
