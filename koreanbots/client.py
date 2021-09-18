@@ -179,5 +179,9 @@ class Koreanbots(KoreanbotsRequester):
         """
         return await self.get_bot_widget_url(widget_type, bot_id, style, scale, icon)
 
-    async def is_voted(self, user_id: int, bot_id: int) -> KoreanbotsVote:
+    async def is_voted(self, user_id: int, bot_id: Optional[int] = None) -> KoreanbotsVote:
+        if not bot_id:
+            if not self.client:
+                raise TypeError("유효한 봇 ID가 지정되지 않았습니다.")
+            bot_id = self.client.user.id
         return KoreanbotsVote(**await self.get_user_vote(user_id, bot_id))
