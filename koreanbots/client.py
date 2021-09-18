@@ -85,6 +85,9 @@ class Koreanbots(KoreanbotsRequester):
         await self.client.wait_until_ready()
 
         while not self.client.is_closed():
+            if not self.client.user:
+                continue
+
             kwargs = {"servers": len(self.client.guilds)}
             if self.include_shard_count:
                 if self.client.shard_count:
