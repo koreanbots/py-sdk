@@ -1,11 +1,11 @@
 import asyncio
 from asyncio.events import get_event_loop
 from logging import getLogger
-from typing import Optional, Union
+from typing import Optional
 
 import aiohttp
-from discord import Client, Member, User
 
+from .abc import DiscordABC
 from .decorator import strict_literal
 from .http import KoreanbotsRequester
 from .model import KoreanbotsBot, KoreanbotsUser, KoreanbotsVote
@@ -21,7 +21,7 @@ class Koreanbots(KoreanbotsRequester):
     :param client:
         discord.Client의 클래스입니다. 만약 필요한 경우 이 인수를 지정하세요.
     :type client:
-        Optional[Client]
+        Optional[DiscordABC]
 
     :param api_key:
         API key를 지정합니다. 만약 필요한 경우 이 키를 지정하세요.
@@ -46,7 +46,7 @@ class Koreanbots(KoreanbotsRequester):
 
     def __init__(
         self,
-        client: Optional[Client] = None,
+        client: Optional[DiscordABC] = None,
         api_key: Optional[str] = None,
         session: Optional[aiohttp.ClientSession] = None,
         run_task: bool = False,
@@ -85,6 +85,9 @@ class Koreanbots(KoreanbotsRequester):
         await self.client.wait_until_ready()
 
         while not self.client.is_closed():
+            if not self.client.user:
+                continue
+
             kwargs = {"servers": len(self.client.guilds)}
             if self.include_shard_count:
                 if self.client.shard_count:
