@@ -251,6 +251,12 @@ class KoreanbotsRequester:
             요청할 user의 ID를 지정합니다.
         :type user_id:
             int
+
+        :param bot_id:
+            요청할 bot의 ID를 지정합니다.
+        :type bot_id:
+            int
+
         """
         return await self.request(
             "GET",
