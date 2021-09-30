@@ -188,6 +188,11 @@ class Koreanbots(KoreanbotsRequester):
         :type user_id:
             int
 
+        :param bot_id:
+            요청할 봇의 ID를 지정합니다.
+        :type bot_id:
+            int
+
         :return:
             투표여부를 담고 있는 KoreanbotsVote클래스입니다.
         :rtype:
