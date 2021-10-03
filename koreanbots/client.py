@@ -5,7 +5,7 @@ from typing import Optional
 
 import aiohttp
 
-from .abc import DpyABC
+from .abc import DiscordABC
 from .decorator import strict_literal
 from .http import KoreanbotsRequester
 from .model import KoreanbotsBot, KoreanbotsUser, KoreanbotsVote
@@ -46,7 +46,7 @@ class Koreanbots(KoreanbotsRequester):
 
     def __init__(
         self,
-        client: Optional[DpyABC] = None,
+        client: Optional[DiscordABC] = None,
         api_key: Optional[str] = None,
         session: Optional[aiohttp.ClientSession] = None,
         run_task: bool = False,

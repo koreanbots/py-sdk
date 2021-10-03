@@ -42,8 +42,8 @@ class DicoKoreanbots(KoreanbotsRequester):
 
     def __init__(
         self,
-        client: "dico.Client" = None,
-        api_key: str = None,
+        client: "dico.Client",  # type:ignore
+        api_key: str,
         session: Optional[aiohttp.ClientSession] = None,
         run_task: bool = False,
         include_shard_count: bool = False,
