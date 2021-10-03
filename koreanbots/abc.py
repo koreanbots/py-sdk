@@ -23,7 +23,7 @@ class KoreanbotsABC(metaclass=ABCMeta):
         return self.response_data.get("data", {})
 
 
-class DiscordABC(metaclass=ABCMeta):
+class DpyABC(metaclass=ABCMeta):
     @abstractmethod
     async def close(self) -> None:
         raise NotImplementedError
@@ -38,12 +38,12 @@ class DiscordABC(metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def guilds(self) -> List["DiscordGuildABC"]:
+    def guilds(self) -> List["DpyGuildABC"]:
         raise NotImplementedError
 
     @property
     @abstractmethod
-    def user(self) -> Optional["DiscordUserABC"]:
+    def user(self) -> Optional["DpyUserABC"]:
         raise NotImplementedError
 
     @property
@@ -52,12 +52,41 @@ class DiscordABC(metaclass=ABCMeta):
         raise NotImplementedError
 
 
-class DiscordUserABC(metaclass=ABCMeta):
+class DpyUserABC(metaclass=ABCMeta):
     @property
     @abstractmethod
     def id(self) -> int:
         raise NotImplementedError
 
 
-class DiscordGuildABC(metaclass=ABCMeta):
+class DpyGuildABC(metaclass=ABCMeta):
     ...
+
+
+class DicoABC(metaclass=ABCMeta):
+    @abstractmethod
+    async def close(self) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def wait_ready(self) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def is_closed(self) -> bool:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def guild_count(self) -> int:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def shard_count(self) -> Optional[int]:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def application_id(self) -> Optional[int]:
+        raise NotImplementedError
