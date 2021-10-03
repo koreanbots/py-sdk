@@ -5,7 +5,7 @@ from typing import Optional
 
 import aiohttp
 
-from .abc import DiscordABC
+from .abc import DpyABC
 from .decorator import strict_literal
 from .http import KoreanbotsRequester
 from .model import KoreanbotsBot, KoreanbotsUser, KoreanbotsVote
@@ -16,12 +16,12 @@ log = getLogger(__name__)
 
 class Koreanbots(KoreanbotsRequester):
     """
-    KoreanbotsRequester를 감싸는 클라이언트 클래스 입니다.
+    KoreanbotsRequester를 감싸는 클라이언트 클래스입니다.
 
     :param client:
         discord.Client의 클래스입니다. 만약 필요한 경우 이 인수를 지정하세요.
     :type client:
-        Optional[DiscordABC]
+        Optional[DpyABC]
 
     :param api_key:
         API key를 지정합니다. 만약 필요한 경우 이 키를 지정하세요.
@@ -39,14 +39,14 @@ class Koreanbots(KoreanbotsRequester):
         bool
 
     :param include_shard_count:
-        샤드 갯수를 포함할지 지정합니다. 만약 아니라면 지정하지 않습니다.
+        샤드 개수를 포함할지 지정합니다. 만약 아니라면 지정하지 않습니다.
     :type include_shard_count:
         bool
     """
 
     def __init__(
         self,
-        client: Optional[DiscordABC] = None,
+        client: Optional[DpyABC] = None,
         api_key: Optional[str] = None,
         session: Optional[aiohttp.ClientSession] = None,
         run_task: bool = False,
@@ -73,7 +73,7 @@ class Koreanbots(KoreanbotsRequester):
 
     async def tasks_send_guildcount(self) -> None:
         """
-        길드 갯수를 서버에 전송하는 태스크 입니다.
+        길드 개수를 서버에 전송하는 태스크 입니다.
 
         :raises RuntimeError:
             클라이언트를 찾을 수 없습니다.
@@ -99,7 +99,7 @@ class Koreanbots(KoreanbotsRequester):
 
     async def guildcount(self, bot_id: int, **kwargs: Optional[int]) -> None:
         """
-        길드 갯수를 서버에 전송합니다.
+        길드 개수를 서버에 전송합니다.
 
         :param bot_id:
             요청할 bot의 ID를 지정합니다.
