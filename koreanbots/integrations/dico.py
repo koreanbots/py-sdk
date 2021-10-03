@@ -7,8 +7,8 @@ import aiohttp
 from ..abc import DicoABC
 from ..decorator import strict_literal
 from ..http import KoreanbotsRequester
-from ..model import KoreanbotsVote, KoreanbotsBot, KoreanbotsUser
-from ..typing import WidgetType, WidgetStyle
+from ..model import KoreanbotsBot, KoreanbotsUser, KoreanbotsVote
+from ..typing import WidgetStyle, WidgetType
 
 log = logging.getLogger(__name__)
 
