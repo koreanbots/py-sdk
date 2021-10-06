@@ -244,6 +244,20 @@ class KoreanbotsRequester:
 
     @required
     async def get_user_vote(self, user_id: int, bot_id: int) -> Any:
+        """
+        주어진 bot_id로 user_id를 통해 해당 user의 투표 여부를 반환합니다.
+
+        :param user_id:
+            요청할 user의 ID를 지정합니다.
+        :type user_id:
+            int
+
+        :param bot_id:
+            요청할 bot의 ID를 지정합니다.
+        :type bot_id:
+            int
+
+        """
         return await self.request(
             "GET",
             f"/bots/{bot_id}/vote?userID={user_id}",

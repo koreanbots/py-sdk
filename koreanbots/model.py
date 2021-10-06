@@ -457,8 +457,24 @@ class KoreanbotsVote(BaseKoreanbots):
 
     @property
     def voted(self) -> bool:
+        """
+        투표 여부를 반환합니다.
+
+        :return:
+            투표 여부
+        :rtype:
+            bool
+        """
         return self.data.get("voted", False)
 
     @property
     def last_vote(self) -> int:
+        """
+        마지막으로 투표한 일자를 가져옵니다.
+
+        :return:
+            마지막으로 투표한 일자
+        :rtype:
+            int
+        """
         return self.data.get("lastVote", 0)
