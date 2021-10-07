@@ -1,5 +1,5 @@
-from asyncio.events import get_event_loop
 import logging
+from asyncio.events import get_event_loop
 from asyncio.tasks import sleep
 from typing import Optional
 
