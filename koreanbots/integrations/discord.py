@@ -1,50 +1,29 @@
 from asyncio.events import get_event_loop
-import logging
 from asyncio.tasks import sleep
-from typing import Optional
+from logging import getLogger
+from typing import Optional, Union
 
 from aiohttp import ClientSession
-from dico import Client  # type: ignore
 
 from koreanbots.http import KoreanbotsRequester
 
-log = logging.getLogger(__name__)
+try:
+    import discord  # type: ignore
+except ImportError:
+    pass
+
+try:
+    import nextcord  # type: ignore
+except ImportError:
+    pass
+
+log = getLogger(__name__)
 
 
-class DicoKoreanbotsHelper(KoreanbotsRequester):
-    """
-    KoreanbotsRequester를 감싸는 클라이언트 클래스입니다.
-    dico 전용입니다.
-
-    :param client:
-        dico.Client의 클래스입니다.
-    :type client:
-        dico.Client
-
-    :param api_key:
-        API key를 지정합니다.
-    :type api_key:
-        str
-
-    :param session:
-        aiohttp.ClientSession의 클래스입니다. 만약 필요한 경우 이 인수를 지정하세요. 지정하지 않으면 생성합니다.
-    :type session:
-        Optional[aiohttp.ClientSession]
-
-    :param run_task:
-        봇 정보를 갱신하는 작업을 자동으로 실행합니다. 만약 아니라면 지정하지 않습니다.
-    :type run_task:
-        bool
-
-    :param include_shard_count:
-        샤드 개수를 포함할지 지정합니다. 만약 아니라면 지정하지 않습니다.
-    :type include_shard_count:
-        bool
-    """
-
+class DiscordpyKoreanbotshHelper(KoreanbotsRequester):
     def __init__(
         self,
-        client: Client,
+        client: Union["discord.Client", "nextcord.Client"],
         api_key: str,
         session: Optional[ClientSession] = None,
         run_task: bool = False,
@@ -52,6 +31,7 @@ class DicoKoreanbotsHelper(KoreanbotsRequester):
     ):
         self.client = client
 
+        # Patch discord.py client.close() method to handle session.close()
         if client:
             original_close = client.close
 
@@ -79,17 +59,17 @@ class DicoKoreanbotsHelper(KoreanbotsRequester):
         if not self.client:
             raise RuntimeError("Client Not Found")
 
-        await self.client.wait_ready()
+        await self.client.wait_until_ready()
 
-        while not self.client.websocket_closed:
-            if not self.client.application_id:
+        while not self.client.is_closed():
+            if not self.client.user:
                 continue
 
-            kwargs = {"servers": self.client.guild_count}
+            kwargs = {"servers": len(self.client.guilds)}
             if self.include_shard_count:
                 if self.client.shard_count:
                     kwargs.update({"shards": self.client.shard_count})
             log.info("Send")
-            await self.post_update_bot_info(int(self.client.application_id), **kwargs)
+            await self.post_update_bot_info(self.client.user.id, **kwargs)
             log.info("Complete i will sleep")
             await sleep(1800)
