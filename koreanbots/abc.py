@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict
 
 
 class KoreanbotsABC(metaclass=ABCMeta):
@@ -21,43 +21,3 @@ class KoreanbotsABC(metaclass=ABCMeta):
     @abstractmethod
     def data(self) -> Dict[str, Any]:
         return self.response_data.get("data", {})
-
-
-class DiscordABC(metaclass=ABCMeta):
-    @abstractmethod
-    async def close(self) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
-    async def wait_until_ready(self) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
-    def is_closed(self) -> bool:
-        raise NotImplementedError
-
-    @property
-    @abstractmethod
-    def guilds(self) -> List["DiscordGuildABC"]:
-        raise NotImplementedError
-
-    @property
-    @abstractmethod
-    def user(self) -> Optional["DiscordUserABC"]:
-        raise NotImplementedError
-
-    @property
-    @abstractmethod
-    def shard_count(self) -> Optional[int]:
-        raise NotImplementedError
-
-
-class DiscordUserABC(metaclass=ABCMeta):
-    @property
-    @abstractmethod
-    def id(self) -> int:
-        raise NotImplementedError
-
-
-class DiscordGuildABC(metaclass=ABCMeta):
-    ...
