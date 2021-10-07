@@ -31,7 +31,7 @@ setup(
         "Tracker": "https://github.com/koreanbots/py-sdk/issues",
     },
     version=version,
-    packages=["koreanbots"],
+    packages=["koreanbots", "koreanbots.integrations"],
     license="MIT",
     description="Official SDK for Koreanbots.",
     long_description=readme,

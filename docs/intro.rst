@@ -25,10 +25,10 @@ discord.py와 함께 사용이 가능하지만 필수는 아닙니다.
 .. code:: py
 
     import discord
-    import koreanbots
+    from koreanbots.integrations.discord import DiscordpyKoreanbots
 
     client = discord.Client()
-    kb = koreanbots.Koreanbots(client, 'KoreanBots 토큰', run_task=True)
+    kb = DiscordpyKoreanbots(client, 'KoreanBots 토큰', run_task=True)
 
     @client.event
     async def on_ready():
@@ -44,10 +44,10 @@ discord.py 사용시
 .. code:: py
 
     import discord
-    import koreanbots
+    from koreanbots.integrations.discord import DiscordpyKoreanbots
 
     client = discord.Client()
-    kb = koreanbots.Koreanbots()
+    kb = DiscordpyKoreanbots(client, 'KoreanBots 토큰', run_task=True)
 
     @client.event
     async def on_ready():
