@@ -6,12 +6,12 @@ from typing import Optional
 from aiohttp import ClientSession
 from dico import Client  # type: ignore
 
-from koreanbots.http import KoreanbotsRequester
+from koreanbots.client import Koreanbots
 
 log = logging.getLogger(__name__)
 
 
-class DicoKoreanbotsHelper(KoreanbotsRequester):
+class DicoKoreanbots(Koreanbots):
     """
     KoreanbotsRequester를 감싸는 클라이언트 클래스입니다.
     dico 전용입니다.
@@ -90,6 +90,6 @@ class DicoKoreanbotsHelper(KoreanbotsRequester):
                 if self.client.shard_count:
                     kwargs.update({"shards": self.client.shard_count})
             log.info("Send")
-            await self.post_update_bot_info(int(self.client.application_id), **kwargs)
+            await self.guildcount(int(self.client.application_id), **kwargs)
             log.info("Complete i will sleep")
             await sleep(1800)

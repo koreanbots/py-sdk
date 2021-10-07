@@ -5,7 +5,7 @@ from typing import Optional, Union
 
 from aiohttp import ClientSession
 
-from koreanbots.http import KoreanbotsRequester
+from koreanbots.client import Koreanbots
 
 try:
     import discord  # type: ignore
@@ -20,7 +20,7 @@ except ImportError:
 log = getLogger(__name__)
 
 
-class DiscordpyKoreanbotshHelper(KoreanbotsRequester):
+class DiscordpyKoreanbots(Koreanbots):
     def __init__(
         self,
         client: Union["discord.Client", "nextcord.Client"],
@@ -70,6 +70,6 @@ class DiscordpyKoreanbotshHelper(KoreanbotsRequester):
                 if self.client.shard_count:
                     kwargs.update({"shards": self.client.shard_count})
             log.info("Send")
-            await self.post_update_bot_info(self.client.user.id, **kwargs)
+            await self.guildcount(self.client.user.id, **kwargs)
             log.info("Complete i will sleep")
             await sleep(1800)
