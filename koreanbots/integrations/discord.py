@@ -13,7 +13,7 @@ except ImportError:
     pass
 
 try:
-    import disnake  # type: ignore
+    import disnake
 except ImportError:
     pass
 
