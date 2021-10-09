@@ -13,7 +13,7 @@ except ImportError:
     pass
 
 try:
-    import disnake.client.Client as DisnakeClient
+    from disnake.client import Client as DisnakeClient
 except ImportError:
     pass
 
