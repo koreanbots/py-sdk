@@ -37,15 +37,14 @@ class DiscordpyKoreanbots(Koreanbots):
         self.client = client
 
         # Patch discord.py client.close() method to handle session.close()
-        if client:
-            original_close = getattr(client, "close")
+        original_close = getattr(client, "close")
 
-            async def close() -> None:
-                if self.session is not None and not self.session.closed:
-                    await self.session.close()
-                await original_close()
+        async def close() -> None:
+            if self.session is not None and not self.session.closed:
+                await self.session.close()
+            await original_close()
 
-            setattr(client, "close", close)
+        setattr(client, "close", close)
 
         self.include_shard_count = include_shard_count
         super().__init__(api_key, session)
