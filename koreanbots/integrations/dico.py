@@ -4,6 +4,7 @@ from asyncio.tasks import sleep
 from typing import Optional
 
 from aiohttp import ClientSession
+
 try:
     from dico import Client  # type: ignore
 except ImportError:
