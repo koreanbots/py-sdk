@@ -17,6 +17,15 @@ Client
 .. autoclass:: Koreanbots
     :members:
 
+Integrations
+------------
+
+.. autoclass:: koreanbots.integrations.discord.DiscordpyKoreanbots
+    :members:
+
+.. autoclass:: koreanbots.integrations.dico.DicoKoreanbots
+    :members:
+
 HTTP
 -------------------
 
