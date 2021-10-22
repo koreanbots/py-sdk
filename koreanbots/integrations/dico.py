@@ -4,7 +4,10 @@ from asyncio.tasks import sleep
 from typing import Optional
 
 from aiohttp import ClientSession
-from dico import Client  # type: ignore
+try:
+    from dico import Client  # type: ignore
+except ImportError:
+    pass
 
 from koreanbots.client import Koreanbots
 
@@ -44,7 +47,7 @@ class DicoKoreanbots(Koreanbots):
 
     def __init__(
         self,
-        client: Client,
+        client: "Client",
         api_key: str,
         session: Optional[ClientSession] = None,
         run_task: bool = False,
