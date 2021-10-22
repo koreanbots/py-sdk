@@ -13,7 +13,7 @@ except ImportError:
     pass
 
 try:
-    from disnake.client import Client as DisnakeClient
+    import disnake  # type: ignore
 except ImportError:
     pass
 
@@ -28,7 +28,7 @@ log = getLogger(__name__)
 class DiscordpyKoreanbots(Koreanbots):
     def __init__(
         self,
-        client: Union["discord.Client", "nextcord.Client", "DisnakeClient"],
+        client: Union["discord.Client", "nextcord.Client", "disnake.Client"],
         api_key: str,
         session: Optional[ClientSession] = None,
         run_task: bool = False,
