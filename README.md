@@ -12,4 +12,4 @@
 
 ## 문서
 
-[문서](https://py-sdk-docs.pages.dev/)
+[문서](https://koreanbots.readthedocs.io/en/latest/)
