@@ -500,15 +500,15 @@ class KoreanbotsServer(BaseKoreanbots):
     """
     서버 정보를 가져왔을때 반환되는 클래스입니다.
 
-    :param init_in_bot:
-        봇 클래스에서 초기화 되었는지 여부입니다. 기본값은 False입니다.
-    :type init_in_bot: bool
+    :param init_in_bot_user:
+        봇 클래스 또는 유저 클래스에서 초기화 되었는지 여부입니다. 기본값은 False입니다.
+    :type init_in_bot_user: bool
 
     """
 
     def __init__(self, init_in_bot: bool = False, **response_data: Any) -> None:
         super().__init__(**response_data)
-        self.init_in_bot = init_in_bot
+        self.init_in_bot_user = init_in_bot_user
 
     @property
     def id(self) -> int:
@@ -682,19 +682,16 @@ class KoreanbotsServer(BaseKoreanbots):
     @property
     def emojis(
         self,
-    ) -> Union[List[Emoji], List[str]]:
+    ) -> List[Emoji]:
         """
         이모지들을 반환합니다.
 
         :return:
             Emoji 인스턴스를 담고있는 리스트
         :rtype:
-            Union[List[str], List[Emoji]]
+            List[Emoji]
 
         """
-        if self.init_in_bot:
-            return self._response_data.get("emojis", [])
-
         return list(
             map(
                 lambda emoji: Emoji(**emoji),
@@ -726,7 +723,7 @@ class KoreanbotsServer(BaseKoreanbots):
             Union[str, KoreanbotsUser]
 
         """
-        if self.init_in_user:
+        if self.init_in_server:
             return self._response_data.get("owner", "")
 
         return list(
@@ -742,7 +739,7 @@ class KoreanbotsServer(BaseKoreanbots):
     ) -> Union[List[KoreanbotsBot], List[str]]:
         """
         봇들을 반환합니다.
-        ※ init_in_bot가 True인경우 봇들의 ID를 반환합니다.
+        ※ init_in_server가 True인경우 봇들의 ID를 반환합니다.
 
         :return:
             봇들의 ID들을 담고 있는 리스트 또는 KoreanbotsUser 인스턴스를 담고있는 리스트
@@ -750,7 +747,7 @@ class KoreanbotsServer(BaseKoreanbots):
             Union[List[str], List[KoreanbotsUser]]
 
         """
-        if self.init_in_bot:
+        if self.init_in_server:
             return self._response_data.get("bots", [])
 
         return list(
