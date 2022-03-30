@@ -260,8 +260,9 @@ class KoreanbotsRequester:
         """
         return await self.request(
             "GET",
-            f"/bots/{bot_id}/vote?userID={user_id}",
+            f"/bots/{bot_id}/vote",
             headers={"Authorization": self.api_key},
+            params={"userID": user_id}
         )
 
     async def get_server_info(self, server_id: int) -> Any:
@@ -294,6 +295,7 @@ class KoreanbotsRequester:
         """
         return await self.request(
             "GET",
-            f"/servers/{bot_id}/vote?userID={user_id}",
+            f"/servers/{server_id}/vote",
             headers={"Authorization": self.api_key},
+            params={"userID": user_id}
         )
