@@ -5,7 +5,12 @@ import aiohttp
 
 from koreanbots.decorator import strict_literal
 from koreanbots.http import KoreanbotsRequester
-from koreanbots.model import KoreanbotsBot, KoreanbotsUser, KoreanbotsServer, KoreanbotsVote
+from koreanbots.model import (
+    KoreanbotsBot,
+    KoreanbotsUser,
+    KoreanbotsServer,
+    KoreanbotsVote,
+)
 from koreanbots.typing import WidgetStyle, WidgetType
 
 log = getLogger(__name__)

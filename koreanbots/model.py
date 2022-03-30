@@ -455,39 +455,39 @@ class Emoji:
     """
     이모지 정보를 가져왔을때 반환되는 클래스입니다.
     """
-    
+
     def __init__(self, **response_data: Any) -> None:
         self._response_data = response_data
-        
+
     @property
     def id(self) -> int:
         """
         ID를 반환합니다.
-        
+
         :return:
             ID
         :rtype:
             int
         """
         return self._response_data.get("id", 0)
-        
+
     @property
     def name(self) -> str:
         """
         이모지 이름을 반환합니다.
-        
+
         :return:
             이모지 이름
         :rtype:
             str
         """
         return self._response_data.get("name", "")
-            
+
     @property
     def url(self) -> str:
         """
         이모지 url을 반환합니다.
-        
+
         :return:
             이모지 url
         :rtype:
