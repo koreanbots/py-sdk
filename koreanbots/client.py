@@ -5,7 +5,7 @@ import aiohttp
 
 from koreanbots.decorator import strict_literal
 from koreanbots.http import KoreanbotsRequester
-from koreanbots.model import KoreanbotsBot, KoreanbotsUser, KoreanbotsVote
+from koreanbots.model import KoreanbotsBot, KoreanbotsUser, KoreanbotsServer, KoreanbotsVote
 from koreanbots.typing import WidgetStyle, WidgetType
 
 log = getLogger(__name__)
@@ -90,6 +90,22 @@ class Koreanbots(KoreanbotsRequester):
         """
         return KoreanbotsBot(**await self.get_bot_info(bot_id))
 
+    async def serverinfo(self, server_id: int) -> KoreanbotsServer:
+        """
+        서버 정보를 가져옵니다.
+
+        :param server_id:
+            요청할 서버의 ID를 지정합니다.
+        :type server_id:
+            int
+
+        :return:
+            봇 정보를 담고 있는 KoreanbotsServer클래스입니다.
+        :rtype:
+            KoreanbotsServer
+        """
+        return KoreanbotsServer(**await self.get_server_info(server_id))
+
     @strict_literal(["widget_type", "style"])
     async def widget(
         self,
@@ -133,7 +149,7 @@ class Koreanbots(KoreanbotsRequester):
         """
         return await self.get_bot_widget_url(widget_type, bot_id, style, scale, icon)
 
-    async def is_voted(self, user_id: int, bot_id: int) -> KoreanbotsVote:
+    async def is_voted_bot(self, user_id: int, bot_id: int) -> KoreanbotsVote:
         """
         주어진 bot_id로 user_id를 통해 해당 user의 투표 여부를 반환합니다.
 
@@ -153,3 +169,24 @@ class Koreanbots(KoreanbotsRequester):
             KoreanbotsVote
         """
         return KoreanbotsVote(**await self.get_user_vote(user_id, bot_id))
+
+    async def is_voted_server(self, user_id: int, server_id: int) -> KoreanbotsVote:
+        """
+        주어진 server_id user_id를 통해 해당 user의 투표 여부를 반환합니다.
+
+        :param user_id:
+            요청할 user의 ID를 지정합니다.
+        :type user_id:
+            int
+
+        :param server_id:
+            요청할 서버의 ID를 지정합니다.
+        :type server_id:
+            int
+
+        :return:
+            투표여부를 담고 있는 KoreanbotsVote클래스입니다.
+        :rtype:
+            KoreanbotsVote
+        """
+        return KoreanbotsVote(**await self.get_server_vote(user_id, server_id))

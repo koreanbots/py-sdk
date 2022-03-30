@@ -243,7 +243,7 @@ class KoreanbotsRequester:
         return await self.request("GET", f"/users/{user_id}")
 
     @required
-    async def get_user_vote(self, user_id: int, bot_id: int) -> Any:
+    async def get_bot_vote(self, user_id: int, bot_id: int) -> Any:
         """
         주어진 bot_id로 user_id를 통해 해당 user의 투표 여부를 반환합니다.
 
@@ -261,5 +261,43 @@ class KoreanbotsRequester:
         return await self.request(
             "GET",
             f"/bots/{bot_id}/vote?userID={user_id}",
+            headers={"Authorization": self.api_key},
+        )
+
+    async def get_server_info(self, server_id: int) -> Any:
+        """
+        주어진 server_id로 server의 정보를 반환합니다.
+
+        :param server_id:
+            요청할 server의 ID를 지정합니다.
+        :type server_id:
+            int
+
+        :return:
+            요청 결과를 반환합니다.
+        :rtype:
+            Dict[str, Any]
+        """
+        return await self.request("GET", f"/servers/{bot_id}")
+
+    @required
+    async def get_server_vote(self, user_id: int, server_id: int) -> Any:
+        """
+        주어진 server_id로 user_id를 통해 해당 user의 투표 여부를 반환합니다.
+
+        :param user_id:
+            요청할 user의 ID를 지정합니다.
+        :type user_id:
+            int
+
+        :param server_id로:
+            요청할 server의 ID를 지정합니다.
+        :type server_id:
+            int
+
+        """
+        return await self.request(
+            "GET",
+            f"/servers/{bot_id}/vote?userID={user_id}",
             headers={"Authorization": self.api_key},
         )
