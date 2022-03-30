@@ -168,7 +168,7 @@ class Koreanbots(KoreanbotsRequester):
         :rtype:
             KoreanbotsVote
         """
-        return KoreanbotsVote(**await self.get_user_vote(user_id, bot_id))
+        return KoreanbotsVote(**await self.get_bot_vote(user_id, bot_id))
 
     async def is_voted_server(self, user_id: int, server_id: int) -> KoreanbotsVote:
         """
