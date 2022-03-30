@@ -1,10 +1,11 @@
-﻿from typing import Literal, NamedTuple
+from typing import Literal, NamedTuple
 
 from .client import Koreanbots as Koreanbots
 from .errors import *
 from .http import KoreanbotsRequester as KoreanbotsRequester
 from .model import KoreanbotsBot as KoreanbotsBot
 from .model import KoreanbotsUser as KoreanbotsUser
+from .model import KoreanbotsServer as KoreanbotsServer
 
 
 class VersionInfo(NamedTuple):

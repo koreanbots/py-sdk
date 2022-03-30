@@ -451,6 +451,316 @@ class KoreanbotsUser(BaseKoreanbots):
         )
 
 
+class Emoji():
+    """
+    이모지 정보를 가져왔을때 반환되는 클래스입니다.
+    """
+    
+    def __init__(self, **response_data: Any) -> None:
+        self._response_data = response_data
+        
+    @property
+    def id(self) -> int:
+        """
+        ID를 반환합니다.
+        
+        :return:
+            ID
+        :rtype:
+            int
+        """
+        return self._response_data.get("id", 0)
+        
+    @property
+    def name(self) -> str:
+        """
+        이모지 이름을 반환합니다.
+        
+        :return:
+            이모지 이름
+        :rtype:
+            str
+        """
+        return self._response_data.get("name", "")
+            
+    @property
+    def url(self) -> str:
+        """
+        이모지 url을 반환합니다.
+        
+        :return:
+            이모지 url
+        :rtype:
+            str
+        """
+        return self._response_data.get("url", "")
+
+
+class KoreanbotsServer(BaseKoreanbots):
+    """
+    서버 정보를 가져왔을때 반환되는 클래스입니다.
+
+    :param init_in_bot:
+        봇 클래스에서 초기화 되었는지 여부입니다. 기본값은 False입니다.
+    :type init_in_bot: bool
+
+    """
+
+    def __init__(self, init_in_bot: bool = False, **response_data: Any) -> None:
+        super().__init__(**response_data)
+        self.init_in_bot = init_in_bot
+
+    @property
+    def id(self) -> int:
+        """
+        ID를 반환합니다.
+
+        :return:
+            ID
+        :rtype:
+            int
+        """
+        return self.data.get("id", 0)
+
+    @property
+    def name(self) -> str:
+        """
+        서버 이름을 반환합니다.
+
+        :return:
+            서버 이름
+        :rtype:
+            str
+        """
+        return self.data.get("name", "")
+
+    @property
+    def flags(self) -> int:
+        """
+        플래그를 반환합니다.
+
+        :return:
+            플래그
+        :rtype:
+            int
+        """
+        return self.data.get("flags", 0)
+
+    @property
+    def intro(self) -> Optional[str]:
+        """
+        소개문구를 반환합니다.
+
+        :return:
+            소개문구
+        :rtype:
+            Optional[str]
+        """
+        return self.data.get("intro")
+
+    @property
+    def desc(self) -> Optional[str]:
+        """
+        설명문구를 반환합니다.
+
+        :return:
+            설명문구
+        :rtype:
+            Optional[str]
+        """
+        return self.data.get("desc")
+
+    @property
+    def votes(self) -> int:
+        """
+        투표수를 반환합니다.
+
+        :return:
+            투표수
+        :rtype:
+            int
+        """
+        return self.data.get("votes", 0)
+
+    @property
+    def category(self) -> Optional[Category]:
+        """
+        카테고리를 반환합니다.
+
+        :return:
+            카테고리
+        :rtype:
+            Optional[Category]
+        """
+        return self.data.get("category")
+
+    @property
+    def invite(self) -> str:
+        """
+        초대링크를 반환합니다.
+
+        :return:
+            초대링크
+        :rtype:
+            str
+        """
+        return self.data.get("invite", "")
+
+    @property
+    def state(self) -> Optional[State]:
+        """
+        Koreanbots에서의 상태를 반환합니다.
+
+        :return:
+            Koreanbots에서의 상태
+        :rtype:
+            Optional[State]
+        """
+        return self.data.get("state")
+
+    @property
+    def vanity(self) -> Optional[str]:
+        """
+        서버의 가상 주소를 반환합니다.
+
+        :return:
+            서버의 가상 주소
+        :rtype:
+            Optional[str]
+        """
+        return self.data.get("vanity")
+
+    @property
+    def bg(self) -> Optional[str]:
+        """
+        배경 이미지 주소를 반환합니다.
+
+        :return:
+            배경 이미지 주소
+        :rtype:
+            Optional[str]
+        """
+        return self.data.get("bg")
+
+    @property
+    def banner(self) -> Optional[str]:
+        """
+        배너 이미지 주소를 반환합니다.
+
+        :return:
+            배너 이미지 주소
+        :rtype:
+            Optional[str]
+        """
+        return self.data.get("banner")
+
+    @property
+    def icon(self) -> Optional[str]:
+        """
+        아이콘을 반환합니다.
+
+
+        :return:
+            아이콘 url
+        :rtype:
+            Optional[str]
+        """
+        return self.data.get("icon")
+
+    @property
+    def members(self) -> int:
+        """
+        멤버수를 반환합니다.
+
+        :return:
+            멤버수
+        :rtype:
+            int
+        """
+        return self.data.get("members", 0)
+
+    @property
+    def emojis(
+        self,
+    ) -> Union[List[Emoji], List[str]]:
+        """
+        이모지들을 반환합니다.
+
+        :return:
+            Emoji 인스턴스를 담고있는 리스트
+        :rtype:
+            Union[List[str], List[Emoji]]
+
+        """
+        if self.init_in_bot:
+            return self._response_data.get("emojis", [])
+
+        return list(
+            map(
+                lambda emoji: Emoji(**emoji),
+                self.data.get("emojis", []),
+            )
+        )
+
+    @property
+    def boostTier(self) -> int:
+        """
+        부스트레벨을 반환합니다.
+
+        :return:
+            부스트레벨
+        :rtype:
+            int
+        """
+        return self.data.get("boostTier", 0)
+
+    @property
+    def owner(self) -> Union["KoreanbotsUser", str]:
+        """
+        소유자를 반환합니다.
+        ※ init_in_user가 True인경우 소유자의 ID를 반환합니다.
+
+        :return:
+            소유자의 ID 또는 KoreanbotsUser 인스턴스
+        :rtype:
+            Union[str, KoreanbotsUser]
+
+        """
+        if self.init_in_user:
+            return self._response_data.get("owner", "")
+
+        return list(
+            map(
+                lambda user: KoreanbotsUser(True, **user),
+                self.data.get("owner", ""),
+            )
+        )
+
+    @property
+    def bots(
+        self,
+    ) -> Union[List[KoreanbotsBot], List[str]]:
+        """
+        봇들을 반환합니다.
+        ※ init_in_bot가 True인경우 봇들의 ID를 반환합니다.
+
+        :return:
+            봇들의 ID들을 담고 있는 리스트 또는 KoreanbotsUser 인스턴스를 담고있는 리스트
+        :rtype:
+            Union[List[str], List[KoreanbotsUser]]
+
+        """
+        if self.init_in_bot:
+            return self._response_data.get("bots", [])
+
+        return list(
+            map(
+                lambda bot: KoreanbotsBot(True, **bot),
+                self.data.get("bots", []),
+            )
+        )
+
+
 class KoreanbotsVote(BaseKoreanbots):
     def __init__(self, **response_data: Any) -> None:
         super().__init__(**response_data)
