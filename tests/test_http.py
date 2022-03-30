@@ -16,6 +16,12 @@ async def test_get_user_info(client: Koreanbots):
 
 
 @pytest.mark.asyncio
+async def test_get_server_info(client: Koreanbots):
+    response = await client.get_server_info(653083797763522580)
+    assert response["code"] == 200
+
+
+@pytest.mark.asyncio
 async def test_get(client: Koreanbots):
     response = await client.get_bot_widget_url("votes", 653534001742741552)
     assert (
