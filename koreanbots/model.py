@@ -451,7 +451,7 @@ class KoreanbotsUser(BaseKoreanbots):
         )
 
 
-class Emoji():
+class Emoji:
     """
     이모지 정보를 가져왔을때 반환되는 클래스입니다.
     """
