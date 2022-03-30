@@ -712,7 +712,7 @@ class KoreanbotsServer(BaseKoreanbots):
         return self.data.get("boostTier", 0)
 
     @property
-    def owner(self) -> Union["KoreanbotsUser", str]:
+    def owner(self) -> Union[KoreanbotsUser, str]:
         """
         소유자를 반환합니다.
         ※ init_in_user가 True인경우 소유자의 ID를 반환합니다.
