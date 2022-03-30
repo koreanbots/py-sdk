@@ -273,12 +273,8 @@ class KoreanbotsRequester:
         :type server_id:
             int
 
-        :return:
-            요청 결과를 반환합니다.
-        :rtype:
-            Dict[str, Any]
         """
-        return await self.request("GET", f"/servers/{bot_id}")
+        return await self.request("GET", f"/servers/{server_id}")
 
     @required
     async def get_server_vote(self, user_id: int, server_id: int) -> Any:
