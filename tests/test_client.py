@@ -27,8 +27,8 @@ async def test_get_server_info(client: Koreanbots):
     response = await client.serverinfo(653083797763522580)
 
     assert response.code == 200
-    assert isinstance(response.owner[0], KoreanbotsUser)
-    assert isinstance(response.owner[0].bots[0], str)
+    assert isinstance(response.bots[0], KoreanbotsBot)
+    assert isinstance(response.bots[0].owners[0], str)
 
 
 @pytest.mark.asyncio
