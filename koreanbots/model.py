@@ -506,7 +506,7 @@ class KoreanbotsServer(BaseKoreanbots):
 
     """
 
-    def __init__(self, init_in_bot: bool = False, **response_data: Any) -> None:
+    def __init__(self, init_in_bot_user: bool = False, **response_data: Any) -> None:
         super().__init__(**response_data)
         self.init_in_bot_user = init_in_bot_user
 
@@ -712,34 +712,12 @@ class KoreanbotsServer(BaseKoreanbots):
         return self.data.get("boostTier", 0)
 
     @property
-    def owner(self) -> Union[KoreanbotsUser, str]:
-        """
-        소유자를 반환합니다.
-        ※ init_in_user가 True인경우 소유자의 ID를 반환합니다.
-
-        :return:
-            소유자의 ID 또는 KoreanbotsUser 인스턴스
-        :rtype:
-            Union[str, KoreanbotsUser]
-
-        """
-        if self.init_in_server:
-            return self._response_data.get("owner", "")
-
-        return list(
-            map(
-                lambda user: KoreanbotsUser(True, **user),
-                self.data.get("owner", ""),
-            )
-        )
-
-    @property
     def bots(
         self,
     ) -> Union[List[KoreanbotsBot], List[str]]:
         """
         봇들을 반환합니다.
-        ※ init_in_server가 True인경우 봇들의 ID를 반환합니다.
+        ※ init_in_bot_user가 True인경우 봇들의 ID를 반환합니다.
 
         :return:
             봇들의 ID들을 담고 있는 리스트 또는 KoreanbotsUser 인스턴스를 담고있는 리스트
@@ -747,7 +725,7 @@ class KoreanbotsServer(BaseKoreanbots):
             Union[List[str], List[KoreanbotsUser]]
 
         """
-        if self.init_in_server:
+        if self.init_in_bot_user:
             return self._response_data.get("bots", [])
 
         return list(
