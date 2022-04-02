@@ -7,8 +7,8 @@ from koreanbots.decorator import strict_literal
 from koreanbots.http import KoreanbotsRequester
 from koreanbots.model import (
     KoreanbotsBot,
-    KoreanbotsUser,
     KoreanbotsServer,
+    KoreanbotsUser,
     KoreanbotsVote,
 )
 from koreanbots.typing import WidgetStyle, WidgetType
