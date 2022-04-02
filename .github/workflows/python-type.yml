@@ -22,7 +22,8 @@ jobs:
         python -m pip install mypy
     - name: Install integrations
       run: |
-        python -m pip install discord.py dico nextcord disnake
+        python -m pip install git+https://github.com/rapptz/discord.py
+        python -m pip install dico nextcord disnake
     - name: Checking type annotations
       run: |
         mypy ./koreanbots --strict

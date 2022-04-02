@@ -1,7 +1,7 @@
 import pytest
 
 from koreanbots.client import Koreanbots
-from koreanbots.model import KoreanbotsBot, KoreanbotsUser
+from koreanbots.model import KoreanbotsBot, KoreanbotsUser, KoreanbotsServer
 
 
 @pytest.mark.asyncio
@@ -16,6 +16,15 @@ async def test_botinfo(client: Koreanbots):
 @pytest.mark.asyncio
 async def test_get_user_info(client: Koreanbots):
     response = await client.userinfo(285185716240252929)
+
+    assert response.code == 200
+    assert isinstance(response.bots[0], KoreanbotsBot)
+    assert isinstance(response.bots[0].owners[0], str)
+
+
+@pytest.mark.asyncio
+async def test_get_server_info(client: Koreanbots):
+    response = await client.serverinfo(653083797763522580)
 
     assert response.code == 200
     assert isinstance(response.bots[0], KoreanbotsBot)

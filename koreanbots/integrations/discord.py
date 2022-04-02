@@ -1,26 +1,16 @@
 from asyncio.events import get_event_loop
 from asyncio.tasks import sleep
 from logging import getLogger
-from typing import Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 from aiohttp import ClientSession
 
 from koreanbots.client import Koreanbots
 
-try:
-    import discord  # type: ignore
-except ImportError:
-    pass
-
-try:
+if TYPE_CHECKING:
+    import nextcord
+    from discord import Client as DiscordpyClient
     from disnake.client import Client as DisnakeClient
-except ImportError:
-    pass
-
-try:
-    import nextcord  # type: ignore
-except ImportError:
-    pass
 
 log = getLogger(__name__)
 
@@ -28,7 +18,7 @@ log = getLogger(__name__)
 class DiscordpyKoreanbots(Koreanbots):
     def __init__(
         self,
-        client: Union["discord.Client", "nextcord.Client", "DisnakeClient"],
+        client: Union["DiscordpyClient", "nextcord.Client", "DisnakeClient"],
         api_key: str,
         session: Optional[ClientSession] = None,
         run_task: bool = False,
