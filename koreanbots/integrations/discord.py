@@ -1,26 +1,16 @@
 from asyncio.events import get_event_loop
 from asyncio.tasks import sleep
 from logging import getLogger
-from typing import Optional, Union
+from typing import TYPE_CHECKING,Optional, Union
 
 from aiohttp import ClientSession
 
 from koreanbots.client import Koreanbots
 
-try:
-    import discord  # type: ignore
-except ImportError:
-    pass
-
-try:
+if TYPE_CHECKING:
+    import discord
     from disnake.client import Client as DisnakeClient
-except ImportError:
-    pass
-
-try:
-    import nextcord  # type: ignore
-except ImportError:
-    pass
+    import nextcord
 
 log = getLogger(__name__)
 
