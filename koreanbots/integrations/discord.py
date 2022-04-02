@@ -8,7 +8,7 @@ from aiohttp import ClientSession
 from koreanbots.client import Koreanbots
 
 if TYPE_CHECKING:
-    import discord
+    from discord import Client as DiscordpyClient
     from disnake.client import Client as DisnakeClient
     import nextcord
 
@@ -18,7 +18,7 @@ log = getLogger(__name__)
 class DiscordpyKoreanbots(Koreanbots):
     def __init__(
         self,
-        client: Union["discord.Client", "nextcord.Client", "DisnakeClient"],
+        client: Union["DiscordpyClient", "nextcord.Client", "DisnakeClient"],
         api_key: str,
         session: Optional[ClientSession] = None,
         run_task: bool = False,
