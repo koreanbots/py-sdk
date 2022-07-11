@@ -8,7 +8,7 @@ from koreanbots.model import KoreanbotsBot, KoreanbotsUser, KoreanbotsServer
 async def test_botinfo(client: Koreanbots):
     response = await client.botinfo(653534001742741552)
     assert response.code == 200
-    assert response.name == "IU"
+    assert response.name == "KODL"
     assert isinstance(response.owners[0], KoreanbotsUser)
     assert isinstance(response.owners[0].bots[0], str)
 
