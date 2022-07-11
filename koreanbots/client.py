@@ -1,5 +1,5 @@
 from logging import getLogger
-from typing import Optional, Tuple, Dict, Any
+from typing import Any, Dict, Optional, Tuple
 
 import aiohttp
 
