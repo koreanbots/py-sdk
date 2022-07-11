@@ -94,6 +94,15 @@ class Koreanbots(KoreanbotsRequester):
         code, data, version = self.fit_response(
             await self.get_user_info(user_id), "bots"
         )
+        servers_data = data["servers"]
+
+        def wrap_servers(s):
+            server_data = self.fit_data(s, "bots")
+            return KoreanbotsServer(
+                code=code, version=version, data=server_data, **server_data
+            )
+
+        data["servers"] = list(map(wrap_servers, servers_data))
         return KoreanbotsUser(code=code, version=version, data=data, **data)
 
     async def botinfo(self, bot_id: int) -> KoreanbotsBot:
