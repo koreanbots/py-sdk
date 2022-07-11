@@ -44,7 +44,7 @@ class KoreanbotsBot(BaseKoreanbots):
         repr=False, compare=False, default=None
     )  # Koreanbots에서의 상태
 
-    _owners: List[str] = field(repr=False, compare=False, default_factory=list)  # 봇들
+    _owners: Union[List[Dict[str, Any]], List[str]] = field(repr=False, compare=False, default_factory=list)  # 봇들
     init_in_user: bool = field(
         repr=False, compare=False, default=False
     )  # .owners 에서 소유자들의 ID를 반환하는지의 여부
@@ -76,7 +76,7 @@ class KoreanbotsUser(BaseKoreanbots):
     tag: str = field(repr=False, compare=False, default="")  # 태그
     github: Optional[str] = field(repr=False, compare=False, default=None)  # Github 주소
     flags: int = field(repr=False, compare=False, default=0)  # 플래그
-    _bots: List[str] = field(repr=False, compare=False, default_factory=list)
+    _bots: Union[List[Dict[str, Any]], List[str]] = field(repr=False, compare=False, default_factory=list)
     init_in_bot: bool = field(
         repr=False, compare=False, default=False
     )  # .bots 에서 봇들의 ID를 반환하는지의 여부
@@ -138,7 +138,7 @@ class KoreanbotsServer(BaseKoreanbots):
         repr=False, compare=False, default_factory=list
     )  # Emoji 인스턴스를 담고 있는 리스트
     boostTier: int = field(repr=False, compare=False, default=0)  # 부스트 레벨
-    _bots: List[str] = field(repr=False, compare=False, default_factory=list)
+    _bots: Union[List[Dict[str, Any]], List[str]] = field(repr=False, compare=False, default_factory=list)
     init_in_bot_user: bool = field(
         repr=False, compare=False, default=False
     )  # .bots 에서 봇들의 ID를 반환하는지의 여부
