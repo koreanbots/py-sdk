@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from .typing import Category, State, Status
 
@@ -44,6 +44,31 @@ class KoreanbotsBot(BaseKoreanbots):
         repr=False, compare=False, default=None
     )  # Koreanbots에서의 상태
 
+    _owners: List[str] = field(repr=False, compare=False, default_factory=list)  # 봇들
+    init_in_user: bool = field(
+        repr=False, compare=False, default=False
+    )  # .owners 에서 소유자들의 ID를 반환하는지의 여부
+
+    @property
+    def owners(self) -> Union[List["KoreanbotsUser"], List[str]]:
+        """
+        소유자를 반환합니다.
+        ※ init_in_user가 True인경우 소유자들의 ID를 반환합니다.
+        :return:
+            소유자들의 ID들을 담고 있는 리스트 또는 KoreanbotsUser 인스턴스를 담고있는 리스트
+        :rtype:
+            Union[List[str], List[KoreanbotsUser]]
+        """
+        if self.init_in_user:
+            return self._owners
+
+        return list(
+            map(
+                lambda user: KoreanbotsUser(True, **user),
+                self._owners
+            )
+        )
+
 
 @dataclass(eq=True, frozen=True)
 class KoreanbotsUser(BaseKoreanbots):
@@ -56,6 +81,32 @@ class KoreanbotsUser(BaseKoreanbots):
     tag: str = field(repr=False, compare=False, default="")  # 태그
     github: Optional[str] = field(repr=False, compare=False, default=None)  # Github 주소
     flags: int = field(repr=False, compare=False, default=0)  # 플래그
+    _bots: List[str] = field(repr=False, compare=False, default_factory=list)
+    init_in_bot: bool = field(
+        repr=False, compare=False, default=False
+    )  # .bots 에서 봇들의 ID를 반환하는지의 여부
+
+    @property
+    def bots(
+        self,
+    ) -> Union[List[KoreanbotsBot], List[str]]:
+        """
+        봇들을 반환합니다.
+        ※ init_in_bot가 True인경우 봇들의 ID를 반환합니다.
+        :return:
+            봇들의 ID들을 담고 있는 리스트 또는 KoreanbotsUser 인스턴스를 담고있는 리스트
+        :rtype:
+            Union[List[str], List[KoreanbotsUser]]
+        """
+        if self.init_in_bot:
+            return self._bots
+
+        return list(
+            map(
+                lambda bot: KoreanbotsBot(True, **bot),
+                self._bots
+            )
+        )
 
 
 @dataclass(eq=True, frozen=True)
@@ -77,7 +128,7 @@ class KoreanbotsServer(BaseKoreanbots):
 
     id: int = field(repr=True, compare=True, default=0)  # ID
     name: str = field(repr=True, compare=False, default="")  # 서버 이름
-    flags: int = field(repr=False, compare=False, default="")  # 플래그
+    flags: int = field(repr=False, compare=False, default=0)  # 플래그
     intro: Optional[str] = field(repr=False, compare=False, default=None)  # 소개문구
     desc: Optional[str] = field(repr=False, compare=False, default=None)  # 설명문구
     votes: int = field(repr=True, compare=False, default=0)  # 투표수
@@ -97,6 +148,32 @@ class KoreanbotsServer(BaseKoreanbots):
         repr=False, compare=False, default_factory=list
     )  # Emoji 인스턴스를 담고 있는 리스트
     boostTier: int = field(repr=False, compare=False, default=0)  # 부스트 레벨
+    _bots: List[str] = field(repr=False, compare=False, default_factory=list)
+    init_in_bot_user: bool = field(
+        repr=False, compare=False, default=False
+    )  # .bots 에서 봇들의 ID를 반환하는지의 여부
+
+    @property
+    def bots(
+        self,
+    ) -> Union[List[KoreanbotsBot], List[str]]:
+        """
+        봇들을 반환합니다.
+        ※ init_in_bot_user가 True인경우 봇들의 ID를 반환합니다.
+        :return:
+            봇들의 ID들을 담고 있는 리스트 또는 KoreanbotsUser 인스턴스를 담고있는 리스트
+        :rtype:
+            Union[List[str], List[KoreanbotsUser]]
+        """
+        if self.init_in_bot_user:
+            return self._bots
+
+        return list(
+            map(
+                lambda bot: KoreanbotsBot(True, **bot),
+                self._bots
+            )
+        )
 
 
 @dataclass(eq=True, frozen=True)
