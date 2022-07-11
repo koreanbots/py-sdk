@@ -62,12 +62,7 @@ class KoreanbotsBot(BaseKoreanbots):
         if self.init_in_user:
             return self._owners
 
-        return list(
-            map(
-                lambda user: KoreanbotsUser(True, **user),
-                self._owners
-            )
-        )
+        return list(map(lambda user: KoreanbotsUser(True, **user), self._owners))
 
 
 @dataclass(eq=True, frozen=True)
@@ -101,12 +96,7 @@ class KoreanbotsUser(BaseKoreanbots):
         if self.init_in_bot:
             return self._bots
 
-        return list(
-            map(
-                lambda bot: KoreanbotsBot(True, **bot),
-                self._bots
-            )
-        )
+        return list(map(lambda bot: KoreanbotsBot(True, **bot), self._bots))
 
 
 @dataclass(eq=True, frozen=True)
@@ -168,12 +158,7 @@ class KoreanbotsServer(BaseKoreanbots):
         if self.init_in_bot_user:
             return self._bots
 
-        return list(
-            map(
-                lambda bot: KoreanbotsBot(True, **bot),
-                self._bots
-            )
-        )
+        return list(map(lambda bot: KoreanbotsBot(True, **bot), self._bots))
 
 
 @dataclass(eq=True, frozen=True)
