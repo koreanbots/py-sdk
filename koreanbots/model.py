@@ -64,7 +64,19 @@ class KoreanbotsBot(BaseKoreanbots):
         if self.init_in_user:
             return self._owners
 
-        return list(map(lambda user: KoreanbotsUser(True, **user), self._owners))
+        def wrap_user(user: Dict[str, Any]) -> KoreanbotsUser:
+            if "_bots" not in user:
+                bots = user.pop("bots")
+                user["_bots"] = bots
+            return KoreanbotsUser(
+                code=self.code,
+                version=self.version,
+                data=user,
+                init_in_bot=True,
+                **user
+            )
+
+        return list(map(wrap_user, self._owners))
 
 
 @dataclass(eq=True, frozen=True)
@@ -78,6 +90,9 @@ class KoreanbotsUser(BaseKoreanbots):
     tag: str = field(repr=False, compare=False, default="")  # 태그
     github: Optional[str] = field(repr=False, compare=False, default=None)  # Github 주소
     flags: int = field(repr=False, compare=False, default=0)  # 플래그
+    servers: List["KoreanbotsServer"] = field(
+        repr=False, compare=False, default_factory=list
+    )  # 유저가 참가중인 서버
     _bots: Union[List[Dict[str, Any]], List[str]] = field(
         repr=False, compare=False, default_factory=list
     )
@@ -100,7 +115,15 @@ class KoreanbotsUser(BaseKoreanbots):
         if self.init_in_bot:
             return self._bots
 
-        return list(map(lambda bot: KoreanbotsBot(True, **bot), self._bots))
+        def wrap_bot(bot: Dict[str, Any]) -> KoreanbotsBot:
+            if "_owners" not in bot:
+                owners = bot.pop("owners")
+                bot["_owners"] = owners
+            return KoreanbotsBot(
+                code=self.code, version=self.version, data=bot, init_in_user=True, **bot
+            )
+
+        return list(map(wrap_bot, self._bots))
 
 
 @dataclass(eq=True, frozen=True)
@@ -142,6 +165,7 @@ class KoreanbotsServer(BaseKoreanbots):
         repr=False, compare=False, default_factory=list
     )  # Emoji 인스턴스를 담고 있는 리스트
     boostTier: int = field(repr=False, compare=False, default=0)  # 부스트 레벨
+    owner: KoreanbotsUser = field(repr=True, compare=False, default=None)  # 서버 주인
     _bots: Union[List[Dict[str, Any]], List[str]] = field(
         repr=False, compare=False, default_factory=list
     )
@@ -164,7 +188,15 @@ class KoreanbotsServer(BaseKoreanbots):
         if self.init_in_bot_user:
             return self._bots
 
-        return list(map(lambda bot: KoreanbotsBot(True, **bot), self._bots))
+        def wrap_bot(bot: Dict[str, Any]) -> KoreanbotsBot:
+            if "_owners" not in bot:
+                owners = bot.pop("owners")
+                bot["_owners"] = owners
+            return KoreanbotsBot(
+                code=self.code, version=self.version, data=bot, init_in_user=True, **bot
+            )
+
+        return list(map(wrap_bot, self._bots))
 
 
 @dataclass(eq=True, frozen=True)
