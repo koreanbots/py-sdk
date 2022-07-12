@@ -96,7 +96,7 @@ class Koreanbots(KoreanbotsRequester):
         )
         servers_data = data["servers"]
 
-        def wrap_servers(s):
+        def wrap_servers(s: Dict[str, Any]) -> KoreanbotsServer:
             server_data = self.fit_data(s, "bots")
             return KoreanbotsServer(
                 code=code, version=version, data=server_data, **server_data
