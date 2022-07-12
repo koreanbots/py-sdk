@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, cast
 
 from .typing import Category, State, Status
 
@@ -44,7 +44,7 @@ class KoreanbotsBot(BaseKoreanbots):
         repr=False, compare=False, default=None
     )  # Koreanbots에서의 상태
 
-    _owners: Union[List[Dict[str, Any]], List[str]] = field(
+    _owners: List[Union[List[str], Dict[str, Any]]] = field(
         repr=False, compare=False, default_factory=list
     )  # 봇들
     init_in_user: bool = field(
@@ -62,7 +62,7 @@ class KoreanbotsBot(BaseKoreanbots):
             Union[List[str], List[KoreanbotsUser]]
         """
         if self.init_in_user:
-            return self._owners
+            return cast(List[str], self._owners)
 
         def wrap_user(user: Dict[str, Any]) -> KoreanbotsUser:
             if "_bots" not in user:
@@ -76,7 +76,7 @@ class KoreanbotsBot(BaseKoreanbots):
                 **user
             )
 
-        return list(map(wrap_user, self._owners))
+        return list(map(wrap_user, cast(List[Dict[str, Any]], self._owners)))
 
 
 @dataclass(eq=True, frozen=True)
@@ -93,7 +93,7 @@ class KoreanbotsUser(BaseKoreanbots):
     servers: List["KoreanbotsServer"] = field(
         repr=False, compare=False, default_factory=list
     )  # 유저가 참가중인 서버
-    _bots: Union[List[Dict[str, Any]], List[str]] = field(
+    _bots: List[Union[List[str], Dict[str, Any]]] = field(
         repr=False, compare=False, default_factory=list
     )
     init_in_bot: bool = field(
@@ -113,7 +113,7 @@ class KoreanbotsUser(BaseKoreanbots):
             Union[List[str], List[KoreanbotsUser]]
         """
         if self.init_in_bot:
-            return self._bots
+            return cast(List[str], self._bots)
 
         def wrap_bot(bot: Dict[str, Any]) -> KoreanbotsBot:
             if "_owners" not in bot:
@@ -123,7 +123,7 @@ class KoreanbotsUser(BaseKoreanbots):
                 code=self.code, version=self.version, data=bot, init_in_user=True, **bot
             )
 
-        return list(map(wrap_bot, self._bots))
+        return list(map(wrap_bot, cast(List[Dict[str, Any]], self._bots)))
 
 
 @dataclass(eq=True, frozen=True)
@@ -165,8 +165,10 @@ class KoreanbotsServer(BaseKoreanbots):
         repr=False, compare=False, default_factory=list
     )  # Emoji 인스턴스를 담고 있는 리스트
     boostTier: int = field(repr=False, compare=False, default=0)  # 부스트 레벨
-    owner: KoreanbotsUser = field(repr=True, compare=False, default=None)  # 서버 주인
-    _bots: Union[List[Dict[str, Any]], List[str]] = field(
+    owner: Optional[KoreanbotsUser] = field(
+        repr=True, compare=False, default=None
+    )  # 서버 주인
+    _bots: List[Union[List[str], Dict[str, Any]]] = field(
         repr=False, compare=False, default_factory=list
     )
     init_in_bot_user: bool = field(
@@ -186,7 +188,7 @@ class KoreanbotsServer(BaseKoreanbots):
             Union[List[str], List[KoreanbotsUser]]
         """
         if self.init_in_bot_user:
-            return self._bots
+            return cast(List[str], self._bots)
 
         def wrap_bot(bot: Dict[str, Any]) -> KoreanbotsBot:
             if "_owners" not in bot:
@@ -196,7 +198,7 @@ class KoreanbotsServer(BaseKoreanbots):
                 code=self.code, version=self.version, data=bot, init_in_user=True, **bot
             )
 
-        return list(map(wrap_bot, self._bots))
+        return list(map(wrap_bot, cast(List[Dict[str, Any]], self._bots)))
 
 
 @dataclass(eq=True, frozen=True)
