@@ -1,5 +1,5 @@
 from logging import getLogger
-from typing import Optional
+from typing import Any, Dict, Optional, Tuple
 
 import aiohttp
 
@@ -64,6 +64,19 @@ class Koreanbots(KoreanbotsRequester):
         """
         await self.post_update_bot_info(bot_id, **kwargs)
 
+    def fit_response(
+        self, response: Dict[str, Any], target_key: str
+    ) -> Tuple[int, Dict[str, Any], int]:
+        code, data, version = response.values()
+        data = self.fit_data(data, target_key)
+        return code, data, version
+
+    @staticmethod
+    def fit_data(data: Dict[str, Any], target_key: str) -> Dict[str, Any]:
+        target = data.pop(target_key)
+        data[f"_{target_key}"] = target
+        return data
+
     async def userinfo(self, user_id: int) -> KoreanbotsUser:
         """
         유저 정보를 가져옵니다.
@@ -77,7 +90,20 @@ class Koreanbots(KoreanbotsRequester):
         :rtype:
             KoreanbotsUser
         """
-        return KoreanbotsUser(**await self.get_user_info(user_id))
+        # patch for KoreanbotsUser.bots property & ._bots field
+        code, data, version = self.fit_response(
+            await self.get_user_info(user_id), "bots"
+        )
+        servers_data = data["servers"]
+
+        def wrap_servers(s: Dict[str, Any]) -> KoreanbotsServer:
+            server_data = self.fit_data(s, "bots")
+            return KoreanbotsServer(
+                code=code, version=version, data=server_data, **server_data
+            )
+
+        data["servers"] = list(map(wrap_servers, servers_data))
+        return KoreanbotsUser(code=code, version=version, data=data, **data)
 
     async def botinfo(self, bot_id: int) -> KoreanbotsBot:
         """
@@ -93,7 +119,12 @@ class Koreanbots(KoreanbotsRequester):
         :rtype:
             KoreanbotsBot
         """
-        return KoreanbotsBot(**await self.get_bot_info(bot_id))
+        # patch for KoreanbotsBot.owners property & ._owners field
+        code, data, version = self.fit_response(
+            await self.get_bot_info(bot_id), "owners"
+        )
+
+        return KoreanbotsBot(code=code, version=version, data=data, **data)
 
     async def serverinfo(self, server_id: int) -> KoreanbotsServer:
         """
@@ -109,7 +140,15 @@ class Koreanbots(KoreanbotsRequester):
         :rtype:
             KoreanbotsServer
         """
-        return KoreanbotsServer(**await self.get_server_info(server_id))
+        # patch for KoreanbotsServer.bots property & ._bots field
+        code, data, version = self.fit_response(
+            await self.get_server_info(server_id), "bots"
+        )
+        owner_data = self.fit_data(data["owner"], "bots")
+        data["owner"] = KoreanbotsUser(
+            code=code, version=version, data=owner_data, **owner_data
+        )
+        return KoreanbotsServer(code=code, version=version, data=data, **data)
 
     @strict_literal(["widget_type", "style"])
     async def widget(
