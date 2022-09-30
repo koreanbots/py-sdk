@@ -1,6 +1,6 @@
 from os import getenv
 
-from pytest import fixture
+from pytest_asyncio import fixture
 
 from koreanbots import Koreanbots
 
