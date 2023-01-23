@@ -43,10 +43,13 @@ class DiscordpyKoreanbots(Koreanbots):
 
         # Set default on_ready handler to start send_guildcount task.
         if client_ready is not None:
+
             async def on_ready():
                 self.run_post_guild_count_task()
-                await client_ready()    # call previously registered on_ready handler.
+                await client_ready()  # call previously registered on_ready handler.
+
         else:
+
             async def on_ready():
                 self.run_post_guild_count_task()
 
@@ -56,9 +59,15 @@ class DiscordpyKoreanbots(Koreanbots):
     def is_running(self) -> bool:
         return self.guildcount_sender is not None and not self.guildcount_sender.done()
 
-    def run_post_guild_count_task(self):
+    def run_post_guild_count_task(self) -> None:
+        """
+        tasks_send_guildcount를 호출하는 함수입니다.
+        사용자가 on_ready 이벤트 핸들러를 정의할 때, 이 함수를 호출해 길드 개수를 지속적으로 갱신할 수 있습니다.
+        """
         if not self.is_running:
-            self.guildcount_sender = self.client.loop.create_task(self.tasks_send_guildcount())
+            self.guildcount_sender = self.client.loop.create_task(
+                self.tasks_send_guildcount()
+            )
 
     async def tasks_send_guildcount(self) -> None:
         """
