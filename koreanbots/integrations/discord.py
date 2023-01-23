@@ -44,8 +44,8 @@ class DiscordpyKoreanbots(Koreanbots):
         # Set default on_ready handler to start send_guildcount task.
         if client_ready is not None:
             async def on_ready():
-                await client_ready()    # call previously registered on_ready handler.
                 self.run_post_guild_count_task()
+                await client_ready()    # call previously registered on_ready handler.
         else:
             async def on_ready():
                 self.run_post_guild_count_task()
