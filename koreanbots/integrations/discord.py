@@ -1,4 +1,4 @@
-from asyncio.tasks import sleep, Task
+from asyncio.tasks import Task, sleep
 from logging import getLogger
 from typing import TYPE_CHECKING, Optional, Union
 
