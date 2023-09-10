@@ -110,6 +110,8 @@ class KoreanbotsUser(BaseKoreanbots):
     """아이디"""
     username: str = field(repr=True, compare=False, default="")
     """유저 이름"""
+    globalName: str = field(repr=True, compare=False, default="")
+    """유저 글로벌 이름"""
     tag: str = field(repr=False, compare=False, default="")
     """태그"""
     github: Optional[str] = field(repr=False, compare=False, default=None)
