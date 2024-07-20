@@ -38,22 +38,23 @@ class DiscordpyKoreanbots(Koreanbots):
         self.include_shard_count = include_shard_count
         super().__init__(api_key, session)
 
-        client_ready = getattr(client, "on_ready", None)
-        self.guildcount_sender: Optional[Task[None]] = None
+        if run_task:
+            client_ready = getattr(client, "on_ready", None)
+            self.guildcount_sender: Optional[Task[None]] = None
 
-        # Set default on_ready handler to start send_guildcount task.
-        if client_ready is not None:
+            # Set default on_ready handler to start send_guildcount task.
+            if client_ready is not None:
 
-            async def on_ready() -> None:
-                self.run_post_guild_count_task()
-                await client_ready()  # call previously registered on_ready handler.
+                async def on_ready() -> None:
+                    self.run_post_guild_count_task()
+                    await client_ready()  # call previously registered on_ready handler.
 
-        else:
+            else:
 
-            async def on_ready() -> None:
-                self.run_post_guild_count_task()
+                async def on_ready() -> None:
+                    self.run_post_guild_count_task()
 
-        client.event(on_ready)
+            client.event(on_ready)
 
     @property
     def is_running(self) -> bool:
