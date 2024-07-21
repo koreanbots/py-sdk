@@ -1,12 +1,12 @@
 import pytest
 
 from koreanbots.client import Koreanbots
-from koreanbots.model import KoreanbotsBot, KoreanbotsUser, KoreanbotsServer
+from koreanbots.model import KoreanbotsBot, KoreanbotsUser
 
 
 @pytest.mark.asyncio
-async def test_botinfo(client: Koreanbots):
-    response = await client.botinfo(653534001742741552)
+async def test_botinfo(session: Koreanbots):
+    response = await session.botinfo(653534001742741552)
     assert response.code == 200
     assert response.name == "KODL"
     assert isinstance(response.owners[0], KoreanbotsUser)
@@ -14,8 +14,8 @@ async def test_botinfo(client: Koreanbots):
 
 
 @pytest.mark.asyncio
-async def test_get_user_info(client: Koreanbots):
-    response = await client.userinfo(285185716240252929)
+async def test_get_user_info(session: Koreanbots):
+    response = await session.userinfo(285185716240252929)
 
     assert response.code == 200
     assert isinstance(response.bots[0], KoreanbotsBot)
@@ -23,8 +23,8 @@ async def test_get_user_info(client: Koreanbots):
 
 
 @pytest.mark.asyncio
-async def test_get_server_info(client: Koreanbots):
-    response = await client.serverinfo(653083797763522580)
+async def test_get_server_info(session: Koreanbots):
+    response = await session.serverinfo(653083797763522580)
 
     assert response.code == 200
     assert isinstance(response.bots[0], KoreanbotsBot)
@@ -32,8 +32,8 @@ async def test_get_server_info(client: Koreanbots):
 
 
 @pytest.mark.asyncio
-async def test_get(client: Koreanbots):
-    response = await client.widget("votes", 653534001742741552)
+async def test_get(session: Koreanbots):
+    response = await session.widget("votes", 653534001742741552)
     assert (
         response
         == "https://koreanbots.dev/api/v2/widget/bots/votes/653534001742741552.svg?style=flat&scale=1.0&icon=False"
