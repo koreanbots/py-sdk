@@ -1,6 +1,15 @@
 from asyncio.tasks import Task, sleep
 from logging import getLogger
-from typing import TYPE_CHECKING, Any, Callable, Coroutine, Optional, TypeVar, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Coroutine,
+    Optional,
+    TypeVar,
+    Union,
+    cast,
+)
 
 from aiohttp import ClientSession
 
@@ -66,9 +75,9 @@ class DiscordpyKoreanbots(Koreanbots):
                         self.run_post_guild_count_task()
                         await coro()
 
-                    return client_event(on_ready)
+                    return cast(CoroT, client_event(on_ready))
 
-                return client_event(coro)
+                return cast(CoroT, client_event(coro))
 
             client.event(on_ready)
             setattr(client, "event", event)
