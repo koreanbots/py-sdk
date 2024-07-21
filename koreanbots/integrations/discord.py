@@ -1,6 +1,6 @@
 from asyncio.tasks import Task, sleep
 from logging import getLogger
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Optional, Union, TypeVar, Callable, Coroutine, Any
 
 from aiohttp import ClientSession
 
@@ -10,6 +10,10 @@ if TYPE_CHECKING:
     import nextcord
     from discord import Client as DiscordpyClient
     from disnake.client import Client as DisnakeClient
+
+T = TypeVar('T')
+Coro = Coroutine[Any, Any, T]
+CoroT = TypeVar('CoroT', bound=Callable[..., Coro[Any]])
 
 log = getLogger(__name__)
 
@@ -40,6 +44,7 @@ class DiscordpyKoreanbots(Koreanbots):
 
         if run_task:
             client_ready = getattr(client, "on_ready", None)
+            client_event = getattr(client, "event")
             self.guildcount_sender: Optional[Task[None]] = None
 
             # Set default on_ready handler to start send_guildcount task.
@@ -54,7 +59,18 @@ class DiscordpyKoreanbots(Koreanbots):
                 async def on_ready() -> None:
                     self.run_post_guild_count_task()
 
+            def event(coro: CoroT, /) -> CoroT:
+                if coro.__name__ == "on_ready" and (orig := getattr(client, "on_ready", None)):
+                    async def on_ready() -> None:
+                        await orig()
+                        await coro()
+
+                    return client_event(on_ready)
+
+                return client_event(coro)
+
             client.event(on_ready)
+            setattr(client, "event", event)
 
     @property
     def is_running(self) -> bool:
