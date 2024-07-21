@@ -61,6 +61,7 @@ class DiscordpyKoreanbots(Koreanbots):
 
             def event(coro: CoroT, /) -> CoroT:
                 if coro.__name__ == "on_ready":
+
                     async def on_ready() -> None:
                         self.run_post_guild_count_task()
                         await coro()
