@@ -97,7 +97,7 @@ class DicoKoreanbots(Koreanbots):
             try:
                 await self.guildcount(int(self.client.application_id), **kwargs)
             except:
-                log.error("Guild count update failed due to an error.")
+                log.exception("Guild count update failed due to an error.")
             else:
                 log.info(
                     "Guild count updated successfully. Waiting 30 minutes for the next update."
