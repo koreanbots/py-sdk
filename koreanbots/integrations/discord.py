@@ -120,8 +120,10 @@ class DiscordpyKoreanbots(Koreanbots):
             log.info("Initiating guild count update...")
             try:
                 await self.guildcount(int(self.client.user.id), **kwargs)
-            except Exception as e:
+            except:
                 log.error("Guild count update failed due to an error.")
             else:
-                log.info("Guild count updated successfully. Waiting 30 minutes for the next update.")
+                log.info(
+                    "Guild count updated successfully. Waiting 30 minutes for the next update."
+                )
             await sleep(1800)
