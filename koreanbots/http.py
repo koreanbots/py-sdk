@@ -113,8 +113,12 @@ class KoreanbotsRequester:
             async with self.session.request(
                 method, KOREANBOTS_URL + endpoint, **kwargs
             ) as response:
-                remain_limit = response.headers["x-ratelimit-remaining"]
-                if int(remain_limit) == 0 or response.status == 429:
+                remain_limit = response.headers.get("x-ratelimit-remaining")
+                if (
+                    remain_limit is not None
+                    and int(remain_limit) == 0
+                    or response.status == 429
+                ):
                     reset_limit_timestamp = int(response.headers["x-ratelimit-reset"])
                     reset_limit = datetime.fromtimestamp(reset_limit_timestamp)
                     retry_after = reset_limit - datetime.now()
