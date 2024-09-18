@@ -16,6 +16,6 @@ class VersionInfo(NamedTuple):
     serial: int
 
 
-versioninfo = VersionInfo(2, 1, 1, "final", 0)
+versioninfo = VersionInfo(2, 1, 2, "final", 0)
 
-__version__ = "2.1.1"
+__version__ = "2.1.2"
