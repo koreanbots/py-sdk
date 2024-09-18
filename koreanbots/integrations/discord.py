@@ -117,7 +117,13 @@ class DiscordpyKoreanbots(Koreanbots):
             if self.include_shard_count:
                 if self.client.shard_count:
                     kwargs.update({"shards": self.client.shard_count})
-            log.info("Send")
-            await self.guildcount(self.client.user.id, **kwargs)
-            log.info("Complete i will sleep")
+            log.info("Initiating guild count update...")
+            try:
+                await self.guildcount(int(self.client.user.id), **kwargs)
+            except:
+                log.exception("Guild count update failed due to an error.")
+            else:
+                log.info(
+                    "Guild count updated successfully. Waiting 30 minutes for the next update."
+                )
             await sleep(1800)
