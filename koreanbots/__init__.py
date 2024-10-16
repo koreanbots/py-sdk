@@ -3,9 +3,6 @@ from typing import Literal, NamedTuple
 from .client import Koreanbots as Koreanbots
 from .errors import *
 from .http import KoreanbotsRequester as KoreanbotsRequester
-from .model import KoreanbotsBot as KoreanbotsBot
-from .model import KoreanbotsServer as KoreanbotsServer
-from .model import KoreanbotsUser as KoreanbotsUser
 
 
 class VersionInfo(NamedTuple):

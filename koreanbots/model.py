@@ -1,21 +1,31 @@
+from abc import ABC
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List, Optional
 
 from .typing import Category, State, Status
 
 
-@dataclass(eq=False, frozen=True)
-class BaseKoreanbots:
-    code: int = field(repr=True)
+from dataclasses import dataclass
+from typing import Generic, TypeVar
+
+
+class KoreanbotsResponseABC(ABC): ...
+
+
+T = TypeVar("T", bound=KoreanbotsResponseABC)
+
+
+@dataclass(frozen=True)
+class KoreanbotsResponse(Generic[T]):
+    code: int
     """상태 코드"""
-    version: int = field(repr=True)
+    version: int
     """버전"""
-    data: Dict[str, Any] = field(repr=False)
-    """데이터 딕셔너리"""
+    data: T
 
 
 @dataclass(eq=True, frozen=True)
-class KoreanbotsBot(BaseKoreanbots):
+class KoreanbotsBot(KoreanbotsResponseABC):
     """
     봇의 정보를 가져왔을떄 반환되는 인스턴스입니다.
     """
@@ -65,43 +75,9 @@ class KoreanbotsBot(BaseKoreanbots):
     state: Optional[State] = field(repr=False, compare=False, default=None)
     """Koreanbots에서의 상태"""
 
-    _owners: List[Union[List[str], Dict[str, Any]]] = field(
-        repr=False, compare=False, default_factory=list
-    )
-    """봇들"""
-    init_in_user: bool = field(repr=False, compare=False, default=False)
-    """.owners 에서 소유자들의 ID를 반환하는지의 여부"""
-
-    @property
-    def owners(self) -> Union[List["KoreanbotsUser"], List[str]]:
-        """
-        소유자를 반환합니다.
-        ※ init_in_user가 True인경우 소유자들의 ID를 반환합니다.
-        :return:
-            소유자들의 ID들을 담고 있는 리스트 또는 KoreanbotsUser 인스턴스를 담고있는 리스트
-        :rtype:
-            Union[List[str], List[KoreanbotsUser]]
-        """
-        if self.init_in_user:
-            return cast(List[str], self._owners)
-
-        def wrap_user(user: Dict[str, Any]) -> KoreanbotsUser:
-            if "_bots" not in user:
-                bots = user.pop("bots")
-                user["_bots"] = bots
-            return KoreanbotsUser(
-                code=self.code,
-                version=self.version,
-                data=user,
-                init_in_bot=True,
-                **user
-            )
-
-        return list(map(wrap_user, cast(List[Dict[str, Any]], self._owners)))
-
 
 @dataclass(eq=True, frozen=True)
-class KoreanbotsUser(BaseKoreanbots):
+class KoreanbotsUser(KoreanbotsResponseABC):
     """
     유저 정보를 가져왔을때 반환되는 클래스입니다.
     """
@@ -118,40 +94,112 @@ class KoreanbotsUser(BaseKoreanbots):
     """Github 주소"""
     flags: int = field(repr=False, compare=False, default=0)
     """플래그"""
-    servers: List["KoreanbotsServer"] = field(
+    servers: List["KoreanbotsServerResponse"] = field(
         repr=False, compare=False, default_factory=list
     )
-    """유저가 참가중인 서버"""
-    _bots: List[Union[List[str], Dict[str, Any]]] = field(
+
+
+@dataclass(eq=True, frozen=True)
+class CircularKoreanbotsBot(KoreanbotsBot):
+    owners: List[str] = field(repr=False, compare=False, default_factory=list)
+
+
+@dataclass(eq=True, frozen=True)
+class CircularKoreanbotsUser(KoreanbotsUser):
+    bots: List[str] = field(repr=False, compare=False, default_factory=list)
+
+
+@dataclass(eq=True, frozen=True)
+class KoreanbotsUserResponse(KoreanbotsUser):
+    bots: List["CircularKoreanbotsBot"] = field(
         repr=False, compare=False, default_factory=list
     )
-    init_in_bot: bool = field(repr=False, compare=False, default=False)
-    """.bots 에서 봇들의 ID를 반환하는지의 여부"""
 
-    @property
-    def bots(
-        self,
-    ) -> Union[List[KoreanbotsBot], List[str]]:
-        """
-        봇들을 반환합니다.
-        ※ init_in_bot가 True인경우 봇들의 ID를 반환합니다.
-        :return:
-            봇들의 ID들을 담고 있는 리스트 또는 KoreanbotsUser 인스턴스를 담고있는 리스트
-        :rtype:
-            Union[List[str], List[KoreanbotsUser]]
-        """
-        if self.init_in_bot:
-            return cast(List[str], self._bots)
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "KoreanbotsUserResponse":
+        return cls(
+            id=data["id"],
+            username=data["username"],
+            globalName=data["globalName"],
+            tag=data["tag"],
+            github=data.get("github"),
+            flags=data["flags"],
+            servers=[KoreanbotsServerResponse.from_dict(s) for s in data["servers"]],
+            bots=[
+                CircularKoreanbotsBot(
+                    id=b["id"],
+                    name=b["name"],
+                    tag=b["tag"],
+                    avatar=b["avatar"],
+                    flags=b["flags"],
+                    lib=b["lib"],
+                    prefix=b["prefix"],
+                    votes=b["votes"],
+                    servers=b["servers"],
+                    shards=b["shards"],
+                    intro=b.get("intro"),
+                    desc=b.get("desc"),
+                    web=b.get("web"),
+                    git=b.get("git"),
+                    url=b.get("url"),
+                    discord=b.get("discord"),
+                    category=b.get("category"),
+                    vanity=b.get("vanity"),
+                    bg=b.get("bg"),
+                    banner=b.get("banner"),
+                    status=b.get("status"),
+                    state=b.get("state"),
+                    owners=b["owners"],
+                )
+                for b in data["bots"]
+            ],
+        )
 
-        def wrap_bot(bot: Dict[str, Any]) -> KoreanbotsBot:
-            if "_owners" not in bot:
-                owners = bot.pop("owners")
-                bot["_owners"] = owners
-            return KoreanbotsBot(
-                code=self.code, version=self.version, data=bot, init_in_user=True, **bot
-            )
 
-        return list(map(wrap_bot, cast(List[Dict[str, Any]], self._bots)))
+@dataclass(eq=True, frozen=True)
+class KoreanbotsBotResponse(KoreanbotsBot):
+    owners: List["CircularKoreanbotsUser"] = field(
+        repr=False, compare=False, default_factory=list
+    )
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]):
+        return cls(
+            id=data["id"],
+            name=data["name"],
+            tag=data["tag"],
+            avatar=data["avatar"],
+            flags=data["flags"],
+            lib=data["lib"],
+            prefix=data["prefix"],
+            votes=data["votes"],
+            servers=data["servers"],
+            shards=data["shards"],
+            intro=data.get("intro"),
+            desc=data.get("desc"),
+            web=data.get("web"),
+            git=data.get("git"),
+            url=data.get("url"),
+            discord=data.get("discord"),
+            category=data.get("category"),
+            vanity=data.get("vanity"),
+            bg=data.get("bg"),
+            banner=data.get("banner"),
+            status=data.get("status"),
+            state=data.get("state"),
+            owners=[
+                CircularKoreanbotsUser(
+                    id=o["id"],
+                    username=o["username"],
+                    globalName=o["globalName"],
+                    tag=o["tag"],
+                    github=o.get("github"),
+                    flags=o["flags"],
+                    bots=o["bots"],
+                )
+                for o in data["owners"]
+            ],
+        )
 
 
 @dataclass(eq=True, frozen=True)
@@ -169,7 +217,7 @@ class Emoji:
 
 
 @dataclass(eq=True, frozen=True)
-class KoreanbotsServer(BaseKoreanbots):
+class KoreanbotsServerResponse(KoreanbotsResponseABC):
     """
     서버 정보를 가져왔을때 반환되는 클래스입니다.
     """
@@ -206,43 +254,41 @@ class KoreanbotsServer(BaseKoreanbots):
     """Emoji 인스턴스를 담고 있는 리스트"""
     boostTier: int = field(repr=False, compare=False, default=0)
     """부스트 레벨"""
-    owner: Optional[KoreanbotsUser] = field(repr=True, compare=False, default=None)
+    owner: List[str] = field(repr=True, compare=False, default_factory=list)
     """서버 주인"""
-    _bots: List[Union[List[str], Dict[str, Any]]] = field(
-        repr=False, compare=False, default_factory=list
-    )
-    init_in_bot_user: bool = field(repr=False, compare=False, default=False)
-    """.bots 에서 봇들의 ID를 반환하는지의 여부"""
 
-    @property
-    def bots(
-        self,
-    ) -> Union[List[KoreanbotsBot], List[str]]:
-        """
-        봇들을 반환합니다.
-        ※ init_in_bot_user가 True인경우 봇들의 ID를 반환합니다.
-        :return:
-            봇들의 ID들을 담고 있는 리스트 또는 KoreanbotsUser 인스턴스를 담고있는 리스트
-        :rtype:
-            Union[List[str], List[KoreanbotsUser]]
-        """
-        if self.init_in_bot_user:
-            return cast(List[str], self._bots)
-
-        def wrap_bot(bot: Dict[str, Any]) -> KoreanbotsBot:
-            if "_owners" not in bot:
-                owners = bot.pop("owners")
-                bot["_owners"] = owners
-            return KoreanbotsBot(
-                code=self.code, version=self.version, data=bot, init_in_user=True, **bot
-            )
-
-        return list(map(wrap_bot, cast(List[Dict[str, Any]], self._bots)))
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]):
+        return cls(
+            id=data["id"],
+            name=data["name"],
+            flags=data["flags"],
+            intro=data.get("intro"),
+            desc=data.get("desc"),
+            votes=data["votes"],
+            category=data.get("category"),
+            invite=data["invite"],
+            state=data.get("state"),
+            vanity=data.get("vanity"),
+            bg=data.get("bg"),
+            banner=data.get("banner"),
+            icon=data.get("icon"),
+            members=data["members"],
+            emojis=[
+                Emoji(id=e["id"], name=e["name"], url=e["url"]) for e in data["emojis"]
+            ],
+            boostTier=data["boostTier"],
+            owner=data["owner"],
+        )
 
 
 @dataclass(eq=True, frozen=True)
-class KoreanbotsVote(BaseKoreanbots):
+class KoreanbotsVoteResponse(KoreanbotsResponseABC):
     voted: bool = field(repr=True, compare=True, default=False)
     """투표 여부"""
     last_vote: int = field(repr=True, compare=True, default=0)
     """마지막으로 투표한 일자"""
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]):
+        return cls(voted=data["voted"], last_vote=data["lastVote"])
