@@ -1,12 +1,8 @@
 from abc import ABC
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Generic, List, Optional, TypeVar
 
 from .typing import Category, State, Status
-
-
-from dataclasses import dataclass
-from typing import Generic, TypeVar
 
 
 class KoreanbotsResponseABC(ABC): ...
@@ -94,9 +90,69 @@ class KoreanbotsUser(KoreanbotsResponseABC):
     """Github 주소"""
     flags: int = field(repr=False, compare=False, default=0)
     """플래그"""
-    servers: List["KoreanbotsServerResponse"] = field(
-        repr=False, compare=False, default_factory=list
-    )
+
+
+@dataclass(eq=True, frozen=True)
+class KoreanbotsServer(KoreanbotsResponseABC):
+    """
+    서버 정보를 가져왔을때 반환되는 클래스입니다.
+    """
+
+    id: int = field(repr=True, compare=True, default=0)
+    """ID"""
+    name: str = field(repr=True, compare=False, default="")
+    """서버 이름"""
+    flags: int = field(repr=False, compare=False, default=0)
+    """플래그"""
+    intro: Optional[str] = field(repr=False, compare=False, default=None)
+    """소개문구"""
+    desc: Optional[str] = field(repr=False, compare=False, default=None)
+    """설명문구"""
+    votes: int = field(repr=True, compare=False, default=0)
+    """투표수"""
+    category: Optional[Category] = field(repr=False, compare=False, default=None)
+    """카테고리"""
+    invite: str = field(repr=False, compare=False, default="")
+    """초대링크"""
+    state: Optional[State] = field(repr=False, compare=False, default=None)
+    """Koreanbots에서의 상태"""
+    vanity: Optional[str] = field(repr=False, compare=False, default=None)
+    """서버의 가상 주소"""
+    bg: Optional[str] = field(repr=False, compare=False, default=None)
+    """배경 이미지 주소"""
+    banner: Optional[str] = field(repr=False, compare=False, default=None)
+    """배너 이미지 주소"""
+    icon: Optional[str] = field(repr=False, compare=False, default=None)
+    """아이콘"""
+    members: int = field(repr=False, compare=False, default=0)
+    """멤버 수"""
+    emojis: List["Emoji"] = field(repr=False, compare=False, default_factory=list)
+    """Emoji 인스턴스를 담고 있는 리스트"""
+    boostTier: int = field(repr=False, compare=False, default=0)
+    """부스트 레벨"""
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]):
+        return cls(
+            id=data["id"],
+            name=data["name"],
+            flags=data["flags"],
+            intro=data.get("intro"),
+            desc=data.get("desc"),
+            votes=data["votes"],
+            category=data.get("category"),
+            invite=data["invite"],
+            state=data.get("state"),
+            vanity=data.get("vanity"),
+            bg=data.get("bg"),
+            banner=data.get("banner"),
+            icon=data.get("icon"),
+            members=data["members"],
+            emojis=[
+                Emoji(id=e["id"], name=e["name"], url=e["url"]) for e in data["emojis"]
+            ],
+            boostTier=data["boostTier"],
+        )
 
 
 @dataclass(eq=True, frozen=True)
@@ -107,11 +163,20 @@ class CircularKoreanbotsBot(KoreanbotsBot):
 @dataclass(eq=True, frozen=True)
 class CircularKoreanbotsUser(KoreanbotsUser):
     bots: List[str] = field(repr=False, compare=False, default_factory=list)
+    servers: List[str] = field(repr=False, compare=False, default_factory=list)
+
+
+@dataclass(eq=True, frozen=True)
+class CircularKoreanbotsServer(KoreanbotsServer):
+    owner: str = field(repr=False, compare=False, default="")
 
 
 @dataclass(eq=True, frozen=True)
 class KoreanbotsUserResponse(KoreanbotsUser):
     bots: List["CircularKoreanbotsBot"] = field(
+        repr=False, compare=False, default_factory=list
+    )
+    servers: List[CircularKoreanbotsServer] = field(
         repr=False, compare=False, default_factory=list
     )
 
@@ -124,7 +189,31 @@ class KoreanbotsUserResponse(KoreanbotsUser):
             tag=data["tag"],
             github=data.get("github"),
             flags=data["flags"],
-            servers=[KoreanbotsServerResponse.from_dict(s) for s in data["servers"]],
+            servers=[
+                CircularKoreanbotsServer(
+                    id=s["id"],
+                    name=s["name"],
+                    flags=s["flags"],
+                    intro=s.get("intro"),
+                    desc=s.get("desc"),
+                    votes=s["votes"],
+                    category=s.get("category"),
+                    invite=s["invite"],
+                    state=s.get("state"),
+                    vanity=s.get("vanity"),
+                    bg=s.get("bg"),
+                    banner=s.get("banner"),
+                    icon=s.get("icon"),
+                    members=s["members"],
+                    emojis=[
+                        Emoji(id=e["id"], name=e["name"], url=e["url"])
+                        for e in s["emojis"]
+                    ],
+                    boostTier=s["boostTier"],
+                    owner=s["owner"],
+                )
+                for s in data["servers"]
+            ],
             bots=[
                 CircularKoreanbotsBot(
                     id=b["id"],
@@ -203,59 +292,10 @@ class KoreanbotsBotResponse(KoreanbotsBot):
 
 
 @dataclass(eq=True, frozen=True)
-class Emoji:
-    """
-    이모지 정보를 가져왔을때 반환되는 클래스입니다.
-    """
-
-    id: int = field(repr=True, compare=True, default=0)
-    """ID"""
-    name: str = field(repr=True, compare=False, default="")
-    """이모지 이름"""
-    url: str = field(repr=False, compare=False, default="")
-    """이모지 url"""
-
-
-@dataclass(eq=True, frozen=True)
-class KoreanbotsServerResponse(KoreanbotsResponseABC):
-    """
-    서버 정보를 가져왔을때 반환되는 클래스입니다.
-    """
-
-    id: int = field(repr=True, compare=True, default=0)
-    """ID"""
-    name: str = field(repr=True, compare=False, default="")
-    """서버 이름"""
-    flags: int = field(repr=False, compare=False, default=0)
-    """플래그"""
-    intro: Optional[str] = field(repr=False, compare=False, default=None)
-    """소개문구"""
-    desc: Optional[str] = field(repr=False, compare=False, default=None)
-    """설명문구"""
-    votes: int = field(repr=True, compare=False, default=0)
-    """투표수"""
-    category: Optional[Category] = field(repr=False, compare=False, default=None)
-    """카테고리"""
-    invite: str = field(repr=False, compare=False, default="")
-    """초대링크"""
-    state: Optional[State] = field(repr=False, compare=False, default=None)
-    """Koreanbots에서의 상태"""
-    vanity: Optional[str] = field(repr=False, compare=False, default=None)
-    """서버의 가상 주소"""
-    bg: Optional[str] = field(repr=False, compare=False, default=None)
-    """배경 이미지 주소"""
-    banner: Optional[str] = field(repr=False, compare=False, default=None)
-    """배너 이미지 주소"""
-    icon: Optional[str] = field(repr=False, compare=False, default=None)
-    """아이콘"""
-    members: int = field(repr=False, compare=False, default=0)
-    """멤버 수"""
-    emojis: List[Emoji] = field(repr=False, compare=False, default_factory=list)
-    """Emoji 인스턴스를 담고 있는 리스트"""
-    boostTier: int = field(repr=False, compare=False, default=0)
-    """부스트 레벨"""
-    owner: List[str] = field(repr=True, compare=False, default_factory=list)
-    """서버 주인"""
+class KoreanbotsServerResponse(KoreanbotsServer):
+    owner: "CircularKoreanbotsUser" = field(
+        repr=False, compare=False, default=CircularKoreanbotsUser()
+    )
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]):
@@ -278,8 +318,31 @@ class KoreanbotsServerResponse(KoreanbotsResponseABC):
                 Emoji(id=e["id"], name=e["name"], url=e["url"]) for e in data["emojis"]
             ],
             boostTier=data["boostTier"],
-            owner=data["owner"],
+            owner=CircularKoreanbotsUser(
+                id=data["owner"]["id"],
+                username=data["owner"]["username"],
+                globalName=data["owner"]["globalName"],
+                tag=data["owner"]["tag"],
+                github=data["owner"].get("github"),
+                flags=data["owner"]["flags"],
+                bots=data["owner"]["bots"],
+                servers=data["owner"]["servers"],
+            ),
         )
+
+
+@dataclass(eq=True, frozen=True)
+class Emoji:
+    """
+    이모지 정보를 가져왔을때 반환되는 클래스입니다.
+    """
+
+    id: int = field(repr=True, compare=True, default=0)
+    """ID"""
+    name: str = field(repr=True, compare=False, default="")
+    """이모지 이름"""
+    url: str = field(repr=False, compare=False, default="")
+    """이모지 url"""
 
 
 @dataclass(eq=True, frozen=True)
