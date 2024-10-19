@@ -132,7 +132,7 @@ class KoreanbotsServer(KoreanbotsResponseABC):
     """부스트 레벨"""
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]):
+    def from_dict(cls, data: Dict[str, Any]) -> "KoreanbotsServer":
         return cls(
             id=data["id"],
             name=data["name"],
@@ -252,7 +252,7 @@ class KoreanbotsBotResponse(KoreanbotsBot):
     )
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]):
+    def from_dict(cls, data: Dict[str, Any]) -> "KoreanbotsBotResponse":
         return cls(
             id=data["id"],
             name=data["name"],
@@ -298,7 +298,7 @@ class KoreanbotsServerResponse(KoreanbotsServer):
     )
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]):
+    def from_dict(cls, data: Dict[str, Any]) -> "KoreanbotsServerResponse":
         return cls(
             id=data["id"],
             name=data["name"],
@@ -353,5 +353,5 @@ class KoreanbotsVoteResponse(KoreanbotsResponseABC):
     """마지막으로 투표한 일자"""
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]):
+    def from_dict(cls, data: Dict[str, Any]) -> "KoreanbotsVoteResponse":
         return cls(voted=data["voted"], last_vote=data["lastVote"])
