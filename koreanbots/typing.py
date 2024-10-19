@@ -6,6 +6,8 @@ WidgetType = Literal["votes", "servers", "status"]
 
 WidgetStyle = Literal["classic", "flat"]
 
+VoteType = Literal["bot", "server"]
+
 Category = Literal[
     "관리",
     "뮤직",
