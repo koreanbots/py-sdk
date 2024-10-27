@@ -95,7 +95,7 @@ class DicoKoreanbots(Koreanbots):
                     kwargs.update({"shards": self.client.shard_count})
             log.info("Initiating guild count update...")
             try:
-                await self.guildcount(int(self.client.application_id), **kwargs)
+                await self.post_guild_count(int(self.client.application_id), **kwargs)
             except:
                 log.exception("Guild count update failed due to an error.")
             else:
