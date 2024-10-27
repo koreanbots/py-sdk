@@ -202,7 +202,7 @@ class Koreanbots(KoreanbotsRequester):
         elif vote_type == "server":
             data = await self.get_server_vote(user_id, target_id)
         else:
-            raise KoreanbotsException("올바르지 않은 vote_type 입니다.")
+            raise KoreanbotsException("vote_type은 bot 또는 server 중 하나여만 합니다.")
 
         code = data["code"]
         version = data["version"]
