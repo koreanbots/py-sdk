@@ -230,7 +230,7 @@ class Koreanbots(KoreanbotsRequester):
         :rtype:
             KoreanbotsVote
         """
-        data = await super().get_server_info(user_id, server_id)
+        data = await super().get_server_vote(user_id, server_id)
 
         code = data["code"]
         version = data["version"]
@@ -294,7 +294,8 @@ class Koreanbots(KoreanbotsRequester):
         self, user_id: int, server_id: int
     ) -> KoreanbotsResponse[KoreanbotsVoteResponse]:
         warn(
-            "is_voted_server 메서드는 get_server_vote로 변경되었습니다.", DeprecationWarning
+            "is_voted_server 메서드는 get_server_vote로 변경되었습니다.",
+            DeprecationWarning,
         )
 
         return await self.get_server_vote(user_id, server_id)
