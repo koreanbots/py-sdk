@@ -178,25 +178,20 @@ class Koreanbots(KoreanbotsRequester):
         """
         return await self.get_bot_widget_url(widget_type, bot_id, style, scale, icon)
 
-    async def check_vote(
-        self, vote_type: VoteType, user_id: int, target_id: int
+    async def get_bot_vote(
+        self, user_id: int, bot_id: int
     ) -> KoreanbotsResponse[KoreanbotsVoteResponse]:
         """
-        주어진 vote_type에 따라 user_id를 통해 target_id에 대한 투표 여부를 반환합니다.
-
-        :param vote_type:
-            요청할 투표의 타입(봇, 서버)를 지정합니다.
-        :type vote_type:
-            VoteType
+        user_id를 통해 주어진 bot_id에 대한 투표 여부를 반환합니다.
 
         :param user_id:
             요청할 user의 ID를 지정합니다.
         :type user_id:
             int
 
-        :param target_id:
-            요청할 봇 또는 서버의 ID를 지정합니다.
-        :type target_id:
+        :param bot_id:
+            요청할 봇의 ID를 지정합니다.
+        :type bot_id:
             int
 
         :return:
@@ -204,12 +199,38 @@ class Koreanbots(KoreanbotsRequester):
         :rtype:
             KoreanbotsVote
         """
-        if vote_type == "bot":
-            data = await self.get_bot_vote(user_id, target_id)
-        elif vote_type == "server":
-            data = await self.get_server_vote(user_id, target_id)
-        else:
-            raise KoreanbotsException("vote_type은 bot 또는 server 중 하나여만 합니다.")
+        data = await super().get_bot_vote(user_id, bot_id)
+
+        code = data["code"]
+        version = data["version"]
+        data = data["data"]
+
+        return KoreanbotsResponse(
+            code=code, version=version, data=KoreanbotsVoteResponse.from_dict(data)
+        )
+
+    async def get_server_vote(
+        self, user_id: int, server_id: int
+    ) -> KoreanbotsResponse[KoreanbotsVoteResponse]:
+        """
+        user_id를 통해 주어진 server_id에 대한 투표 여부를 반환합니다.
+
+        :param user_id:
+            요청할 user의 ID를 지정합니다.
+        :type user_id:
+            int
+
+        :param server_id:
+            요청할 봇의 ID를 지정합니다.
+        :type server_id:
+            int
+
+        :return:
+            투표여부를 담고 있는 KoreanbotsVote클래스입니다.
+        :rtype:
+            KoreanbotsVote
+        """
+        data = await super().get_server_info(user_id, server_id)
 
         code = data["code"]
         version = data["version"]
@@ -265,15 +286,15 @@ class Koreanbots(KoreanbotsRequester):
     async def is_voted_bot(
         self, user_id: int, bot_id: int
     ) -> KoreanbotsResponse[KoreanbotsVoteResponse]:
-        warn("is_voted_bot 메서드는 check_vote로 변경되었습니다.", DeprecationWarning)
+        warn("is_voted_bot 메서드는 get_bot_vote로 변경되었습니다.", DeprecationWarning)
 
-        return await self.check_vote("bot", user_id, bot_id)
+        return await self.get_bot_vote(user_id, bot_id)
 
     async def is_voted_server(
         self, user_id: int, server_id: int
     ) -> KoreanbotsResponse[KoreanbotsVoteResponse]:
         warn(
-            "is_voted_server 메서드는 check_vote로 변경되었습니다.", DeprecationWarning
+            "is_voted_server 메서드는 get_server_vote로 변경되었습니다.", DeprecationWarning
         )
 
-        return await self.check_vote("server", user_id, server_id)
+        return await self.get_server_vote(user_id, server_id)
