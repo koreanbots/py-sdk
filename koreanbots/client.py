@@ -84,7 +84,9 @@ class Koreanbots(KoreanbotsRequester):
             code=code, version=version, data=KoreanbotsUserResponse.from_dict(data)
         )
 
-    async def get_bot_info(self, bot_id: int) -> KoreanbotsResponse[KoreanbotsBotResponse]:
+    async def get_bot_info(
+        self, bot_id: int
+    ) -> KoreanbotsResponse[KoreanbotsBotResponse]:
         """
         봇 정보를 가져옵니다.
 
@@ -222,7 +224,9 @@ class Koreanbots(KoreanbotsRequester):
     # deprecated since 3.0.0
 
     async def guildcount(self, bot_id: int, **kwargs: Optional[int]) -> None:
-        warn("guildcount 메서드는 post_guild_count로 변경되었습니다.", DeprecationWarning)
+        warn(
+            "guildcount 메서드는 post_guild_count로 변경되었습니다.", DeprecationWarning
+        )
 
         return await self.post_guild_count(bot_id, **kwargs)
 
@@ -241,7 +245,9 @@ class Koreanbots(KoreanbotsRequester):
     async def serverinfo(
         self, server_id: int
     ) -> KoreanbotsResponse[KoreanbotsServerResponse]:
-        warn("serverinfo 메서드는 get_server_info로 변경되었습니다.", DeprecationWarning)
+        warn(
+            "serverinfo 메서드는 get_server_info로 변경되었습니다.", DeprecationWarning
+        )
 
         return await self.get_server_info(server_id)
 
@@ -268,6 +274,8 @@ class Koreanbots(KoreanbotsRequester):
     async def is_voted_server(
         self, user_id: int, server_id: int
     ) -> KoreanbotsResponse[KoreanbotsVoteResponse]:
-        warn("is_voted_server 메서드는 check_vote로 변경되었습니다.", DeprecationWarning)
+        warn(
+            "is_voted_server 메서드는 check_vote로 변경되었습니다.", DeprecationWarning
+        )
 
         return await self.check_vote("server", user_id, server_id)

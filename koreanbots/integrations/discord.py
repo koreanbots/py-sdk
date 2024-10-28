@@ -57,6 +57,7 @@ class DiscordpyKoreanbots(Koreanbots):
     :type include_shard_count:
         bool
     """
+
     def __init__(
         self,
         client: Union["DiscordpyClient", "nextcord.Client", "DisnakeClient"],
