@@ -42,10 +42,8 @@ class Koreanbots(KoreanbotsRequester):
         super().__init__(api_key, session)
 
     @property
-    def http(self) -> KoreanbotsRequester:
-        """
-        부모 클래스인 KoreanbotsRequester의 인스턴스를 반환합니다.
-        """
+    def _http(self):  # type: ignore
+        # 내부 프로퍼티
         return super()
 
     async def post_guild_count(self, bot_id: int, **kwargs: Optional[int]) -> None:
