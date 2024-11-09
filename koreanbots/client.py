@@ -41,11 +41,6 @@ class Koreanbots(KoreanbotsRequester):
     ) -> None:
         super().__init__(api_key, session)
 
-    @property
-    def _http(self):  # type: ignore
-        # 내부 프로퍼티
-        return super()
-
     async def post_guild_count(self, bot_id: int, **kwargs: Optional[int]) -> None:
         """
         길드 개수를 서버에 전송합니다.
