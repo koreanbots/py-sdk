@@ -28,6 +28,36 @@ log = getLogger(__name__)
 
 
 class DiscordpyKoreanbots(Koreanbots):
+    """
+    Koreanbots를 감싸는 클라이언트 클래스입니다.
+    discord.py 및 해당 라이브러리의 포크 전용입니다.
+
+    :param client:
+        discord.Client의 클래스입니다. 만약 필요한 경우 이 인수를 지정하세요.
+    :type client:
+        Optional[DpyABC]
+
+    :param api_key:
+        API key를 지정합니다. 만약 필요한 경우 이 키를 지정하세요.
+    :type api_key:
+        Optional[str]
+
+    :param session:
+        aiohttp.ClientSession의 클래스입니다. 만약 필요한 경우 이 인수를 지정하세요. 지정하지 않으면 생성합니다.
+    :type session:
+        Optional[aiohttp.ClientSession]
+
+    :param run_task:
+        봇 정보를 갱신하는 작업을 자동으로 실행합니다. 만약 아니라면 지정하지 않습니다.
+    :type run_task:
+        bool
+
+    :param include_shard_count:
+        샤드 개수를 포함할지 지정합니다. 만약 아니라면 지정하지 않습니다.
+    :type include_shard_count:
+        bool
+    """
+
     def __init__(
         self,
         client: Union["DiscordpyClient", "nextcord.Client", "DisnakeClient"],
@@ -119,7 +149,7 @@ class DiscordpyKoreanbots(Koreanbots):
                     kwargs.update({"shards": self.client.shard_count})
             log.info("Initiating guild count update...")
             try:
-                await self.guildcount(int(self.client.user.id), **kwargs)
+                await self.post_guild_count(int(self.client.user.id), **kwargs)
             except:
                 log.exception("Guild count update failed due to an error.")
             else:
