@@ -35,10 +35,13 @@ HTTP
 Model
 -------------------
 
-.. autoclass:: KoreanbotsBot
+.. autoclass:: KoreanbotsBot()
     :members:
 
-.. autoclass:: KoreanbotsUser
+.. autoclass:: KoreanbotsServer()
+    :members:
+
+.. autoclass:: KoreanbotsUser()
     :members:
 
 예외

@@ -23,7 +23,7 @@ class KoreanbotsResponse(Generic[T]):
 @dataclass(eq=True, frozen=True)
 class KoreanbotsBot(KoreanbotsResponseABC):
     """
-    봇의 정보를 가져왔을떄 반환되는 인스턴스입니다.
+    봇의 정보를 가져왔을때 반환되는 인스턴스입니다.
     """
 
     id: Optional[str] = field(repr=True, compare=True, default=None)
