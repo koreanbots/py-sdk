@@ -19,11 +19,11 @@ sys.path.insert(0, os.path.abspath(".."))
 # -- Project information -----------------------------------------------------
 
 project = "koreanbots"
-copyright = "2021, Koreanbots"
-author = "Koreanbots"
+copyright = "2021-2024, Koreanlist"
+author = "Koreanlist"
 
 # The full version, including alpha/beta/rc tags
-release = "2.0.0"
+release = "3.0.0"
 
 
 # -- General configuration ---------------------------------------------------
