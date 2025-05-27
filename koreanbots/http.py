@@ -67,7 +67,7 @@ class KoreanbotsRequester:
                     loop.create_task(self.session.close())
                 else:
                     loop.run_until_complete(self.session.close())
-
+    @required
     async def request(
         self,
         method: Literal["GET", "POST"],
@@ -104,7 +104,7 @@ class KoreanbotsRequester:
         """
 
         if not self.session:
-            self.session = aiohttp.ClientSession()
+            self.session = aiohttp.ClientSession(headers={"Authorization": self.api_key})
 
         if not self._global_limit.is_set():
             await self._global_limit.wait()
@@ -154,7 +154,7 @@ class KoreanbotsRequester:
         """
         return await self.request("GET", f"/bots/{bot_id}")
 
-    @required
+
     async def post_update_bot_info(self, bot_id: int, **kwargs: Optional[int]) -> Any:
         """
         주어진 bot_id로 bot의 정보를 갱신합니다.
@@ -183,7 +183,6 @@ class KoreanbotsRequester:
             "POST",
             f"/bots/{bot_id}/stats",
             json={x: kwargs[x] for x in kwargs if x in ["servers", "shards"]},
-            headers={"Authorization": self.api_key},
         )
 
     @strict_literal(["widget_type", "style"])
@@ -246,7 +245,7 @@ class KoreanbotsRequester:
         """
         return await self.request("GET", f"/users/{user_id}")
 
-    @required
+
     async def get_bot_vote(self, user_id: int, bot_id: int) -> Any:
         """
         주어진 bot_id로 user_id를 통해 해당 user의 투표 여부를 반환합니다.
@@ -265,7 +264,6 @@ class KoreanbotsRequester:
         return await self.request(
             "GET",
             f"/bots/{bot_id}/vote",
-            headers={"Authorization": self.api_key},
             params={"userID": user_id},
         )
 
@@ -281,7 +279,7 @@ class KoreanbotsRequester:
         """
         return await self.request("GET", f"/servers/{server_id}")
 
-    @required
+
     async def get_server_vote(self, user_id: int, server_id: int) -> Any:
         """
         주어진 server_id로 user_id를 통해 해당 user의 투표 여부를 반환합니다.
@@ -300,6 +298,5 @@ class KoreanbotsRequester:
         return await self.request(
             "GET",
             f"/servers/{server_id}/vote",
-            headers={"Authorization": self.api_key},
             params={"userID": user_id},
         )
