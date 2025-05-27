@@ -7,4 +7,7 @@ from koreanbots import Koreanbots
 
 @fixture(name="session")
 async def client():
+    """
+    client params in test.
+    """
     yield Koreanbots(api_key=getenv("API_KEY"))
