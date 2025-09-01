@@ -1,17 +1,17 @@
 from abc import ABC
 from dataclasses import dataclass
-from typing import Generic, TypeVar
-
-T = TypeVar("T", bound="KoreanbotsEntity")
 
 
-@dataclass(frozen=True)
+from koreanbots.domain.deserializer import Deserializer
+from koreanbots.domain.serializer import Serializer
+
+
+
+@dataclass
 class KoreanbotsEntity(ABC):
     pass
 
 
-@dataclass(frozen=True)
-class KoreanbotsResponse(KoreanbotsEntity, Generic[T]):
-    code: int
-    version: str
-    data: T
+@dataclass
+class SerializableEntity(KoreanbotsEntity, Serializer, Deserializer):
+    pass

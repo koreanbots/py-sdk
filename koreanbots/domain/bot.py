@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Literal
 
-from koreanbots.domain.abc import KoreanbotsEntity
+from koreanbots.domain.abc import SerializableEntity
 
 Category = Literal[
     "관리",
@@ -32,8 +32,8 @@ Status = Literal["online", "idle", "dnd", "streaming", "offline"]
 State = Literal["ok", "reported", "blocked", "private", "archived"]
 
 
-@dataclass(frozen=True)
-class AbstractBot(KoreanbotsEntity):
+@dataclass
+class AbstractBot(SerializableEntity):
     id: str
     name: str
     tag: str
@@ -58,6 +58,6 @@ class AbstractBot(KoreanbotsEntity):
     state: State
 
 
-@dataclass(frozen=True)
+@dataclass
 class BotWithOwnerID(AbstractBot):
     owner: str
