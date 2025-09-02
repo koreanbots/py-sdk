@@ -1,0 +1,3 @@
+class KoreanbotsException(Exception):
+
+    pass
