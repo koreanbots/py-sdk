@@ -144,7 +144,7 @@ class KoreanbotsRequester:
 
         await self._check_global_rate_limit()
 
-        url = self.KOREANBOTS_API_URL.with_path(path)
+        url = self.KOREANBOTS_API_URL.with_path(self.API_VERSION + path)
 
         # Append query parameters for GET requests
         if method == "GET" and params is not None:
