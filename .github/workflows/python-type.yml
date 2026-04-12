@@ -1,4 +1,4 @@
-name: Cheking Type Annotations
+name: Checking Type Annotations
 
 on:
   push:
@@ -10,21 +10,18 @@ jobs:
   type:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Python 3.11
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - name: Install dependencies
         run: |
-          sudo npm install -g pyright
-          python -m pip install -r requirements.txt
-          python -m pip install mypy
-      - name: Install integrations
-        run: |
-          python -m pip install git+https://github.com/rapptz/discord.py
-          python -m pip install dico nextcord disnake
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+          pip install mypy pyright
       - name: Checking type annotations
         run: |
           mypy ./koreanbots --strict
-          pyright ./koreanbots --outputjson
+          pyright ./koreanbots

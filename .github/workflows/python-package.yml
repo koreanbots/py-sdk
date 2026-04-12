@@ -17,20 +17,21 @@ jobs:
         python-version: ["3.11", "3.12", "3.13"]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pytest pytest-cov pytest-asyncio
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install poetry
+          poetry install
+          pip install pytest pytest-cov pytest-asyncio
       - name: Test with pytest
         env:
           API_KEY: ${{ secrets.API_KEY }}
         run: |
           pytest --cov=koreanbots --cov-report=xml
       - name: Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v5

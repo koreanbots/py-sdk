@@ -1,5 +1,5 @@
 [project]
-name = "py-sdk"
+name = "koreanbots"
 version = "4.0.0"
 description = "Official SDK for Koreanbots."
 authors = [
