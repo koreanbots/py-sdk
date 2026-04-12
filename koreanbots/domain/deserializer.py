@@ -41,9 +41,11 @@ class Deserializer:
                     if isclass(arg_type) and issubclass(arg_type, Deserializer):
                         value = (
                             [
-                                arg_type.from_dict(cast(Mapping[str, Any], v))
-                                if isinstance(v, Mapping)
-                                else v
+                                (
+                                    arg_type.from_dict(cast(Mapping[str, Any], v))
+                                    if isinstance(v, Mapping)
+                                    else v
+                                )
                                 for v in value
                             ]
                             if value is not None
