@@ -22,7 +22,7 @@ discord.py의 `tasks`를 이용해 서버 수를 1시간마다 자동으로 업�
 import discord
 from discord.ext import commands, tasks
 
-from koreanbots import Koreanbots
+from koreanbots.client import Koreanbots
 
 BOT_TOKEN = "your_discord_bot_token"
 KOREANBOTS_API_KEY = "your_koreanbots_api_key"
