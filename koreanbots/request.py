@@ -63,7 +63,7 @@ class KoreanbotsRequester:
         # Set the Authorization header if not already set
         if self.session is not None:
             if self.session.headers.get("Authorization") is None:
-                self.session.headers["Authorization"] = f"Bearer {self.api_key}"
+                self.session.headers["Authorization"] = self.api_key
             self.session.headers["User-Agent"] = f"Koreanbots py-sdk/{__version__}"
             self.session.headers["Content-Type"] = "application/json"
 
@@ -136,7 +136,7 @@ class KoreanbotsRequester:
         if self.session is None:
             self.session = ClientSession(
                 headers={
-                    "Authorization": f"Bearer {self.api_key}",
+                    "Authorization": self.api_key,
                     "Content-Type": "application/json",
                     "User-Agent": f"Koreanbots py-sdk/{__version__}",
                 }
