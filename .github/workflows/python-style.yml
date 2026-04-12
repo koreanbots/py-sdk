@@ -2,24 +2,24 @@ name: Cheking Code Style
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   style:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install black isort
-    - name: Checking style
-      run: |
-        black ./koreanbots --check
-        isort ./koreanbots --check --profile=black
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install black isort
+      - name: Checking style
+        run: |
+          black ./koreanbots --check
+          isort ./koreanbots --check --profile=black

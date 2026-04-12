@@ -1,0 +1,35 @@
+[project]
+name = "py-sdk"
+version = "4.0.0"
+description = "Official SDK for Koreanbots."
+authors = [
+    {name = "Koreanbots"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "aiohttp (>=3.12.15,<4.0.0)"
+]
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+homepage = "https://koreanbots.dev/"
+source = "https://github.com/koreanbots/py-sdk"
+tracker = "https://github.com/koreanbots/py-sdk/issues"
+
+[tool.poetry]
+packages = [
+    {include = "koreanbots"}, 
+]
+
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

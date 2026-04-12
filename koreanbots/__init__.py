@@ -1,12 +1,5 @@
 from typing import Literal, NamedTuple
 
-from .client import Koreanbots as Koreanbots
-from .errors import *
-from .http import KoreanbotsRequester as KoreanbotsRequester
-from .model import KoreanbotsBot as KoreanbotsBot
-from .model import KoreanbotsServer as KoreanbotsServer
-from .model import KoreanbotsUser as KoreanbotsUser
-
 
 class VersionInfo(NamedTuple):
     major: int
@@ -16,7 +9,7 @@ class VersionInfo(NamedTuple):
     serial: int
 
 
-version_info = VersionInfo(3, 1, 0, "final", 0)
+version_info = VersionInfo(major=4, minor=0, micro=0, releaselevel="final", serial=0)
 
 __version__ = f"{version_info.major}.{version_info.minor}.{version_info.micro}"
 

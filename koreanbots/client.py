@@ -1,296 +1,214 @@
-from logging import getLogger
-from typing import Optional
-from warnings import warn
+from typing import Literal
 
-import aiohttp
+from aiohttp import ClientSession
 
-from koreanbots.decorator import strict_literal
-from koreanbots.errors import KoreanbotsException
-from koreanbots.http import KoreanbotsRequester
-from koreanbots.model import (
-    KoreanbotsBotResponse,
-    KoreanbotsResponse,
-    KoreanbotsServerResponse,
-    KoreanbotsUserResponse,
-    KoreanbotsVoteResponse,
+from koreanbots.domain.entities import (
+    Bot,
+    KoreanbotsDataResponse,
+    KoreanbotsMessageResponse,
+    Server,
+    User,
+    Vote,
 )
-from koreanbots.typing import VoteType, WidgetStyle, WidgetType
+from koreanbots.request import KoreanbotsRequester
 
-log = getLogger(__name__)
+WidgetType = Literal["votes", "servers", "status"]
+WidgetStyle = Literal["classic", "flat"]
+
+
+class BotWidgetURLBuilder:
+    """봇 위젯 URL을 단계적으로 구성하는 빌더 클래스."""
+
+    def __init__(self, bot_id: int, widget_type: WidgetType) -> None:
+        """빌더를 초기화합니다.
+
+        Args:
+            bot_id: 위젯을 생성할 봇의 ID.
+            widget_type: 위젯 타입 (votes, servers, status 중 하나).
+        """
+        self._bot_id = bot_id
+        self._widget_type = widget_type
+        self._style: WidgetStyle = "flat"
+        self._scale: float = 1.0
+        self._icon: bool = False
+
+    def style(self, style: WidgetStyle) -> "BotWidgetURLBuilder":
+        """위젯 스타일을 설정합니다.
+
+        Args:
+            style: 위젯 스타일 (classic 또는 flat).
+        """
+        self._style = style
+        return self
+
+    def scale(self, scale: float) -> "BotWidgetURLBuilder":
+        """위젯 크기 배율을 설정합니다.
+
+        Args:
+            scale: 위젯 배율. 0.5 이상이어야 합니다.
+
+        Raises:
+            ValueError: scale이 0.5 미만일 때 발생합니다.
+        """
+        if scale < 0.5:
+            raise ValueError(f"scale must be greater than or equal to 0.5, not {scale}")
+        self._scale = scale
+        return self
+
+    def icon(self, icon: bool = True) -> "BotWidgetURLBuilder":
+        """위젯에 아이콘 표시 여부를 설정합니다.
+
+        Args:
+            icon: True면 아이콘을 표시합니다.
+        """
+        self._icon = icon
+        return self
+
+    def _build(self) -> str:
+        return (
+            KoreanbotsRequester.BASE
+            + f"/widget/bots/{self._widget_type}/{self._bot_id}.svg"
+            + f"?style={self._style}&scale={self._scale}&icon={self._icon}"
+        )
+
+    def __str__(self) -> str:
+        return self._build()
+
+    def __repr__(self) -> str:
+        return self._build()
 
 
 class Koreanbots(KoreanbotsRequester):
-    """
-    KoreanbotsRequester를 감싸는 클라이언트 클래스입니다.
+    def __init__(self, api_key: str, session: ClientSession | None = None) -> None:
+        """Koreanbots 클라이언트를 초기화합니다.
 
-    :param api_key:
-        API key를 지정합니다. 만약 필요한 경우 이 키를 지정하세요.
-    :type api_key:
-        Optional[str]
-
-    :param session:
-        aiohttp.ClientSession의 클래스입니다. 만약 필요한 경우 이 인수를 지정하세요. 지정하지 않으면 생성합니다.
-    :type session:
-        Optional[aiohttp.ClientSession]
-    """
-
-    def __init__(
-        self,
-        api_key: Optional[str] = None,
-        session: Optional[aiohttp.ClientSession] = None,
-    ) -> None:
+        Args:
+            api_key: Koreanbots API 인증 키.
+            session: 재사용할 aiohttp ClientSession. None이면 요청 시 자동 생성됩니다.
+        """
         super().__init__(api_key, session)
 
-    async def post_guild_count(self, bot_id: int, **kwargs: Optional[int]) -> None:
-        """
-        길드 개수를 서버에 전송합니다.
-
-        :param bot_id:
-            요청할 bot의 ID를 지정합니다.
-        :type bot_id:
-            int
-        """
-        await super().post_update_bot_info(bot_id, **kwargs)
-
-    async def get_user_info(
-        self, user_id: int
-    ) -> KoreanbotsResponse[KoreanbotsUserResponse]:
-        """
-        유저 정보를 가져옵니다.
-
-        :param user_id:
-            요청할 유저의 ID를 지정합니다.
-        :type user_id:
-            int
-        :return:
-            유저 정보를 담고 있는 KoreanbotsUser클래스입니다.
-        :rtype:
-            KoreanbotsUser
-        """
-        data = await super().get_user_info(user_id)
-
-        code = data["code"]
-        version = data["version"]
-        data = data["data"]
-
-        return KoreanbotsResponse(
-            code=code, version=version, data=KoreanbotsUserResponse.from_dict(data)
+    async def get_bot_info(self, bot_id: int) -> KoreanbotsDataResponse[Bot]:
+        """봇 정보를 조회합니다."""
+        res = await self.request_bot_info(bot_id)
+        return KoreanbotsDataResponse.from_bot(
+            code=res["code"],
+            version=res["version"],
+            data=res["data"],
         )
 
-    async def get_bot_info(
-        self, bot_id: int
-    ) -> KoreanbotsResponse[KoreanbotsBotResponse]:
-        """
-        봇 정보를 가져옵니다.
-
-        :param bot_id:
-            요청할 봇의 ID를 지정합니다.
-        :type bot_id:
-            int
-
-        :return:
-            봇 정보를 담고 있는 KoreanbotsBot클래스입니다.
-        :rtype:
-            KoreanbotsBot
-        """
-        data = await super().get_bot_info(bot_id)
-
-        code = data["code"]
-        version = data["version"]
-        data = data["data"]
-
-        return KoreanbotsResponse(
-            code=code, version=version, data=KoreanbotsBotResponse.from_dict(data)
+    async def search_bot(
+        self, query: str, page: int = 1
+    ) -> KoreanbotsDataResponse[list[Bot]]:
+        """봇을 검색합니다."""
+        res = await self.request_search_bot(query, page)
+        return KoreanbotsDataResponse.from_list_bot(
+            code=res["code"],
+            version=res["version"],
+            data=res["data"],
         )
 
-    async def get_server_info(
+    async def get_heart_ranking_list(
+        self, page: int = 1
+    ) -> KoreanbotsDataResponse[list[Bot]]:
+        """봇 하트 랭킹 목록을 조회합니다."""
+        res = await self.request_bot_heart_ranking_list(page)
+        return KoreanbotsDataResponse.from_list_bot(
+            code=res["code"],
+            version=res["version"],
+            data=res["data"],
+        )
+
+    async def get_new_bot_list(self) -> KoreanbotsDataResponse[list[Bot]]:
+        """새로 등록된 봇 목록을 조회합니다."""
+        res = await self.request_new_bot_list()
+        return KoreanbotsDataResponse.from_list_bot(
+            code=res["code"],
+            version=res["version"],
+            data=res["data"],
+        )
+
+    async def get_user_is_voted_bot(
+        self, bot_id: int, user_id: int
+    ) -> KoreanbotsDataResponse[Vote]:
+        """특정 유저가 해당 봇에 투표했는지 확인합니다."""
+        res = await self.request_user_is_voted_bot(bot_id, user_id)
+        return KoreanbotsDataResponse.from_vote(
+            code=res["code"],
+            version=res["version"],
+            data=res["data"],
+        )
+
+    async def update_bot_info(
+        self, bot_id: int, servers: int, shards: int
+    ) -> KoreanbotsMessageResponse:
+        """봇의 서버 수와 샤드 수를 업데이트합니다."""
+        res = await self.request_update_bot_info(bot_id, servers, shards)
+        return KoreanbotsMessageResponse(
+            code=res["code"],
+            version=res["version"],
+            message=res["message"],
+        )
+
+    async def get_server_info(self, server_id: int) -> KoreanbotsDataResponse[Server]:
+        """서버 정보를 조회합니다."""
+        res = await self.request_server_info(server_id)
+        return KoreanbotsDataResponse.from_server(
+            code=res["code"],
+            version=res["version"],
+            data=res["data"],
+        )
+
+    async def search_server(
+        self, query: str, page: int = 1
+    ) -> KoreanbotsDataResponse[list[Server]]:
+        """서버를 검색합니다."""
+        res = await self.request_search_server(query, page)
+        return KoreanbotsDataResponse.from_list_server(
+            code=res["code"],
+            version=res["version"],
+            data=res["data"],
+        )
+
+    async def get_server_administrator(
         self, server_id: int
-    ) -> KoreanbotsResponse[KoreanbotsServerResponse]:
-        """
-        서버 정보를 가져옵니다.
-
-        :param server_id:
-            요청할 서버의 ID를 지정합니다.
-        :type server_id:
-            int
-
-        :return:
-            봇 정보를 담고 있는 KoreanbotsServer클래스입니다.
-        :rtype:
-            KoreanbotsServer
-        """
-
-        data = await super().get_server_info(server_id)
-
-        code = data["code"]
-        version = data["version"]
-        data = data["data"]
-
-        return KoreanbotsResponse(
-            code=code, version=version, data=KoreanbotsServerResponse.from_dict(data)
+    ) -> KoreanbotsDataResponse[User]:
+        """서버 관리자 정보를 조회합니다."""
+        res = await self.request_server_administrator(server_id)
+        return KoreanbotsDataResponse.from_user(
+            code=res["code"],
+            version=res["version"],
+            data=res["data"],
         )
 
-    @strict_literal(["widget_type", "style"])
-    async def get_widget(
-        self,
-        widget_type: WidgetType,
-        bot_id: int,
-        style: WidgetStyle = "flat",
-        scale: float = 1.0,
-        icon: bool = False,
-    ) -> str:
-        """
-        주어진 bot_id로 widget의 url을 반환합니다.
-
-        :param widget_type:
-            요청할 widget의 타입을 지정합니다.
-        :type widget_type:
-            WidgetType
-
-        :param bot_id:
-            요청할 bot의 ID를 지정합니다.
-        :type bot_id:
-            int
-
-        :param style:
-            요청할 widget의 형식을 지정합니다. 기본값은 flat로 설정되어 있습니다.
-        :type style:
-            WidgetStyle, optional
-
-        :param scale:
-            요청할 widget의 크기를 지정합니다. 반드시 0.5이상이어야 합니다. 기본값은 1.0입니다.
-        :type scale:
-            float, optional
-
-        :param icon:
-            요청할 widget의 아이콘을 표시할지를 지정합니다. 기본값은 False입니다.
-        :type icon:
-            bool, optional
-
-        :return:
-            위젯 url을 반환합니다.
-        :rtype: str
-        """
-        return await self.get_bot_widget_url(widget_type, bot_id, style, scale, icon)
-
-    async def get_bot_vote(
-        self, user_id: int, bot_id: int
-    ) -> KoreanbotsResponse[KoreanbotsVoteResponse]:
-        """
-        user_id를 통해 주어진 bot_id에 대한 투표 여부를 반환합니다.
-
-        :param user_id:
-            요청할 user의 ID를 지정합니다.
-        :type user_id:
-            int
-
-        :param bot_id:
-            요청할 봇의 ID를 지정합니다.
-        :type bot_id:
-            int
-
-        :return:
-            투표여부를 담고 있는 KoreanbotsVote클래스입니다.
-        :rtype:
-            KoreanbotsVote
-        """
-        data = await super().get_bot_vote(user_id, bot_id)
-
-        code = data["code"]
-        version = data["version"]
-        data = data["data"]
-
-        return KoreanbotsResponse(
-            code=code, version=version, data=KoreanbotsVoteResponse.from_dict(data)
+    async def get_user_is_voted_server(
+        self, server_id: int, user_id: int
+    ) -> KoreanbotsDataResponse[Vote]:
+        """특정 유저가 해당 서버에 투표했는지 확인합니다."""
+        res = await self.request_user_is_voted_server(server_id, user_id)
+        return KoreanbotsDataResponse.from_vote(
+            code=res["code"],
+            version=res["version"],
+            data=res["data"],
         )
 
-    async def get_server_vote(
-        self, user_id: int, server_id: int
-    ) -> KoreanbotsResponse[KoreanbotsVoteResponse]:
+    async def get_user_info(self, user_id: int) -> KoreanbotsDataResponse[User]:
+        """유저 정보를 조회합니다."""
+        res = await self.request_user_info(user_id)
+        return KoreanbotsDataResponse.from_user(
+            code=res["code"],
+            version=res["version"],
+            data=res["data"],
+        )
+
+    def widget(self, bot_id: int, widget_type: WidgetType) -> BotWidgetURLBuilder:
+        """봇 위젯 URL 빌더를 반환합니다.
+
+        Args:
+            bot_id: 위젯을 생성할 봇의 ID.
+            widget_type: 위젯 타입 (votes, servers, status 중 하나).
+
+        Example:
+            >>> url = str(client.widget(123456789, "servers").style("classic").scale(1.5).icon())
         """
-        user_id를 통해 주어진 server_id에 대한 투표 여부를 반환합니다.
-
-        :param user_id:
-            요청할 user의 ID를 지정합니다.
-        :type user_id:
-            int
-
-        :param server_id:
-            요청할 봇의 ID를 지정합니다.
-        :type server_id:
-            int
-
-        :return:
-            투표여부를 담고 있는 KoreanbotsVote클래스입니다.
-        :rtype:
-            KoreanbotsVote
-        """
-        data = await super().get_server_vote(user_id, server_id)
-
-        code = data["code"]
-        version = data["version"]
-        data = data["data"]
-
-        return KoreanbotsResponse(
-            code=code, version=version, data=KoreanbotsVoteResponse.from_dict(data)
-        )
-
-    # deprecated since 3.0.0
-
-    async def guildcount(self, bot_id: int, **kwargs: Optional[int]) -> None:
-        warn(
-            "guildcount 메서드는 post_guild_count로 변경되었습니다.", DeprecationWarning
-        )
-
-        return await self.post_guild_count(bot_id, **kwargs)
-
-    async def userinfo(
-        self, user_id: int
-    ) -> KoreanbotsResponse[KoreanbotsUserResponse]:
-        warn("userinfo 메서드는 get_user_info로 변경되었습니다.", DeprecationWarning)
-
-        return await self.get_user_info(user_id)
-
-    async def botinfo(self, bot_id: int) -> KoreanbotsResponse[KoreanbotsBotResponse]:
-        warn("botinfo 메서드는 get_bot_info로 변경되었습니다.", DeprecationWarning)
-
-        return await self.get_bot_info(bot_id)
-
-    async def serverinfo(
-        self, server_id: int
-    ) -> KoreanbotsResponse[KoreanbotsServerResponse]:
-        warn(
-            "serverinfo 메서드는 get_server_info로 변경되었습니다.", DeprecationWarning
-        )
-
-        return await self.get_server_info(server_id)
-
-    @strict_literal(["widget_type", "style"])
-    async def widget(
-        self,
-        widget_type: WidgetType,
-        bot_id: int,
-        style: WidgetStyle = "flat",
-        scale: float = 1.0,
-        icon: bool = False,
-    ) -> str:
-        warn("widget 메서드는 get_widget으로 변경되었습니다.", DeprecationWarning)
-
-        return await self.get_widget(widget_type, bot_id, style, scale, icon)
-
-    async def is_voted_bot(
-        self, user_id: int, bot_id: int
-    ) -> KoreanbotsResponse[KoreanbotsVoteResponse]:
-        warn("is_voted_bot 메서드는 get_bot_vote로 변경되었습니다.", DeprecationWarning)
-
-        return await self.get_bot_vote(user_id, bot_id)
-
-    async def is_voted_server(
-        self, user_id: int, server_id: int
-    ) -> KoreanbotsResponse[KoreanbotsVoteResponse]:
-        warn(
-            "is_voted_server 메서드는 get_server_vote로 변경되었습니다.",
-            DeprecationWarning,
-        )
-
-        return await self.get_server_vote(user_id, server_id)
+        return BotWidgetURLBuilder(bot_id, widget_type)
