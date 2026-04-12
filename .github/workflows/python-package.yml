@@ -28,6 +28,8 @@ jobs:
           python -m pip install pytest pytest-cov pytest-asyncio
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Test with pytest
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
         run: |
           pytest --cov=koreanbots --cov-report=xml
       - name: Codecov
