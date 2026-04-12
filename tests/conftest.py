@@ -2,7 +2,7 @@ from os import getenv
 
 from pytest_asyncio import fixture
 
-from koreanbots import Koreanbots
+from koreanbots.client import Koreanbots
 
 
 @fixture(name="session")

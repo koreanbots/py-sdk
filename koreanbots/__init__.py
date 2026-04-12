@@ -1,7 +1,5 @@
 from typing import Literal, NamedTuple
 
-from koreanbots.client import BotWidgetURLBuilder, Koreanbots
-
 
 class VersionInfo(NamedTuple):
     major: int
@@ -17,10 +15,3 @@ __version__ = f"{version_info.major}.{version_info.minor}.{version_info.micro}"
 
 if version_info.releaselevel != "final":
     __version__ = f"{__version__}-{version_info.releaselevel}.{version_info.serial}"
-
-__all__ = [
-    "Koreanbots",
-    "BotWidgetURLBuilder",
-    "version_info",
-    "__version__",
-]
