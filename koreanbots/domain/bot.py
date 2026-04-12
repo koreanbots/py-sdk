@@ -56,8 +56,9 @@ class AbstractBot(SerializableEntity):
     banner: str | None
     status: Status | None
     state: State
+    enforcements: list[str]
 
 
 @dataclass
 class BotWithOwnerID(AbstractBot):
-    owner: str
+    owners: list[str]

@@ -1,8 +1,8 @@
 import pytest
 
 from koreanbots.client import Koreanbots
-from koreanbots.domain.bot import BotWithOwnerID
 from koreanbots.domain.entities import User
+from koreanbots.domain.bot import BotWithOwnerID
 
 
 @pytest.mark.asyncio
@@ -11,7 +11,7 @@ async def test_bot_info(session: Koreanbots):
     assert response.code == 200
     assert response.data.name == "KODL"
     assert isinstance(response.data.owners[0], User)
-    assert isinstance(response.data.owners[0].bots[0], BotWithOwnerID)
+    assert isinstance(response.data.owners[0].bots[0], str)
 
 
 @pytest.mark.asyncio
@@ -20,7 +20,6 @@ async def test_get_user_info(session: Koreanbots):
 
     assert response.code == 200
     assert isinstance(response.data.bots[0], BotWithOwnerID)
-    assert isinstance(response.data.bots[0].owner, str)
 
 
 @pytest.mark.asyncio
@@ -28,7 +27,7 @@ async def test_get_server_info(session: Koreanbots):
     response = await session.get_server_info(653083797763522580)
 
     assert response.code == 200
-    assert isinstance(response.data.owners, User)
+    assert isinstance(response.data.owner, User)
 
 
 @pytest.mark.asyncio

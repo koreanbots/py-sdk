@@ -7,4 +7,7 @@ from koreanbots.client import Koreanbots
 
 @fixture(name="session")
 async def client():
-    yield Koreanbots(api_key=getenv("API_KEY"))
+    bot = Koreanbots(api_key=getenv("API_KEY"))
+    yield bot
+    if bot.session:
+        await bot.session.close()

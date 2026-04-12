@@ -17,7 +17,7 @@ class User(AbstractUser):
 
 @dataclass
 class Server(AbstractServer):
-    owners: User
+    owner: User
 
 
 @dataclass

@@ -10,3 +10,4 @@ class AbstractUser(SerializableEntity):
     tag: str
     github: str | None
     flags: int
+    globalName: str

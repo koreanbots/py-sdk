@@ -35,6 +35,7 @@ class AbstractServer(SerializableEntity):
     icon: str | None
     flags: int
     votes: int
+    bots: list[str]
     members: int
     boostTier: int
     intro: str
