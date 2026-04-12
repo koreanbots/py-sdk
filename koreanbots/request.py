@@ -2,7 +2,7 @@ import asyncio
 import logging
 import time
 from dataclasses import dataclass
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 from aiohttp import ClientResponse, ClientSession
 from yarl import URL
@@ -159,7 +159,7 @@ class KoreanbotsRequester:
             if response.status != 200:
                 raise KoreanbotsException(f"HTTP Error: {response.status}")
 
-            return await response.json()
+            return cast(dict[str, Any], await response.json())
 
     async def request_bot_info(self, bot_id: int) -> dict[str, Any]:
         """봇 정보를 조회합니다."""
