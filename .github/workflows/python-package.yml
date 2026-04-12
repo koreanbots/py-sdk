@@ -27,11 +27,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
-          pip install pytest pytest-cov pytest-asyncio
+          poetry run pip install pytest pytest-cov pytest-asyncio
       - name: Test with pytest
         env:
           API_KEY: ${{ secrets.API_KEY }}
         run: |
-          pytest --cov=koreanbots --cov-report=xml
+          poetry run pytest --cov=koreanbots --cov-report=xml
       - name: Codecov
         uses: codecov/codecov-action@v5
